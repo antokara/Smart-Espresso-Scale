@@ -1,4 +1,11 @@
 #include <lcd.h>
+#include <Wire.h>
+
+// set the LCD address to 0x27 for a 16 chars and 2 line display
+// the first parameter is  the I2C address
+// the second parameter is how many rows are on your screen
+// the  third parameter is how many columns are on your screen
+LiquidCrystal_I2C lcd(0x27, 20, 4);
 
 /**
  * @author Antonios Karagiannis (antokarag@gmail.com)
@@ -15,6 +22,17 @@
 void Lcd::setup()
 {
     pinMode(LED_BUILTIN, OUTPUT);
+
+    // initialize the lcd
+    Wire.setSDA(D0);
+    Wire.setSCL(D1);
+    Wire.begin();
+    lcd.init();
+    lcd.backlight();
+    lcd.setCursor(0, 0);
+    lcd.print("Hello, world!");
+    lcd.setCursor(0, 1);
+    lcd.print("Testing 2nd row");
 }
 
 /**
