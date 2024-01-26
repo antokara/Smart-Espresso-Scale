@@ -2,6 +2,19 @@
 
 A Smart Espresso Scale, powered by the [Raspberry Pi Pico W board](https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html).
 
+## componetns used
+
+1. [Raspberry Pi Pico W board](https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html)
+   1. [pinout](https://datasheets.raspberrypi.com/picow/PicoW-A4-Pinout.pdf)
+   1. [I2C Wire doc - pico](https://arduino-pico.readthedocs.io/en/latest/wire.html)
+   1. [I2C Wire doc - arduino](https://www.arduino.cc/reference/en/language/functions/communication/wire/)
+1. [I2C 1602 LCD Display Module 16X2](https://www.amazon.com/dp/B07S7PJYM6)
+   1. [documentation](https://wiki.52pi.com/index.php?title=Z-0234)
+   1. [arduino lib](https://github.com/johnrickman/LiquidCrystal_I2C)
+   1. [arduino example](https://projecthub.arduino.cc/arduino_uno_guy/i2c-liquid-crystal-displays-5eb615)
+1. [SparkFun Qwiic Scale - NAU7802](https://www.sparkfun.com/products/15242)
+   1. [arduino lib](https://github.com/sparkfun/SparkFun_Qwiic_Scale_NAU7802_Arduino_Library)
+
 ## VS Code
 
 1. install VS Code
