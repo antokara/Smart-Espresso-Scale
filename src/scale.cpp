@@ -1,7 +1,3 @@
-#include <scale.h>
-
-NAU7802 scale;
-
 /**
  * @author Antonios Karagiannis (antokarag@gmail.com)
  * @brief Scale
@@ -10,26 +6,35 @@ NAU7802 scale;
  * @copyright Copyright (c) 2024
  *
  */
+#include <scale.h>
+
+// the actual scale library instance
+NAU7802 scale;
+
 /**
  * @brief should be called once, from the main setup() function
  *
  */
 void Scale::setup()
 {
+#ifdef SERIAL_DEBUG
     Serial.println("Scale::setup - start");
-
-    Wire1.setSDA(D2);
-    Wire1.setSCL(D3);
+#endif
+    Wire1.setSDA(SCALE_SDA_PIN);
+    Wire1.setSCL(SCALE_SCL_PIN);
     Wire1.begin();
-    Wire1.setClock(400000); // We can increase I2C clock speed to 400kHz, the NAU7802 supports it
+    Wire1.setClock(SCALE_I2C_CLOCK_HZ);
 
     if (scale.begin(Wire1) == false)
     {
+#ifdef SERIAL_DEBUG
         Serial.println("Scale::setup - Scale not detected. Please check wiring!");
+#endif
         // TODO: show in screen
     }
-
+#ifdef SERIAL_DEBUG
     Serial.println("Scale::setup - end");
+#endif
 }
 
 /**

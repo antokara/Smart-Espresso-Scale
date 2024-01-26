@@ -4,7 +4,7 @@
 // the first parameter is  the I2C address
 // the second parameter is how many rows are on your screen
 // the  third parameter is how many columns are on your screen
-LiquidCrystal_I2C lcd(0x27, 20, 4);
+LiquidCrystal_I2C lcd(LCD_I2C_ADDRESS, 20, 4);
 
 /**
  * @author Antonios Karagiannis (antokarag@gmail.com)
@@ -23,8 +23,8 @@ void Lcd::setup()
     pinMode(LED_BUILTIN, OUTPUT);
 
     // initialize the lcd
-    Wire.setSDA(D0);
-    Wire.setSCL(D1);
+    Wire.setSDA(LCD_SDA_PIN);
+    Wire.setSCL(LCD_SCL_PIN);
     Wire.begin();
     lcd.init();
     lcd.backlight();
