@@ -17,6 +17,7 @@ public:
     // methods
     static void setup();
     static void loop();
+    static void print(String text, uint8_t col, uint8_t row);
 };
 
 #endif // LCD

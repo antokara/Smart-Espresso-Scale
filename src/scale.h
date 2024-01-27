@@ -44,7 +44,9 @@
 
 /**
  * @brief the delta threshold between two average weight values
- * that indicates a new weight to show to the user
+ * that indicates a new weight to show to the user.
+ *
+ * must be greather than, to show
  *
  */
 #define SCALE_AVG_WEIGHT_DELTA_THRESHOLD 2
@@ -56,11 +58,19 @@
 #define SCALE_WEIGHT_DECIMALS 2
 
 /**
- * @brief minimum weight value to show to the user
- * @see Scale::calcAvgWeight
+ * @brief maximum weight value to show to the user (in grams)
  *
  */
-#define SCALE_WEIGHT_MIN 0
+#define SCALE_WEIGHT_MAX 1000
+
+/**
+ * @brief scale unit suffixes
+ *
+ */
+#define SCALE_UNIT_SUFFIX_GRAMS "gr."
+#define SCALE_UNIT_SUFFIX_POUNDS "lb."
+
+// TODO: add unit prefix/switch;
 
 class Scale
 {
@@ -81,8 +91,9 @@ public:
     static void calibrate();
     static void setCalibrationFactor();
     static void tare();
-    static float formatWeight(float weight);
+    static String formatWeight(float weight);
     static float roundFloat(float value, int decimalPoints);
+    static int numberLength(float number);
 };
 
 #endif // SCALE

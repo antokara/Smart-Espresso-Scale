@@ -15,6 +15,13 @@ LiquidCrystal_I2C lcd(LCD_I2C_ADDRESS, 20, 4);
  * @copyright Copyright (c) 2024
  *
  */
+
+void Lcd::print(String text, uint8_t col, uint8_t row)
+{
+    lcd.setCursor(col, row);
+    lcd.print(text);
+}
+
 /**
  * @brief should be called once, from the main setup() function
  *
@@ -29,10 +36,10 @@ void Lcd::setup()
     Wire.begin();
     lcd.init();
     lcd.backlight();
-    lcd.setCursor(0, 0);
-    lcd.print("Hello, world!");
-    lcd.setCursor(0, 1);
-    lcd.print("Testing 2nd row");
+    // lcd.setCursor(0, 0);
+    // lcd.print("Hello, world!");
+    // lcd.setCursor(0, 1);
+    // lcd.print("Testing 2nd row");
     digitalWrite(LED_BUILTIN, HIGH);
 }
 

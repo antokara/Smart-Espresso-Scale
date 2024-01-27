@@ -8,6 +8,7 @@
  */
 #include <scale.h>
 #include <device.h>
+#include <lcd.h>
 
 // the actual scale device instance
 NAU7802 scaleDev;
@@ -122,6 +123,11 @@ float Scale::roundFloat(float value, int decimalPoints)
     return round(value * multiplier) / multiplier;
 }
 
+int Scale::numberLength(float number)
+{
+    return floor(log10(abs(number))) + 1;
+}
+
 /**
  * @brief formats the weight provided,
  * to a user friendly number.
@@ -129,14 +135,37 @@ float Scale::roundFloat(float value, int decimalPoints)
  * @param weight
  * @return float
  */
-float Scale::formatWeight(float weight)
+String Scale::formatWeight(float weight)
 {
-    // when the weight is too small, make it zero
-    if (weight < SCALE_AVG_WEIGHT_DELTA_THRESHOLD)
+    float formattedWeight = weight;
+
+    // when the weight is too close to zero, make it zero
+    if (abs(weight - 0) <= SCALE_AVG_WEIGHT_DELTA_THRESHOLD)
     {
-        return 0;
+        formattedWeight = 0;
     }
-    return Scale::roundFloat(weight, SCALE_WEIGHT_DECIMALS);
+    else
+    {
+        formattedWeight = Scale::roundFloat(weight, SCALE_WEIGHT_DECIMALS);
+    }
+
+    const int totalWidth = Scale::numberLength(SCALE_WEIGHT_DECIMALS + SCALE_WEIGHT_MAX);
+    // +1 for the null terminator
+    char buffer[totalWidth + 1];
+    dtostrf(formattedWeight, totalWidth, SCALE_WEIGHT_DECIMALS, buffer);
+
+    // Find the position of the decimal point
+    char *decimalPoint = strchr(buffer, '.');
+
+    // If decimal point is found, move characters to the right to add leading zeros
+    if (decimalPoint != NULL)
+    {
+        int zerosToAdd = totalWidth - (decimalPoint - buffer);
+        memmove(buffer + zerosToAdd, buffer, strlen(buffer) + 1);
+        memset(buffer, ' ', zerosToAdd);
+    }
+
+    return String(buffer) + " " + SCALE_UNIT_SUFFIX_GRAMS;
 }
 
 /**
@@ -182,7 +211,9 @@ void Scale::calculateZeroOffset()
  */
 void Scale::tare()
 {
+    // TODO: properly tare with a watch. this basically needs to "start" taring
     Scale::calculateZeroOffset();
+    Lcd::print(Scale::formatWeight(0), 0, 0);
 }
 
 /**
@@ -272,8 +303,13 @@ void Scale::loop()
         {
             // TODO: show on screen
             Scale::prevAvgWeight = avgWeight;
+#ifdef SERIAL_DEBUG
             Serial.print("\tAvgWeight: ");
             Serial.println(Scale::formatWeight(Scale::prevAvgWeight));
+#endif
+            // TODO: debounce the screen updates because the LCD has a very slow refresh rate
+            //       the last value, must be retained/shown eventually...
+            Lcd::print(Scale::formatWeight(Scale::prevAvgWeight), 0, 0);
         }
 
 #ifdef SCALE_CALIBRATE
