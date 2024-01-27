@@ -1,4 +1,5 @@
 #include <lcd.h>
+#include <device.h>
 
 // set the LCD address to 0x27 for a 16 chars and 2 line display
 // the first parameter is  the I2C address
@@ -32,6 +33,7 @@ void Lcd::setup()
     lcd.print("Hello, world!");
     lcd.setCursor(0, 1);
     lcd.print("Testing 2nd row");
+    digitalWrite(LED_BUILTIN, HIGH);
 }
 
 /**
@@ -40,8 +42,8 @@ void Lcd::setup()
  */
 void Lcd::loop()
 {
-    digitalWrite(LED_BUILTIN, HIGH);
-    delay(1000);
-    digitalWrite(LED_BUILTIN, LOW);
-    delay(1000);
+    // digitalWrite(LED_BUILTIN, HIGH);
+    // delay(1000);
+    // digitalWrite(LED_BUILTIN, LOW);
+    // delay(1000);
 }

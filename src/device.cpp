@@ -197,10 +197,10 @@ void Device::setup()
   Serial.print("Device::Setup()");
 #endif
 
-  Device::connectToWifi();
+  // Device::connectToWifi();
 
   // enable OTA
-  Device::setupOTA();
+  // Device::setupOTA();
 }
 
 /**
@@ -210,7 +210,7 @@ void Device::setup()
 void Device::loop()
 {
   // process any incoming OTA requests
-  ArduinoOTA.handle();
+  // ArduinoOTA.handle();
 
   /**
    * @brief only on the first loop,
@@ -224,5 +224,5 @@ void Device::loop()
   }
 
   // check if wifi is still connected, etc.
-  Device::wifiLoop();
+  // Device::wifiLoop();
 }
