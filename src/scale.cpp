@@ -12,11 +12,33 @@
 // the actual scale device instance
 NAU7802 scaleDev;
 
-// not yet known
-bool Scale::isAvailable = NULL;
+/**
+ * @brief if false, the scale I2C was not found
+ * 0 when unknown (yet)
+ * 1 when available
+ * 2 when not currently available
+ */
+byte Scale::isAvailable = SCALE_IS_AVAILABLE_UNKNOWN;
 
-// default values
+/**
+ * @brief 0 when the scale has not become available yet
+ *        1, when this is first loop, that it's available
+ *        2, on any subsequent loops
+ *
+ */
+byte Scale::firstAvailability = SCALE_FIRST_AVAILABILITY_UNKNOWN;
+
+/**
+ * @brief Value used to convert the load cell reading to lbs or kg
+ * @see SCALE_CALIBRATE and calibrate()
+ *
+ */
 float Scale::calibrationFactor = -390.26;
+
+/**
+ * @brief "Zero" value that is found when scale is tared
+ *
+ */
 long Scale::zeroOffset = 176605;
 
 // Create an array to take average of weights. This helps smooth out jitter.
@@ -46,12 +68,12 @@ void Scale::setup()
 #ifdef SERIAL_DEBUG
         Serial.println("Scale::setup - Scale not detected. Please check wiring!");
 #endif
-        Scale::isAvailable = false;
+        Scale::isAvailable = SCALE_IS_AVAILABLE_NO;
         // TODO: show in screen
     }
     else
     {
-        Scale::isAvailable = true;
+        Scale::isAvailable = SCALE_IS_AVAILABLE_YES;
         Scale::setCalibrationFactor();
         // Increase to max sample rate
         scaleDev.setSampleRate(NAU7802_SPS_320);
@@ -88,6 +110,36 @@ float Scale::calcAvgWeight(float weight)
 }
 
 /**
+ * @brief rounds the value provided to the decimal points
+ *
+ * @param value
+ * @param decimalPoints
+ * @return float
+ */
+float Scale::roundFloat(float value, int decimalPoints)
+{
+    float multiplier = pow(10, decimalPoints);
+    return round(value * multiplier) / multiplier;
+}
+
+/**
+ * @brief formats the weight provided,
+ * to a user friendly number.
+ *
+ * @param weight
+ * @return float
+ */
+float Scale::formatWeight(float weight)
+{
+    // when the weight is too small, make it zero
+    if (weight < SCALE_AVG_WEIGHT_DELTA_THRESHOLD)
+    {
+        return 0;
+    }
+    return Scale::roundFloat(weight, SCALE_WEIGHT_DECIMALS);
+}
+
+/**
  * @brief sets the initial calibration factor (and zero offset)
  *
  */
@@ -107,7 +159,7 @@ void Scale::setCalibrationFactor(void)
  * @brief calculates, sets and returns the zeroOffset (tares/zeros the scale)
  * @return long the new zeroOffset
  */
-long Scale::calculateZeroOffset()
+void Scale::calculateZeroOffset()
 {
     scaleDev.calculateZeroOffset(SCALE_CALCULATE_ZERO_OFFSET_SAMPLES);
     Scale::zeroOffset = scaleDev.getZeroOffset();
@@ -115,7 +167,22 @@ long Scale::calculateZeroOffset()
     Serial.print("New zero offset: ");
     Serial.println(Scale::zeroOffset);
 #endif
-    return Scale::zeroOffset;
+}
+
+/**
+ * @brief watches the avgWeight readings until they stabilize and
+ * once they do, it zeros/tares the scale.
+ *
+ * if the readings fail to stabilize within the allowed time-frame,
+ * it notifies the user and keeps waiting... it never times out.
+ *
+ * Should be called once at setup and by user input, on command.
+ *
+ * @return long the new zeroOffset
+ */
+void Scale::tare()
+{
+    Scale::calculateZeroOffset();
 }
 
 /**
@@ -191,8 +258,14 @@ void Scale::calibrate(void)
  */
 void Scale::loop()
 {
-    if (Scale::isAvailable == true && scaleDev.available() == true)
+    if (Scale::isAvailable == SCALE_IS_AVAILABLE_YES && scaleDev.available() == true)
     {
+        if (Scale::firstAvailability == SCALE_FIRST_AVAILABILITY_UNKNOWN)
+        {
+            Scale::firstAvailability = SCALE_FIRST_AVAILABILITY_YES;
+            Scale::tare();
+        }
+
         float avgWeight = Scale::calcAvgWeight(Scale::getWeight());
         // TODO: only check the avg weight...
         if (abs(avgWeight - Scale::prevAvgWeight) > SCALE_AVG_WEIGHT_DELTA_THRESHOLD)
@@ -200,7 +273,7 @@ void Scale::loop()
             // TODO: show on screen
             Scale::prevAvgWeight = avgWeight;
             Serial.print("\tAvgWeight: ");
-            Serial.println(Scale::prevAvgWeight, SCALE_WEIGHT_DECIMALS);
+            Serial.println(Scale::formatWeight(Scale::prevAvgWeight));
         }
 
 #ifdef SCALE_CALIBRATE
@@ -219,5 +292,10 @@ void Scale::loop()
             }
         }
 #endif
+
+        if (Scale::firstAvailability == SCALE_FIRST_AVAILABILITY_YES)
+        {
+            Scale::firstAvailability = SCALE_FIRST_AVAILABILITY_NO;
+        }
     }
 }

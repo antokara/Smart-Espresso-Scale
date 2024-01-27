@@ -8,6 +8,16 @@
 #define SCALE_SDA_PIN D2
 #define SCALE_SCL_PIN D3
 
+// enums
+#define SCALE_IS_AVAILABLE_UNKNOWN 0
+#define SCALE_IS_AVAILABLE_YES 1
+#define SCALE_IS_AVAILABLE_NO 2
+
+// enums
+#define SCALE_FIRST_AVAILABILITY_UNKNOWN 0
+#define SCALE_FIRST_AVAILABILITY_YES 1
+#define SCALE_FIRST_AVAILABILITY_NO 2
+
 // we can increase I2C clock speed to 400kHz, the NAU7802 supports it
 #define SCALE_I2C_CLOCK_HZ 400000
 
@@ -45,29 +55,21 @@
  */
 #define SCALE_WEIGHT_DECIMALS 2
 
+/**
+ * @brief minimum weight value to show to the user
+ * @see Scale::calcAvgWeight
+ *
+ */
+#define SCALE_WEIGHT_MIN 0
+
 class Scale
 {
 public:
     // properties
-    /**
-     * @brief if false, the scale I2C was not found
-     * null when unknown (yet)
-     */
-    static bool isAvailable;
-    /**
-     * @brief Zero value that is found when scale is tared
-     *
-     */
+    static byte isAvailable;
+    static byte firstAvailability;
     static long zeroOffset;
-    /**
-     * @brief Value used to convert the load cell reading to lbs or kg
-     *
-     */
     static float calibrationFactor;
-
-    // static long prevReading;
-    // static float prevWeight;
-    // static bool isCalibrated;
     static float prevAvgWeight;
 
     // methods
@@ -75,9 +77,12 @@ public:
     static void loop();
     static float calcAvgWeight(float weight);
     static float getWeight();
-    static long calculateZeroOffset();
+    static void calculateZeroOffset();
     static void calibrate();
     static void setCalibrationFactor();
+    static void tare();
+    static float formatWeight(float weight);
+    static float roundFloat(float value, int decimalPoints);
 };
 
 #endif // SCALE
