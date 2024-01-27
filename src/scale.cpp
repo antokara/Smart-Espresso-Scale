@@ -14,28 +14,18 @@ NAU7802 scaleDev;
 
 // not yet known
 bool Scale::isAvailable = NULL;
-bool Scale::isCalibrated = NULL;
 
 // default values
-// float Scale::calibrationFactor = 0;
 float Scale::calibrationFactor = -390.26;
-// long Scale::zeroOffset = 1000L;
 long Scale::zeroOffset = 176605;
 
-long Scale::prevReading = 0;
-float Scale::prevWeight = 0;
-
 // Create an array to take average of weights. This helps smooth out jitter.
-#define SCALE_AVG_WEIGHT_SAMPLES 4
 float avgWeights[SCALE_AVG_WEIGHT_SAMPLES];
 byte avgWeightIndex = 0;
 
-/**
- * @brief the number of samples to get for the tare
- * @see scaleDev.calculateZeroOffset()
- * should be Called when scale is setup, level, at running temperature, with nothing on it
- */
-#define SCALE_CALCULATE_ZERO_OFFSET_SAMPLES 64
+// keep the previous average weight to compare against
+// before deciding to show a new weight value to the user
+float Scale::prevAvgWeight = 0;
 
 /**
  * @brief should be called once, from the main setup() function
@@ -62,8 +52,7 @@ void Scale::setup()
     else
     {
         Scale::isAvailable = true;
-
-        Scale::readSystemSettings();
+        Scale::setCalibrationFactor();
         // Increase to max sample rate
         scaleDev.setSampleRate(NAU7802_SPS_320);
         // Re-cal analog front end when we change gain, sample rate, or channel
@@ -98,66 +87,51 @@ float Scale::calcAvgWeight(float weight)
     return avgWeight;
 }
 
-void Scale::readSystemSettings(void)
+/**
+ * @brief sets the initial calibration factor (and zero offset)
+ *
+ */
+void Scale::setCalibrationFactor(void)
 {
-    {
-        float settingCalibrationFactor; // Value used to convert the load cell reading to lbs or kg
-        long settingZeroOffset;         // Zero value that is found when scale is tared
-
-        settingCalibrationFactor = Scale::calibrationFactor;
-        settingZeroOffset = Scale::zeroOffset;
-        // Look up the calibration factor
-        // EEPROM.get(LOCATION_CALIBRATION_FACTOR, settingCalibrationFactor);
-        if (settingCalibrationFactor == 0xFFFFFFFF)
-        {
-            settingCalibrationFactor = 0; // Default to 0
-            // EEPROM.put(LOCATION_CALIBRATION_FACTOR, settingCalibrationFactor);
-        }
-
-        // Look up the zero tare point
-        // EEPROM.get(LOCATION_ZERO_OFFSET, settingZeroOffset);
-        if (settingZeroOffset == 0xFFFFFFFF)
-        {
-            settingZeroOffset = 1000L; // Default to 1000 so we don't get inf
-            // EEPROM.put(LOCATION_ZERO_OFFSET, settingZeroOffset);
-        }
-
-        // Pass these values to the library
-        scaleDev.setCalibrationFactor(settingCalibrationFactor);
-        scaleDev.setZeroOffset(settingZeroOffset);
-
-        Serial.print("Scale Zero offset: ");
-        Serial.println(scaleDev.getZeroOffset());
-        Serial.print("Scale Calibration factor: ");
-        Serial.println(scaleDev.getCalibrationFactor());
-
-        if (settingCalibrationFactor < 0.1 || settingZeroOffset == 1000)
-        {
-            // Defaults detected. Prompt user to cal scale.
-            // TODO:
-            // Scale::isCalibrated = false;
-        }
-        // else
-        // {
-        Scale::isCalibrated = true;
-        // }
-    }
-}
-
-// Record the current system settings to EEPROM
-void Scale::recordSystemSettings(void)
-{
-    // Get various values from the library and commit them to NVM
-    //   EEPROM.put(LOCATION_CALIBRATION_FACTOR, myScale.getCalibrationFactor());
-    //   EEPROM.put(LOCATION_ZERO_OFFSET, myScale.getZeroOffset());
+    scaleDev.setCalibrationFactor(Scale::calibrationFactor);
+    scaleDev.setZeroOffset(Scale::zeroOffset);
+#ifdef SERIAL_DEBUG
     Serial.print("Scale Zero offset: ");
     Serial.println(scaleDev.getZeroOffset());
     Serial.print("Scale Calibration factor: ");
     Serial.println(scaleDev.getCalibrationFactor());
+#endif
 }
 
 /**
+ * @brief calculates, sets and returns the zeroOffset (tares/zeros the scale)
+ * @return long the new zeroOffset
+ */
+long Scale::calculateZeroOffset()
+{
+    scaleDev.calculateZeroOffset(SCALE_CALCULATE_ZERO_OFFSET_SAMPLES);
+    Scale::zeroOffset = scaleDev.getZeroOffset();
+#ifdef SERIAL_DEBUG
+    Serial.print("New zero offset: ");
+    Serial.println(Scale::zeroOffset);
+#endif
+    return Scale::zeroOffset;
+}
+
+/**
+ * @brief returns the current weight
+ *
+ * @return float the current weight
+ */
+float Scale::getWeight()
+{
+    return scaleDev.getWeight(SCALE_ALLOW_NEGATIVE_READINGS);
+}
+
+#ifdef SCALE_CALIBRATE
+/**
  * @brief Gives user the ability to set a known weight on the scale and calculate a calibration factor
+ * This should be performed once, before "releasing" the scale.
  *
  */
 void Scale::calibrate(void)
@@ -172,9 +146,8 @@ void Scale::calibrate(void)
         while (Serial.available() == 0)
             delay(10); // Wait for user to press key
 
-        scaleDev.calculateZeroOffset(SCALE_CALCULATE_ZERO_OFFSET_SAMPLES); // Zero or Tare the scale. Average over 64 readings.
-        Serial.print(F("New zero offset: "));
-        Serial.println(scaleDev.getZeroOffset());
+        // zero the scale
+        Scale::calculateZeroOffset();
 
         Serial.println(F("Place known weight on scale. Press a key when weight is in place and stable."));
         while (Serial.available())
@@ -192,17 +165,25 @@ void Scale::calibrate(void)
         float weightOnScale = Serial.parseFloat();
         Serial.println();
 
+        // confirm to the user, the input we got
         Serial.print("Calibration Weight On Scale: ");
         Serial.println(weightOnScale);
 
-        scaleDev.calculateCalibrationFactor(weightOnScale, SCALE_CALCULATE_ZERO_OFFSET_SAMPLES); // Tell the library how much weight is currently on it
+        // Tell the library how much weight is currently on it
+        scaleDev.calculateCalibrationFactor(weightOnScale, SCALE_CALCULATE_ZERO_OFFSET_SAMPLES);
         Scale::calibrationFactor = scaleDev.getCalibrationFactor();
-        Scale::zeroOffset = scaleDev.getZeroOffset();
-        Serial.print(F("New Scale Reading: "));
-        Serial.println(scaleDev.getWeight(true), 2);
-        Scale::recordSystemSettings();
+
+        // confirm to the user, the new weight, which should match
+        // the reference weight that was entered previously...
+        Serial.print("Scale Reading: ");
+        Serial.println(Scale::getWeight(), SCALE_WEIGHT_DECIMALS);
+
+        // this value, must be set to the Scale::calibrationFactor constant
+        Serial.print("Scale Calibration factor: ");
+        Serial.println(scaleDev.getCalibrationFactor());
     }
 }
+#endif
 
 /**
  * @brief should be called on every iteration of the main loop() function
@@ -212,36 +193,31 @@ void Scale::loop()
 {
     if (Scale::isAvailable == true && scaleDev.available() == true)
     {
-        long currentReading = scaleDev.getReading();
-        float currentWeight = scaleDev.getWeight(true);
-        if (abs(currentWeight - Scale::prevWeight) > 1 || abs(currentReading - Scale::prevReading) > 3000)
+        float avgWeight = Scale::calcAvgWeight(Scale::getWeight());
+        // TODO: only check the avg weight...
+        if (abs(avgWeight - Scale::prevAvgWeight) > SCALE_AVG_WEIGHT_DELTA_THRESHOLD)
         {
-            Scale::prevWeight = currentWeight;
-            Scale::prevReading = currentReading;
-            Serial.print("Reading: ");
-            Serial.print(currentReading);
-            Serial.print("\tWeight: ");
-            Serial.print(currentWeight, 2);
+            // TODO: show on screen
+            Scale::prevAvgWeight = avgWeight;
             Serial.print("\tAvgWeight: ");
-            Serial.println(Scale::calcAvgWeight(currentWeight), 2);
+            Serial.println(Scale::prevAvgWeight, SCALE_WEIGHT_DECIMALS);
         }
 
-        if (Scale::isCalibrated == false)
-        {
-            // TODO: show in screen
-            Serial.print("\tScale not calibrated. Press 'c'.");
-            Serial.println();
-        }
-
+#ifdef SCALE_CALIBRATE
         if (Serial.available())
         {
             byte incoming = Serial.read();
-            if (incoming == 't') // Tare the scale
-                scaleDev.calculateZeroOffset();
-            else if (incoming == 'c') // Calibrate
+            if (incoming == 't')
             {
+                // Tare the scale
+                scaleDev.calculateZeroOffset();
+            }
+            else if (incoming == 'c')
+            {
+                // Calibrate
                 Scale::calibrate();
             }
         }
+#endif
     }
 }
