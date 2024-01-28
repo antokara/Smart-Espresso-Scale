@@ -56,6 +56,7 @@ float Scale::prevAvgWeight = 0;
  */
 void Scale::setup()
 {
+    // TODO: show on screen status start/end/calibrate
 #ifdef SERIAL_DEBUG
     Serial.println("Scale::setup - start");
 #endif
@@ -76,8 +77,12 @@ void Scale::setup()
     {
         Scale::isAvailable = SCALE_IS_AVAILABLE_YES;
         Scale::setCalibrationFactor();
-        // Increase to max sample rate
-        scaleDev.setSampleRate(NAU7802_SPS_320);
+        // Set gain. The higher, the more sensitive but also more noise/jitter
+        // values: 1/2/4/8/16/32/64/128
+        scaleDev.setGain(NAU7802_GAIN_32);
+        // set the sample rate per second. The higher, the more jitter we may get
+        // values: 10/20/40/80/320
+        scaleDev.setSampleRate(NAU7802_SPS_80);
         // Re-cal analog front end when we change gain, sample rate, or channel
         scaleDev.calibrateAFE();
     }
@@ -93,6 +98,9 @@ void Scale::setup()
 /**
  * @brief calculates the average weight from the given weight,
  * using a moving window average algorithm, to reduce jitter.
+ *
+ * TODO: add debouncing to this, because it's not very useful currently...
+ * basically, too fast changes, mean noise and not actual weight changes...
  *
  * @param weight
  * @return float

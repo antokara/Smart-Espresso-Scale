@@ -40,7 +40,7 @@
  * @brief the samples to collect for the moving average window
  *
  */
-#define SCALE_AVG_WEIGHT_SAMPLES 4
+#define SCALE_AVG_WEIGHT_SAMPLES 8
 
 /**
  * @brief the delta threshold between two average weight values
@@ -49,7 +49,7 @@
  * must be greather than, to show
  *
  */
-#define SCALE_AVG_WEIGHT_DELTA_THRESHOLD 2
+#define SCALE_AVG_WEIGHT_DELTA_THRESHOLD 0.1
 
 /**
  * @brief the number of weight decimals accurancy, to show to the user
