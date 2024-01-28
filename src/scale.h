@@ -38,9 +38,11 @@
 
 /**
  * @brief the samples to collect for the moving average window
+ * the higher, the smoother the result (less jitter) but
+ * it also slows down the processing time...
  *
  */
-#define SCALE_AVG_WEIGHT_SAMPLES 8
+#define SCALE_AVG_WEIGHT_SAMPLES 10
 
 /**
  * @brief the delta threshold between two average weight values
@@ -69,6 +71,24 @@
  */
 #define SCALE_UNIT_SUFFIX_GRAMS "gr."
 #define SCALE_UNIT_SUFFIX_POUNDS "lb."
+
+/**
+ * @brief the sensor gain
+ * The higher, the more sensitive and appears to reduce noise actually
+ * values: 1/2/4/8/16/32/64/128
+ *
+ * Important: Changing that, requires a recalibration of the scale sensor
+ */
+#define SCALE_GAIN NAU7802_GAIN_128
+
+/**
+ * @brief set the sample rate per second from the sensor.
+ * The higher, the more jitter we may get
+ * values: 10/20/40/80/320
+ *
+ * Important: Changing that, requires a recalibration of the scale sensor
+ */
+#define SCALE_SPS NAU7802_SPS_80
 
 // TODO: add unit prefix/switch;
 

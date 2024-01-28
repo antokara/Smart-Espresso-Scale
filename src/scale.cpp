@@ -34,13 +34,41 @@ byte Scale::firstAvailability = SCALE_FIRST_AVAILABILITY_UNKNOWN;
  * @see SCALE_CALIBRATE and calibrate()
  *
  */
-float Scale::calibrationFactor = -390.26;
+// float Scale::calibrationFactor = -390.26;
+// float Scale::calibrationFactor = -205.39;
 
 /**
  * @brief "Zero" value that is found when scale is tared
  *
  */
-long Scale::zeroOffset = 176605;
+// long Scale::zeroOffset = 176605;
+// long Scale::zeroOffset = 44959;
+
+// 1kg +/-0.6gr - 16g, 80sps
+// float Scale::calibrationFactor = -102.26;
+// long Scale::zeroOffset = 21998;
+
+// 1kg +/-0.25gr - 32g, 80sps
+// float Scale::calibrationFactor = -205.39;
+// long Scale::zeroOffset = 44959;
+
+// 1kg +/-0.2gr - 64g, 80sps
+// float Scale::calibrationFactor = -410.33;
+// long Scale::zeroOffset = 8493;
+
+// 1kg +/-0.16, - 128g, 80sps, 8avg samples
+// float Scale::calibrationFactor = -820.18;
+// long Scale::zeroOffset = 175782;
+
+// 1kg +/-0, - 128g, 80sps, 10avg samples
+float Scale::calibrationFactor = -820.18;
+long Scale::zeroOffset = 175782;
+
+// sps40, produced INF
+
+// 1kg +/-0.17, - 128g, 320sps, 8avg samples
+// float Scale::calibrationFactor = -820.18;
+// long Scale::zeroOffset = 175782;
 
 // Create an array to take average of weights. This helps smooth out jitter.
 float avgWeights[SCALE_AVG_WEIGHT_SAMPLES];
@@ -79,10 +107,10 @@ void Scale::setup()
         Scale::setCalibrationFactor();
         // Set gain. The higher, the more sensitive but also more noise/jitter
         // values: 1/2/4/8/16/32/64/128
-        scaleDev.setGain(NAU7802_GAIN_32);
+        scaleDev.setGain(SCALE_GAIN);
         // set the sample rate per second. The higher, the more jitter we may get
         // values: 10/20/40/80/320
-        scaleDev.setSampleRate(NAU7802_SPS_80);
+        scaleDev.setSampleRate(SCALE_SPS);
         // Re-cal analog front end when we change gain, sample rate, or channel
         scaleDev.calibrateAFE();
     }
