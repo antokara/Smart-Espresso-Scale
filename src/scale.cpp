@@ -60,7 +60,7 @@ byte Scale::firstAvailability = SCALE_FIRST_AVAILABILITY_UNKNOWN;
 // float Scale::calibrationFactor = -820.18;
 // long Scale::zeroOffset = 175782;
 
-// 1kg +/-0, - 128g, 80sps, 10avg samples
+// 1kg +/-0, - 128g, 80sps, 16avg samples, 2 decimal
 float Scale::calibrationFactor = -820.18;
 long Scale::zeroOffset = 175782;
 
@@ -143,7 +143,7 @@ float Scale::calcAvgWeight(float weight)
         avgWeight += avgWeights[x];
     avgWeight /= SCALE_AVG_WEIGHT_SAMPLES;
 
-    return avgWeight;
+    return Scale::roundFloat(avgWeight, SCALE_WEIGHT_DECIMALS);
 }
 
 /**
@@ -179,10 +179,6 @@ String Scale::formatWeight(float weight)
     if (abs(weight - 0) <= SCALE_AVG_WEIGHT_DELTA_THRESHOLD)
     {
         formattedWeight = 0;
-    }
-    else
-    {
-        formattedWeight = Scale::roundFloat(weight, SCALE_WEIGHT_DECIMALS);
     }
 
     const int totalWidth = Scale::numberLength(SCALE_WEIGHT_DECIMALS + SCALE_WEIGHT_MAX);

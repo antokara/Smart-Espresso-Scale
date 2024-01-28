@@ -42,7 +42,7 @@
  * it also slows down the processing time...
  *
  */
-#define SCALE_AVG_WEIGHT_SAMPLES 10
+#define SCALE_AVG_WEIGHT_SAMPLES 16
 
 /**
  * @brief the delta threshold between two average weight values
