@@ -57,13 +57,19 @@
  * @brief the number of weight decimals accurancy, to show to the user
  *
  */
-#define SCALE_WEIGHT_DECIMALS 2
+#define SCALE_WEIGHT_DECIMALS 1
 
 /**
  * @brief maximum weight value to show to the user (in grams)
  *
  */
 #define SCALE_WEIGHT_MAX 1000
+
+/**
+ * @brief the message to show to the user,
+ * when the max weight has been reached
+ */
+#define SCALE_WEIGHT_MAX_MSG "MAX"
 
 /**
  * @brief scale unit suffixes
@@ -83,7 +89,8 @@
 
 /**
  * @brief set the sample rate per second from the sensor.
- * The higher, the more jitter we may get
+ * The higher, the more jitter we may get and
+ * we need higher avg samples to compensate
  * values: 10/20/40/80/320
  *
  * Important: Changing that, requires a recalibration of the scale sensor

@@ -64,6 +64,7 @@ byte Scale::firstAvailability = SCALE_FIRST_AVAILABILITY_UNKNOWN;
 float Scale::calibrationFactor = -820.18;
 long Scale::zeroOffset = 175782;
 
+// 1kg +/-0, - 128g, 320sps, 64avg samples, 2 decimal
 // sps40, produced INF
 
 // 1kg +/-0.17, - 128g, 320sps, 8avg samples
@@ -143,7 +144,7 @@ float Scale::calcAvgWeight(float weight)
         avgWeight += avgWeights[x];
     avgWeight /= SCALE_AVG_WEIGHT_SAMPLES;
 
-    return Scale::roundFloat(avgWeight, SCALE_WEIGHT_DECIMALS);
+    return avgWeight;
 }
 
 /**
@@ -179,6 +180,14 @@ String Scale::formatWeight(float weight)
     if (abs(weight - 0) <= SCALE_AVG_WEIGHT_DELTA_THRESHOLD)
     {
         formattedWeight = 0;
+    }
+    else if (weight > SCALE_WEIGHT_MAX)
+    {
+        return SCALE_WEIGHT_MAX_MSG;
+    }
+    else
+    {
+        formattedWeight = Scale::roundFloat(weight, SCALE_WEIGHT_DECIMALS);
     }
 
     const int totalWidth = Scale::numberLength(SCALE_WEIGHT_DECIMALS + SCALE_WEIGHT_MAX);
