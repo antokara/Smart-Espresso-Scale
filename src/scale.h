@@ -42,6 +42,8 @@
  * it also slows down the processing time...
  *
  */
+#define SCALE_AVG_WEIGHT_SAMPLES_MIN 4
+#define SCALE_AVG_WEIGHT_SAMPLES_MAX 128
 #define SCALE_AVG_WEIGHT_SAMPLES 16
 
 /**
@@ -92,8 +94,6 @@
  * The higher, the more jitter we may get and
  * we need higher avg samples to compensate
  * values: 10/20/40/80/320
- *
- * Important: Changing that, requires a recalibration of the scale sensor
  */
 #define SCALE_SPS NAU7802_SPS_80
 
@@ -107,7 +107,13 @@ public:
     static byte firstAvailability;
     static long zeroOffset;
     static float calibrationFactor;
+
+    static float prevWeight;
     static float prevAvgWeight;
+    // Create an array to take average of weights. This helps smooth out jitter.
+    static float avgWeights[SCALE_AVG_WEIGHT_SAMPLES_MAX];
+    static byte avgWeightIndex;
+    static byte avgWeightSamples;
 
     // methods
     static void setup();

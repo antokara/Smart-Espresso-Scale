@@ -71,13 +71,17 @@ long Scale::zeroOffset = 175782;
 // float Scale::calibrationFactor = -820.18;
 // long Scale::zeroOffset = 175782;
 
-// Create an array to take average of weights. This helps smooth out jitter.
-float avgWeights[SCALE_AVG_WEIGHT_SAMPLES];
-byte avgWeightIndex = 0;
-
 // keep the previous average weight to compare against
 // before deciding to show a new weight value to the user
 float Scale::prevAvgWeight = 0;
+
+// TODO:
+float Scale::prevWeight = 0;
+
+// reset
+float Scale::avgWeights[SCALE_AVG_WEIGHT_SAMPLES_MAX];
+byte Scale::avgWeightIndex = 0;
+byte Scale::avgWeightSamples = SCALE_AVG_WEIGHT_SAMPLES;
 
 /**
  * @brief should be called once, from the main setup() function
@@ -135,14 +139,53 @@ void Scale::setup()
  * @return float
  */
 float Scale::calcAvgWeight(float weight)
+// {
+//     avgWeights[avgWeightIndex++] = weight;
+//     if (avgWeightIndex == SCALE_AVG_WEIGHT_SAMPLES)
+//         avgWeightIndex = 0;
+//     float avgWeight = 0;
+//     for (int x = 0; x < SCALE_AVG_WEIGHT_SAMPLES; x++)
+//         avgWeight += avgWeights[x];
+//     avgWeight /= SCALE_AVG_WEIGHT_SAMPLES;
+
+//     return avgWeight;
+// }
 {
-    avgWeights[avgWeightIndex++] = weight;
-    if (avgWeightIndex == SCALE_AVG_WEIGHT_SAMPLES)
-        avgWeightIndex = 0;
     float avgWeight = 0;
-    for (int x = 0; x < SCALE_AVG_WEIGHT_SAMPLES; x++)
-        avgWeight += avgWeights[x];
-    avgWeight /= SCALE_AVG_WEIGHT_SAMPLES;
+    for (int x = 0; x < Scale::avgWeightSamples; x++)
+        avgWeight += Scale::avgWeights[x];
+    avgWeight /= Scale::avgWeightSamples;
+
+    // float delta = abs(weight - Scale::prevAvgWeight);
+    float delta = abs(avgWeight - Scale::prevAvgWeight);
+    Serial.print("delta: ");
+    Serial.println(delta);
+    if (delta > 0 && delta <= SCALE_AVG_WEIGHT_DELTA_THRESHOLD)
+    {
+        if (Scale::avgWeightSamples < SCALE_AVG_WEIGHT_SAMPLES_MAX)
+        {
+            Scale::avgWeights[Scale::avgWeightSamples++] = avgWeight;
+        }
+    }
+    else if (delta > SCALE_AVG_WEIGHT_DELTA_THRESHOLD)
+    {
+        // if (Scale::avgWeightSamples > SCALE_AVG_WEIGHT_SAMPLES_MIN)
+        {
+            Scale::avgWeightSamples = SCALE_AVG_WEIGHT_SAMPLES_MIN;
+            for (int x = Scale::avgWeightSamples; x < SCALE_AVG_WEIGHT_SAMPLES_MIN; x++)
+                Scale::avgWeights[x] = avgWeight;
+            // Scale::avgWeights[Scale::avgWeightSamples--] = avgWeight;
+        }
+    }
+    Serial.print("avgWeightSamples: ");
+    Serial.println(Scale::avgWeightSamples);
+
+    Scale::avgWeights[Scale::avgWeightIndex++] = weight;
+    if (Scale::avgWeightIndex == SCALE_AVG_WEIGHT_SAMPLES_MAX || Scale::avgWeightIndex >= Scale::avgWeightSamples)
+        Scale::avgWeightIndex = 0;
+
+    // keep the prev avg weight
+    Scale::prevAvgWeight = avgWeight;
 
     return avgWeight;
 }
@@ -160,6 +203,12 @@ float Scale::roundFloat(float value, int decimalPoints)
     return round(value * multiplier) / multiplier;
 }
 
+/**
+ * @brief get the length of characters in a number
+ *
+ * @param number
+ * @return int
+ */
 int Scale::numberLength(float number)
 {
     return floor(log10(abs(number))) + 1;
@@ -258,13 +307,15 @@ void Scale::tare()
 }
 
 /**
- * @brief returns the current weight
+ * @brief returns the current weight,
+ * allowing for negavive values and without any average.
+ * we will calculate the average...
  *
  * @return float the current weight
  */
 float Scale::getWeight()
 {
-    return scaleDev.getWeight(SCALE_ALLOW_NEGATIVE_READINGS);
+    return scaleDev.getWeight(SCALE_ALLOW_NEGATIVE_READINGS, 1);
 }
 
 #ifdef SCALE_CALIBRATE
@@ -330,6 +381,7 @@ void Scale::calibrate(void)
  */
 void Scale::loop()
 {
+    float lastAvgWeight = 0;
     if (Scale::isAvailable == SCALE_IS_AVAILABLE_YES && scaleDev.available() == true)
     {
         if (Scale::firstAvailability == SCALE_FIRST_AVAILABILITY_UNKNOWN)
@@ -337,16 +389,25 @@ void Scale::loop()
             Scale::firstAvailability = SCALE_FIRST_AVAILABILITY_YES;
             Scale::tare();
         }
+        // float weight = Scale::getWeight();
+        // // if (abs(weight - Scale::prevWeight) > SCALE_AVG_WEIGHT_DELTA_THRESHOLD)
+        // {
+        // Serial.print("\tweight: ");
+        //     // Serial.println(Scale::formatWeight(weight));
+        // Serial.println(Scale::getWeight());
+        // }
 
         float avgWeight = Scale::calcAvgWeight(Scale::getWeight());
         // TODO: only check the avg weight...
-        if (abs(avgWeight - Scale::prevAvgWeight) > SCALE_AVG_WEIGHT_DELTA_THRESHOLD)
+        // if (abs(avgWeight - Scale::prevAvgWeight) > SCALE_AVG_WEIGHT_DELTA_THRESHOLD)
+        if (abs(avgWeight - lastAvgWeight) > SCALE_AVG_WEIGHT_DELTA_THRESHOLD)
         {
             // TODO: show on screen
-            Scale::prevAvgWeight = avgWeight;
+            // Scale::prevAvgWeight = avgWeight;
+            lastAvgWeight = avgWeight;
 #ifdef SERIAL_DEBUG
-            Serial.print("\tAvgWeight: ");
-            Serial.println(Scale::formatWeight(Scale::prevAvgWeight));
+            // Serial.print("\tAvgWeight: ");
+            // Serial.println(Scale::prevAvgWeight);
 #endif
             // TODO: debounce the screen updates because the LCD has a very slow refresh rate
             //       the last value, must be retained/shown eventually...
