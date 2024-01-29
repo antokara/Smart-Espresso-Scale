@@ -37,14 +37,12 @@
 #define SCALE_CALCULATE_ZERO_OFFSET_SAMPLES 64
 
 /**
- * @brief the samples to collect for the moving average window
+ * @brief the min/max samples to collect for the moving average window
  * the higher, the smoother the result (less jitter) but
  * it also slows down the processing time...
- *
  */
 #define SCALE_AVG_WEIGHT_SAMPLES_MIN 4
 #define SCALE_AVG_WEIGHT_SAMPLES_MAX 128
-#define SCALE_AVG_WEIGHT_SAMPLES 16
 
 /**
  * @brief the delta threshold between two average weight values

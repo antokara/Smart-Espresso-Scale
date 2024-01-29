@@ -34,54 +34,42 @@ byte Scale::firstAvailability = SCALE_FIRST_AVAILABILITY_UNKNOWN;
  * @see SCALE_CALIBRATE and calibrate()
  *
  */
-// float Scale::calibrationFactor = -390.26;
-// float Scale::calibrationFactor = -205.39;
+float Scale::calibrationFactor = -820.18;
 
 /**
  * @brief "Zero" value that is found when scale is tared
  *
  */
-// long Scale::zeroOffset = 176605;
-// long Scale::zeroOffset = 44959;
-
-// 1kg +/-0.6gr - 16g, 80sps
-// float Scale::calibrationFactor = -102.26;
-// long Scale::zeroOffset = 21998;
-
-// 1kg +/-0.25gr - 32g, 80sps
-// float Scale::calibrationFactor = -205.39;
-// long Scale::zeroOffset = 44959;
-
-// 1kg +/-0.2gr - 64g, 80sps
-// float Scale::calibrationFactor = -410.33;
-// long Scale::zeroOffset = 8493;
-
-// 1kg +/-0.16, - 128g, 80sps, 8avg samples
-// float Scale::calibrationFactor = -820.18;
-// long Scale::zeroOffset = 175782;
-
-// 1kg +/-0, - 128g, 80sps, 16avg samples, 2 decimal
-float Scale::calibrationFactor = -820.18;
 long Scale::zeroOffset = 175782;
 
-// 1kg +/-0, - 128g, 320sps, 64avg samples, 2 decimal
-// sps40, produced INF
-
-// 1kg +/-0.17, - 128g, 320sps, 8avg samples
-// float Scale::calibrationFactor = -820.18;
-// long Scale::zeroOffset = 175782;
-
-// keep the previous average weight to compare against
-// before deciding to show a new weight value to the user
+/**
+ * @brief the previous average weight to compare against
+ * @see calcAvgWeight()
+ */
 float Scale::prevAvgWeight = 0;
 
-// TODO:
-float Scale::prevWeight = 0;
-
-// reset
+/**
+ * @brief the list of weights,
+ * for the average weight calculation
+ *
+ */
 float Scale::avgWeights[SCALE_AVG_WEIGHT_SAMPLES_MAX];
+
+/**
+ * @brief the current index of the avgWeights list.
+ * that's where we will add the next weight...
+ */
 byte Scale::avgWeightIndex = 0;
-byte Scale::avgWeightSamples = SCALE_AVG_WEIGHT_SAMPLES;
+
+/**
+ * @brief the current number of sample weights
+ * that we are using from the list of weights
+ * in order to calculate the average.
+ *
+ * the smaller the number of samples, the more agressive/faster
+ * but also noisier, the avg weight calculation will be.
+ */
+byte Scale::avgWeightSamples = SCALE_AVG_WEIGHT_SAMPLES_MIN;
 
 /**
  * @brief should be called once, from the main setup() function
