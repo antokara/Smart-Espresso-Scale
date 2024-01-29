@@ -151,38 +151,47 @@ float Scale::calcAvgWeight(float weight)
 //     return avgWeight;
 // }
 {
+    // add the new weight to the list of average weights
+    Scale::avgWeights[Scale::avgWeightIndex++] = weight;
+    // reset the index to the start,
+    // if it has reached the max limit of the list or the current limit
+    if (Scale::avgWeightIndex == SCALE_AVG_WEIGHT_SAMPLES_MAX || Scale::avgWeightIndex >= Scale::avgWeightSamples)
+        Scale::avgWeightIndex = 0;
+
+    // get the average weight
     float avgWeight = 0;
     for (int x = 0; x < Scale::avgWeightSamples; x++)
         avgWeight += Scale::avgWeights[x];
     avgWeight /= Scale::avgWeightSamples;
 
-    // float delta = abs(weight - Scale::prevAvgWeight);
+    // get the delta between current avg and previous
     float delta = abs(avgWeight - Scale::prevAvgWeight);
-    Serial.print("delta: ");
-    Serial.println(delta);
-    if (delta > 0 && delta <= SCALE_AVG_WEIGHT_DELTA_THRESHOLD)
+    if (delta > 0 && delta <= SCALE_AVG_WEIGHT_DELTA_THRESHOLD && Scale::avgWeightSamples < SCALE_AVG_WEIGHT_SAMPLES_MAX)
     {
-        if (Scale::avgWeightSamples < SCALE_AVG_WEIGHT_SAMPLES_MAX)
-        {
-            Scale::avgWeights[Scale::avgWeightSamples++] = avgWeight;
-        }
+        // when there's a delta but it's under the threshold
+        // (most likely the item on the scale is stabilizing) and
+        // the samples are still under the max. limit
+        //
+        // increase the samples in an effort to stabilize the weight and
+        // set the average weight to the new maximum sample slot
+        // to prevent any previous value to affect the next average...
+        Scale::avgWeights[++Scale::avgWeightSamples] = avgWeight;
     }
-    else if (delta > SCALE_AVG_WEIGHT_DELTA_THRESHOLD)
+    else if (delta > SCALE_AVG_WEIGHT_DELTA_THRESHOLD && Scale::avgWeightSamples > SCALE_AVG_WEIGHT_SAMPLES_MIN)
     {
-        // if (Scale::avgWeightSamples > SCALE_AVG_WEIGHT_SAMPLES_MIN)
-        {
-            Scale::avgWeightSamples = SCALE_AVG_WEIGHT_SAMPLES_MIN;
-            for (int x = Scale::avgWeightSamples; x < SCALE_AVG_WEIGHT_SAMPLES_MIN; x++)
-                Scale::avgWeights[x] = avgWeight;
-            // Scale::avgWeights[Scale::avgWeightSamples--] = avgWeight;
-        }
+        // when there's a delta greater than the threshold
+        // (most likely the item on the scale was added or removed) and
+        // the samples are above the min. limit
+        //
+        // reset the samples to the min. limit
+        Scale::avgWeightSamples = SCALE_AVG_WEIGHT_SAMPLES_MIN;
+        // overwrite all the samples from the min. limit and above
+        // with the average weight, to prevent any previous value to affect the next average...
+        for (int x = Scale::avgWeightSamples; x < SCALE_AVG_WEIGHT_SAMPLES_MIN; x++)
+            Scale::avgWeights[x] = avgWeight;
     }
-    Serial.print("avgWeightSamples: ");
-    Serial.println(Scale::avgWeightSamples);
-
-    Scale::avgWeights[Scale::avgWeightIndex++] = weight;
-    if (Scale::avgWeightIndex == SCALE_AVG_WEIGHT_SAMPLES_MAX || Scale::avgWeightIndex >= Scale::avgWeightSamples)
-        Scale::avgWeightIndex = 0;
+    // Serial.print("avgWeightSamples: ");
+    // Serial.println(Scale::avgWeightSamples);
 
     // keep the prev avg weight
     Scale::prevAvgWeight = avgWeight;
@@ -226,19 +235,20 @@ String Scale::formatWeight(float weight)
     float formattedWeight = weight;
 
     // when the weight is too close to zero, make it zero
-    if (abs(weight - 0) <= SCALE_AVG_WEIGHT_DELTA_THRESHOLD)
+    if (abs(formattedWeight) <= SCALE_AVG_WEIGHT_DELTA_ZERO_THRESHOLD)
     {
         formattedWeight = 0;
     }
-    else if (weight > SCALE_WEIGHT_MAX)
+    else if (formattedWeight > SCALE_WEIGHT_MAX)
     {
         return SCALE_WEIGHT_MAX_MSG;
     }
     else
     {
-        formattedWeight = Scale::roundFloat(weight, SCALE_WEIGHT_DECIMALS);
+        formattedWeight = Scale::roundFloat(formattedWeight, SCALE_WEIGHT_DECIMALS);
     }
 
+    // pad prefix with spaces
     const int totalWidth = Scale::numberLength(SCALE_WEIGHT_DECIMALS + SCALE_WEIGHT_MAX);
     // +1 for the null terminator
     char buffer[totalWidth + 1];

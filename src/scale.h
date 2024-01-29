@@ -56,6 +56,14 @@
 #define SCALE_AVG_WEIGHT_DELTA_THRESHOLD 0.1
 
 /**
+ * @brief calculate the zero threshold that when the avg weight
+ * has a delta smaller or equal to, will be considered zero,
+ * for formatting purposes only
+ *
+ */
+#define SCALE_AVG_WEIGHT_DELTA_ZERO_THRESHOLD SCALE_AVG_WEIGHT_DELTA_THRESHOLD * 0.9 + SCALE_AVG_WEIGHT_DELTA_THRESHOLD
+
+/**
  * @brief the number of weight decimals accurancy, to show to the user
  *
  */
