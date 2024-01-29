@@ -126,7 +126,7 @@ public:
     // methods
     static void setup();
     static void loop();
-    static float calcAvgWeight(float weight);
+    static bool calcAvgWeight(float weight);
     static float getWeight();
     static void calculateZeroOffset();
     static void calibrate();

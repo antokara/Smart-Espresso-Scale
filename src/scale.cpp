@@ -136,20 +136,9 @@ void Scale::setup()
  * basically, too fast changes, mean noise and not actual weight changes...
  *
  * @param weight
- * @return float
+ * @return bool true if the avg weight has changed since last time
  */
-float Scale::calcAvgWeight(float weight)
-// {
-//     avgWeights[avgWeightIndex++] = weight;
-//     if (avgWeightIndex == SCALE_AVG_WEIGHT_SAMPLES)
-//         avgWeightIndex = 0;
-//     float avgWeight = 0;
-//     for (int x = 0; x < SCALE_AVG_WEIGHT_SAMPLES; x++)
-//         avgWeight += avgWeights[x];
-//     avgWeight /= SCALE_AVG_WEIGHT_SAMPLES;
-
-//     return avgWeight;
-// }
+bool Scale::calcAvgWeight(float weight)
 {
     // add the new weight to the list of average weights
     Scale::avgWeights[Scale::avgWeightIndex++] = weight;
@@ -193,10 +182,13 @@ float Scale::calcAvgWeight(float weight)
     // Serial.print("avgWeightSamples: ");
     // Serial.println(Scale::avgWeightSamples);
 
-    // keep the prev avg weight
-    Scale::prevAvgWeight = avgWeight;
-
-    return avgWeight;
+    if (Scale::prevAvgWeight != avgWeight)
+    {
+        // keep the prev avg weight
+        Scale::prevAvgWeight = avgWeight;
+        return true;
+    }
+    return false;
 }
 
 /**
@@ -399,26 +391,9 @@ void Scale::loop()
             Scale::firstAvailability = SCALE_FIRST_AVAILABILITY_YES;
             Scale::tare();
         }
-        // float weight = Scale::getWeight();
-        // // if (abs(weight - Scale::prevWeight) > SCALE_AVG_WEIGHT_DELTA_THRESHOLD)
-        // {
-        // Serial.print("\tweight: ");
-        //     // Serial.println(Scale::formatWeight(weight));
-        // Serial.println(Scale::getWeight());
-        // }
 
-        float avgWeight = Scale::calcAvgWeight(Scale::getWeight());
-        // TODO: only check the avg weight...
-        // if (abs(avgWeight - Scale::prevAvgWeight) > SCALE_AVG_WEIGHT_DELTA_THRESHOLD)
-        if (abs(avgWeight - lastAvgWeight) > SCALE_AVG_WEIGHT_DELTA_THRESHOLD)
+        if (Scale::calcAvgWeight(Scale::getWeight()))
         {
-            // TODO: show on screen
-            // Scale::prevAvgWeight = avgWeight;
-            lastAvgWeight = avgWeight;
-#ifdef SERIAL_DEBUG
-            // Serial.print("\tAvgWeight: ");
-            // Serial.println(Scale::prevAvgWeight);
-#endif
             // TODO: debounce the screen updates because the LCD has a very slow refresh rate
             //       the last value, must be retained/shown eventually...
             Lcd::print(Scale::formatWeight(Scale::prevAvgWeight), 0, 0);
