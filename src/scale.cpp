@@ -9,6 +9,7 @@
 #include <scale.h>
 #include <device.h>
 #include <lcd.h>
+#include <buzzer.h>
 
 // the actual scale device instance
 NAU7802 scaleDev;
@@ -43,15 +44,20 @@ float Scale::calibrationFactor = -820.18;
 long Scale::zeroOffset = 175782;
 
 /**
- * @brief the previous average weight to compare against
+ * @brief the average weight to compare against.
+ * Depending on the execution time, this can be the previous or current avg weight.
+ *  - if used prior to calling calcAvgWeight(), it is the previous
+ *  - if used after calling calcAvgWeight(), it is the current
+ *
  * @see calcAvgWeight()
  */
-float Scale::prevAvgWeight = 0;
+float Scale::avgWeight = 0;
 
 /**
  * @brief the list of weights,
  * for the average weight calculation
  *
+ * This helps smooth out jitter.
  */
 float Scale::avgWeights[SCALE_AVG_WEIGHT_SAMPLES_MAX];
 
@@ -70,6 +76,12 @@ byte Scale::avgWeightIndex = 0;
  * but also noisier, the avg weight calculation will be.
  */
 byte Scale::avgWeightSamples = SCALE_AVG_WEIGHT_SAMPLES_MIN;
+
+/**
+ * @brief true if the weight has changed in this loop iteration
+ *
+ */
+byte Scale::hasWeightChanged = false;
 
 /**
  * @brief should be called once, from the main setup() function
@@ -120,16 +132,13 @@ void Scale::setup()
  * @brief calculates the average weight from the given weight,
  * using a moving window average algorithm, to reduce jitter.
  *
- * TODO: add debouncing to this, because it's not very useful currently...
- * basically, too fast changes, mean noise and not actual weight changes...
- *
- * @param weight
- * @return bool true if the avg weight has changed since last time
+ * @param rawWeight the current raw weight value
+ * @see getRawWeight()
  */
-bool Scale::calcAvgWeight(float weight)
+void Scale::calcAvgWeight(float rawWeight)
 {
     // add the new weight to the list of average weights
-    Scale::avgWeights[Scale::avgWeightIndex++] = weight;
+    Scale::avgWeights[Scale::avgWeightIndex++] = rawWeight;
     // reset the index to the start,
     // if it has reached the max limit of the list or the current limit
     if (Scale::avgWeightIndex == SCALE_AVG_WEIGHT_SAMPLES_MAX || Scale::avgWeightIndex >= Scale::avgWeightSamples)
@@ -142,7 +151,7 @@ bool Scale::calcAvgWeight(float weight)
     avgWeight /= Scale::avgWeightSamples;
 
     // get the delta between current avg and previous
-    float delta = abs(avgWeight - Scale::prevAvgWeight);
+    float delta = abs(avgWeight - Scale::avgWeight);
     if (delta > 0 && delta <= SCALE_AVG_WEIGHT_DELTA_THRESHOLD && Scale::avgWeightSamples < SCALE_AVG_WEIGHT_SAMPLES_MAX)
     {
         // when there's a delta but it's under the threshold
@@ -167,16 +176,17 @@ bool Scale::calcAvgWeight(float weight)
         for (int x = Scale::avgWeightSamples; x < SCALE_AVG_WEIGHT_SAMPLES_MIN; x++)
             Scale::avgWeights[x] = avgWeight;
     }
-    // Serial.print("avgWeightSamples: ");
-    // Serial.println(Scale::avgWeightSamples);
 
-    if (Scale::prevAvgWeight != avgWeight)
+    if (Scale::avgWeight != avgWeight)
     {
         // keep the prev avg weight
-        Scale::prevAvgWeight = avgWeight;
-        return true;
+        Scale::avgWeight = avgWeight;
+        Scale::hasWeightChanged = true;
     }
-    return false;
+    else
+    {
+        Scale::hasWeightChanged = false;
+    }
 }
 
 /**
@@ -292,20 +302,34 @@ void Scale::calculateZeroOffset()
 void Scale::tare()
 {
     // TODO: properly tare with a watch. this basically needs to "start" taring
+    Buzzer::on();
+    Lcd::print("Tearing...", 0, 0, true);
     Scale::calculateZeroOffset();
-    Lcd::print(Scale::formatWeight(0), 0, 0);
+    Lcd::print(Scale::formatWeight(0), 0, 0, true);
+    Buzzer::off();
 }
 
 /**
- * @brief returns the current weight,
+ * @brief returns the current raw weight, as the sensor returns it,
  * allowing for negavive values and without any average.
- * we will calculate the average...
  *
- * @return float the current weight
+ * @return float the current raw weight
+ */
+float Scale::getRawWeight()
+{
+    return scaleDev.getWeight(SCALE_ALLOW_NEGATIVE_READINGS, 1);
+}
+
+/**
+ * @brief the current processed (filtered) weight
+ * this should be used in most places (except for calibration)
+ *
+ * @return float
+ * @see calcAvgWeight()
  */
 float Scale::getWeight()
 {
-    return scaleDev.getWeight(SCALE_ALLOW_NEGATIVE_READINGS, 1);
+    return Scale::avgWeight;
 }
 
 #ifdef SCALE_CALIBRATE
@@ -356,7 +380,7 @@ void Scale::calibrate(void)
         // confirm to the user, the new weight, which should match
         // the reference weight that was entered previously...
         Serial.print("Scale Reading: ");
-        Serial.println(Scale::getWeight(), SCALE_WEIGHT_DECIMALS);
+        Serial.println(Scale::getRawWeight(), SCALE_WEIGHT_DECIMALS);
 
         // this value, must be set to the Scale::calibrationFactor constant
         Serial.print("Scale Calibration factor: ");
@@ -380,11 +404,14 @@ void Scale::loop()
             Scale::tare();
         }
 
-        if (Scale::calcAvgWeight(Scale::getWeight()))
+        // calculate the average weight and set the hasWeightChanged
+        Scale::calcAvgWeight(Scale::getRawWeight());
+
+        if (Scale::hasWeightChanged)
         {
             // TODO: debounce the screen updates because the LCD has a very slow refresh rate
             //       the last value, must be retained/shown eventually...
-            Lcd::print(Scale::formatWeight(Scale::prevAvgWeight), 0, 0);
+            Lcd::print(Scale::formatWeight(Scale::getWeight()), 0, 0);
         }
 
 #ifdef SCALE_CALIBRATE

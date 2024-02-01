@@ -4,7 +4,7 @@
 #include <Wire.h>
 #include <SparkFun_Qwiic_Scale_NAU7802_Arduino_Library.h>
 
-// I2C pins
+// I2C pins (D0-D28 which equates to GP0-GP28)
 #define SCALE_SDA_PIN D2
 #define SCALE_SCL_PIN D3
 
@@ -37,12 +37,22 @@
 #define SCALE_CALCULATE_ZERO_OFFSET_SAMPLES 64
 
 /**
- * @brief the min/max samples to collect for the moving average window
+ * @brief the min samples to collect for the moving average window
  * the higher, the smoother the result (less jitter) but
  * it also slows down the processing time...
+ *
+ * 1 is the hard minimum.
  */
 #define SCALE_AVG_WEIGHT_SAMPLES_MIN 4
-#define SCALE_AVG_WEIGHT_SAMPLES_MAX 128
+
+/**
+ * @brief the max samples to collect for the moving average window
+ * the higher, the smoother the result (less jitter) but
+ * it also slows down the processing time...
+ *
+ * 255 is the hard maximum.
+ */
+#define SCALE_AVG_WEIGHT_SAMPLES_MAX 255
 
 /**
  * @brief the delta threshold between two average weight values
@@ -56,8 +66,13 @@
 /**
  * @brief calculate the zero threshold that when the avg weight
  * has a delta smaller or equal to, will be considered zero,
- * for formatting purposes only
+ * for formatting purposes only.
  *
+ * that's because, even though it appears that the avg weight is 0.1
+ * in reality, that's a rounded number which may be 0.100001 and
+ * if we compare against the SCALE_AVG_WEIGHT_DELTA_THRESHOLD
+ * we will get false... therefore, we convert the 0.1 to 0.19
+ * in order to catch all those case...
  */
 #define SCALE_AVG_WEIGHT_DELTA_ZERO_THRESHOLD SCALE_AVG_WEIGHT_DELTA_THRESHOLD * 0.9 + SCALE_AVG_WEIGHT_DELTA_THRESHOLD
 
@@ -111,12 +126,10 @@ public:
     // properties
     static byte isAvailable;
     static byte firstAvailability;
+    static byte hasWeightChanged;
     static long zeroOffset;
     static float calibrationFactor;
-
-    static float prevWeight;
-    static float prevAvgWeight;
-    // Create an array to take average of weights. This helps smooth out jitter.
+    static float avgWeight;
     static float avgWeights[SCALE_AVG_WEIGHT_SAMPLES_MAX];
     static byte avgWeightIndex;
     static byte avgWeightSamples;
@@ -124,7 +137,8 @@ public:
     // methods
     static void setup();
     static void loop();
-    static bool calcAvgWeight(float weight);
+    static void calcAvgWeight(float weight);
+    static float getRawWeight();
     static float getWeight();
     static void calculateZeroOffset();
     static void calibrate();

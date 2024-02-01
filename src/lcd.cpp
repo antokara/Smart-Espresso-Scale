@@ -16,10 +16,32 @@ LiquidCrystal_I2C lcd(LCD_I2C_ADDRESS, 20, 4);
  *
  */
 
-void Lcd::print(String text, uint8_t col, uint8_t row)
+/**
+ * @brief prints the text to the screen col/row given and optionally,
+ * clears the screen before it prints.
+ *
+ * @param text what to print
+ * @param col column (0 based)
+ * @param row row (0 based)
+ * @param clear whether or not to clear before printing
+ */
+void Lcd::print(String text, uint8_t col, uint8_t row, bool clear)
 {
+    if (clear)
+    {
+        Lcd::clear();
+    }
     lcd.setCursor(col, row);
     lcd.print(text);
+}
+
+/**
+ * @brief clears the screen
+ *
+ */
+void Lcd::clear()
+{
+    lcd.clear();
 }
 
 /**
@@ -36,10 +58,6 @@ void Lcd::setup()
     Wire.begin();
     lcd.init();
     lcd.backlight();
-    // lcd.setCursor(0, 0);
-    // lcd.print("Hello, world!");
-    // lcd.setCursor(0, 1);
-    // lcd.print("Testing 2nd row");
     digitalWrite(LED_BUILTIN, HIGH);
 }
 
@@ -49,8 +67,4 @@ void Lcd::setup()
  */
 void Lcd::loop()
 {
-    // digitalWrite(LED_BUILTIN, HIGH);
-    // delay(1000);
-    // digitalWrite(LED_BUILTIN, LOW);
-    // delay(1000);
 }

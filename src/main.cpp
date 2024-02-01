@@ -1,18 +1,22 @@
 #include <Arduino.h>
 #include "device.h"
+#include "buzzer.h"
 #include "lcd.h"
 #include "scale.h"
+#include "buttons.h"
 
 void setup()
 {
-    Device::setup();
+    Buzzer::setup();
     Lcd::setup();
     Scale::setup();
+    Buttons::setup();
 }
 
 void loop()
 {
-    Device::loop();
+    Buzzer::loop();
     Lcd::loop();
     Scale::loop();
+    Buttons::loop();
 }
