@@ -3,6 +3,8 @@
 #include "scale.h"
 #include "lcd.h"
 #include "device.h"
+#include "modes/modes.h"
+#include "modes/modes_controller.h"
 
 /**
  * @author Antonios Karagiannis (antokarag@gmail.com)
@@ -78,9 +80,9 @@ void Buttons::loop()
   // check the buttons
   if (digitalRead(TARE_BUTTON_PIN) == HIGH && Buttons::isTarePressed == false)
   {
+    // TODO: move to scene controller;
     Buttons::isTarePressed = true;
-    // TODO: move to mode
-    Scale::tare();
+    Modes_Controller::mode = tare;
   }
   else
   {
