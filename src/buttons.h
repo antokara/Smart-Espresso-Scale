@@ -38,6 +38,7 @@ class Buttons
 {
 public:
     // properties
+    // TODO: make them bytes to allow for actions
     static bool isTarePressed;
     static bool isUpPressed;
     static bool isDownPressed;

@@ -79,6 +79,7 @@ void Buttons::loop()
   if (digitalRead(TARE_BUTTON_PIN) == HIGH && Buttons::isTarePressed == false)
   {
     Buttons::isTarePressed = true;
+    // TODO: move to mode
     Scale::tare();
   }
   else

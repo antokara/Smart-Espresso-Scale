@@ -304,8 +304,17 @@ void Scale::tare()
     // TODO: properly tare with a watch. this basically needs to "start" taring
     Buzzer::on();
     Lcd::print("Tearing...", 0, 0, true);
+
+    // tare
     Scale::calculateZeroOffset();
+
+    // show zero to the screen
     Lcd::print(Scale::formatWeight(0), 0, 0, true);
+
+    // reset all avg weight values
+    for (int x = 0; x < SCALE_AVG_WEIGHT_SAMPLES_MIN; x++)
+        Scale::avgWeights[x] = 0;
+
     Buzzer::off();
 }
 
