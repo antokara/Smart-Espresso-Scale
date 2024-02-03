@@ -6,6 +6,9 @@
  * @copyright Copyright (c) 2024
  *
  */
+#include <Arduino.h>
+#include <Wire.h>
+#include <SparkFun_Qwiic_Scale_NAU7802_Arduino_Library.h>
 #include <scale.h>
 #include <device.h>
 #include <lcd.h>

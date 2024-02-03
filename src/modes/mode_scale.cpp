@@ -1,7 +1,12 @@
 #include <modes/mode_scale.h>
+#include <lcd.h>
+#include <scale.h>
+#include <buttons.h>
+#include <modes/modes_controller.h>
 
-void Mode_Scale::setup(){
-
+void Mode_Scale::setup()
+{
+    Lcd::clear();
 };
 
 void Mode_Scale::loop()
@@ -11,5 +16,18 @@ void Mode_Scale::loop()
         // TODO: debounce the screen updates because the LCD has a very slow refresh rate
         //       the last value, must be retained/shown eventually...
         Lcd::print(Scale::formatWeight(Scale::getWeight()), 0, 0);
+    }
+
+    if (Buttons::tare == 1)
+    {
+        Modes_Controller::mode = tare;
+    }
+    else if (Buttons::ok == 1)
+    {
+        Modes_Controller::mode = customBrewMenu;
+    }
+    else if (Buttons::coffee == 1)
+    {
+        Modes_Controller::mode = selectPreset;
     }
 };

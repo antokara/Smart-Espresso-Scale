@@ -1,5 +1,6 @@
 #ifndef DEVICE
 #define DEVICE
+#include <Arduino.h>
 
 #define DEVICE_ID "smart-espresso-scale"
 #define DEVICE_NAME "Smart Espresso Scale"

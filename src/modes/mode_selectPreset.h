@@ -1,6 +1,5 @@
 #ifndef MODE_SELECT_PRESET
 #define MODE_SELECT_PRESET
-#include <lcd.h>
 
 class Mode_SelectPreset
 {

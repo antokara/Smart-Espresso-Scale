@@ -1,8 +1,6 @@
 #ifndef SCALE
 #define SCALE
 #include <Arduino.h>
-#include <Wire.h>
-#include <SparkFun_Qwiic_Scale_NAU7802_Arduino_Library.h>
 
 // I2C pins (D0-D28 which equates to GP0-GP28)
 #define SCALE_SDA_PIN D2
