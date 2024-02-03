@@ -312,7 +312,7 @@ void Scale::tare()
     Lcd::print(Scale::formatWeight(0), 0, 0, true);
 
     // reset all avg weight values
-    for (int x = 0; x < SCALE_AVG_WEIGHT_SAMPLES_MIN; x++)
+    for (int x = 0; x <= SCALE_AVG_WEIGHT_SAMPLES_MAX; x++)
         Scale::avgWeights[x] = 0;
 
     Buzzer::off();
