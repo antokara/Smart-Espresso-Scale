@@ -58,26 +58,11 @@ void Modes_Controller::loop()
         Modes_Controller::currentMode->setup();
     }
 
-    // TODO: add timeout when no button has been pressed for 1 minute and start beeping. maybe add scene?
-    if (Buttons::up == button_pressed)
-    {
-        Lcd::print("up    ", 0, 1);
-    }
-    else if (Buttons::down == button_pressed)
-    {
-        Lcd::print("down   ", 0, 1);
-    }
-    else if (Buttons::ok == button_pressed)
-    {
-        Lcd::print("ok   ", 0, 1);
-    }
-    else if (Buttons::cancel == button_pressed)
-    {
-        Lcd::print("cancel", 0, 1);
-    }
-
     // run the mode's loop
     Modes_Controller::currentMode->loop();
+
+    // TODO: add timeout when no button has been pressed for 1 minute
+    //       and start beeping. maybe add scene? OR implement auto shut-off
 
     // check for user actions (buttons)
     if (Buttons::tare == button_pressed)

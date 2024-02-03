@@ -6,6 +6,13 @@
 #include "modes/mode_tare.h"
 #include "modes/mode_selectPreset.h"
 
+/**
+ * @brief this class is responsible for:
+ *  - handling the mode switching
+ *  - creating/destroying modes if needed
+ *  - executing the setup/loop of the current mode
+ *  - delegating events (e.g. user button presses) to the current mode
+ */
 class Modes_Controller
 {
 public:
