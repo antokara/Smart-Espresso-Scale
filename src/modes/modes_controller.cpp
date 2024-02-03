@@ -19,6 +19,8 @@ void Modes_Controller::setup(){};
 
 void Modes_Controller::loop()
 {
+    // TODO: add timeout
+
     // TODO: consider adding a setup call, upon mode switch;
     switch (Modes_Controller::mode)
     {
