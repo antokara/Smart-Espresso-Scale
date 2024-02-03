@@ -21,7 +21,7 @@ void Mode_Scale::loop()
 
 void Mode_Scale::tare()
 {
-    Modes_Controller::mode = modes_tare;
+    Modes_Controller::setMode(modes_tare);
     Lcd::print("tare    ", 0, 1);
 }
 
@@ -35,7 +35,7 @@ void Mode_Scale::down()
 
 void Mode_Scale::ok()
 {
-    Modes_Controller::mode = modes_customBrewMenu;
+    Modes_Controller::setMode(modes_customBrewMenu);
 }
 
 void Mode_Scale::cancel()
@@ -44,5 +44,5 @@ void Mode_Scale::cancel()
 
 void Mode_Scale::coffee()
 {
-    Modes_Controller::mode = modes_selectPreset;
+    Modes_Controller::setMode(modes_selectPreset);
 }

@@ -4,9 +4,6 @@
 class Mode_Base
 {
 public:
-    // constructor
-    Mode_Base();
-
     // standard methods (must be implemented by the derived class)
     virtual void setup() = 0;
     virtual void loop() = 0;

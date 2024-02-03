@@ -21,13 +21,29 @@ modes Modes_Controller::mode = modes_scale;
 modes Modes_Controller::prevMode;
 
 /**
- * @brief our mode scale
+ * @brief the current mode instance
  *
  */
-Mode_Scale Modes_Controller::modeScale = Mode_Scale();
-Mode_Tare Modes_Controller::modeTare = Mode_Tare();
-Mode_SelectPreset Modes_Controller::modeSelectPreset = Mode_SelectPreset();
 Mode_Base *Modes_Controller::currentMode;
+
+/**
+ * @brief sets the new mode.
+ *
+ * important: the new mode does not take effect immediatelly.
+ *            rather, the timing of that event, gets handled properly
+ *            inside the loop method of this class.
+ *            this method helps us control the change from a single approved method.
+ *
+ * @param newMode
+ * @see loop()
+ */
+void Modes_Controller::setMode(modes newMode)
+{
+    if (Modes_Controller::mode != newMode)
+    {
+        Modes_Controller::mode = newMode;
+    }
+}
 
 void Modes_Controller::setup(){
 
@@ -35,24 +51,23 @@ void Modes_Controller::setup(){
 
 void Modes_Controller::loop()
 {
-    // at the very start, handle mode changes (to also apply on the very first run...)
+    // handle mode changes, as the first thing we do (so that don't have NULL, on the first loop)
     if (Modes_Controller::mode != Modes_Controller::prevMode)
     {
-        Serial.print("new mode");
-        Serial.println(Modes_Controller::mode);
         Modes_Controller::prevMode = Modes_Controller::mode;
+        delete Modes_Controller::currentMode;
         Buttons::ignoreAll();
         switch (Modes_Controller::mode)
         {
         default:
         case modes_scale:
-            Modes_Controller::currentMode = &Modes_Controller::modeScale;
+            Modes_Controller::currentMode = new Mode_Scale();
             break;
         case modes_tare:
-            Modes_Controller::currentMode = &Modes_Controller::modeTare;
+            Modes_Controller::currentMode = new Mode_Tare();
             break;
         case modes_selectPreset:
-            Modes_Controller::currentMode = &Modes_Controller::modeSelectPreset;
+            Modes_Controller::currentMode = new Mode_SelectPreset();
             break;
         }
         Modes_Controller::currentMode->setup();

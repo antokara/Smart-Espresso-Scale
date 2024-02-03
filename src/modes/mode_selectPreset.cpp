@@ -28,7 +28,7 @@ void Mode_SelectPreset::ok()
 
 void Mode_SelectPreset::cancel()
 {
-    Modes_Controller::mode = modes_scale;
+    Modes_Controller::setMode(modes_scale);
 }
 
 void Mode_SelectPreset::coffee()

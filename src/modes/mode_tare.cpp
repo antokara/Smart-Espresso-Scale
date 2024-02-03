@@ -4,9 +4,8 @@
 
 void Mode_Tare::setup()
 {
-    Serial.println("Mode_Tare::setup()");
     Scale::tare();
-    Modes_Controller::mode = modes_scale;
+    Modes_Controller::setMode(modes_scale);
 };
 
 void Mode_Tare::loop(){};

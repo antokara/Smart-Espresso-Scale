@@ -15,18 +15,17 @@
  */
 class Modes_Controller
 {
-public:
+private:
     // properties
     static modes mode;
     static modes prevMode;
-    static Mode_Scale modeScale;
-    static Mode_Tare modeTare;
-    static Mode_SelectPreset modeSelectPreset;
     static Mode_Base *currentMode;
 
+public:
     // methods
     static void setup();
     static void loop();
+    static void setMode(modes newMode);
 };
 
 #endif // MODES_CONTROLLER
