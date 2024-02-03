@@ -17,16 +17,13 @@
 
 /**
  * @brief the state of the button:
- *        0: not pressed
- *        1: currently down/pressed and first loop
- *        2: currently down/pressed and consecutive loop
  */
-byte Buttons::tare = 0;
-byte Buttons::up = 0;
-byte Buttons::down = 0;
-byte Buttons::ok = 0;
-byte Buttons::cancel = 0;
-byte Buttons::coffee = 0;
+button_states Buttons::tare = button_up;
+button_states Buttons::up = button_up;
+button_states Buttons::down = button_up;
+button_states Buttons::ok = button_up;
+button_states Buttons::cancel = button_up;
+button_states Buttons::coffee = button_up;
 
 /**
  * @brief should be called once, from the main setup() function
@@ -57,97 +54,116 @@ void Buttons::loop()
   // check the buttons
   if (digitalRead(TARE_BUTTON_PIN) == HIGH)
   {
-    if (Buttons::tare == 0)
+    if (Buttons::tare == button_up)
     {
-      Buttons::tare = 1;
+      Buttons::tare = button_pressed;
     }
-    else if (Buttons::tare == 1)
+    else if (Buttons::tare == button_pressed)
     {
-      Buttons::tare == 2;
+      Buttons::tare == button_down;
     }
   }
   else
   {
-    Buttons::tare = 0;
+    Buttons::tare = button_up;
   }
 
   if (digitalRead(UP_BUTTON_PIN) == HIGH)
   {
-    if (Buttons::up == 0)
+    if (Buttons::up == button_up)
     {
-      Buttons::up = 1;
+      Buttons::up = button_pressed;
     }
-    else if (Buttons::up == 1)
+    else if (Buttons::up == button_pressed)
     {
-      Buttons::up == 2;
+      Buttons::up == button_down;
     }
   }
   else
   {
-    Buttons::up = 0;
+    Buttons::up = button_up;
   }
 
   if (digitalRead(DOWN_BUTTON_PIN) == HIGH)
   {
-    if (Buttons::down == 0)
+    if (Buttons::down == button_up)
     {
-      Buttons::down = 1;
+      Buttons::down = button_pressed;
     }
-    else if (Buttons::down == 1)
+    else if (Buttons::down == button_pressed)
     {
-      Buttons::down == 2;
+      Buttons::down == button_down;
     }
   }
   else
   {
-    Buttons::down = 0;
+    Buttons::down = button_up;
   }
 
   if (digitalRead(OK_BUTTON_PIN) == HIGH)
   {
-    if (Buttons::ok == 0)
+    if (Buttons::ok == button_up)
     {
-      Buttons::ok = 1;
+      Buttons::ok = button_pressed;
     }
-    else if (Buttons::ok == 1)
+    else if (Buttons::ok == button_pressed)
     {
-      Buttons::ok == 2;
+      Buttons::ok == button_down;
     }
   }
   else
   {
-    Buttons::ok = 0;
+    Buttons::ok = button_up;
   }
 
   if (digitalRead(CANCEL_BUTTON_PIN) == HIGH)
   {
-    if (Buttons::cancel == 0)
+    if (Buttons::cancel == button_up)
     {
-      Buttons::cancel = 1;
+      Buttons::cancel = button_pressed;
     }
-    else if (Buttons::cancel == 1)
+    else if (Buttons::cancel == button_pressed)
     {
-      Buttons::cancel == 2;
+      Buttons::cancel == button_down;
     }
   }
   else
   {
-    Buttons::cancel = 0;
+    Buttons::cancel = button_up;
   }
 
   if (digitalRead(COFFEE_BUTTON_PIN) == HIGH)
   {
-    if (Buttons::coffee == 0)
+    if (Buttons::coffee == button_up)
     {
-      Buttons::coffee = 1;
+      Buttons::coffee = button_pressed;
     }
-    else if (Buttons::coffee == 1)
+    else if (Buttons::coffee == button_pressed)
     {
-      Buttons::coffee == 2;
+      Buttons::coffee == button_down;
     }
   }
   else
   {
-    Buttons::coffee = 0;
+    Buttons::coffee = button_up;
   }
+}
+
+/**
+ * @brief set all buttons to ignore state.
+ *
+ * This is needed after a navigation, to prevent
+ * actions to be taken on a different menu
+ * for a button that was will pressed (e.g. cancel).
+ *
+ * Sort of a debounce...
+ */
+void Buttons::ignoreAll()
+{
+  Buttons::tare = button_ignore;
+  Buttons::up = button_ignore;
+  Buttons::down = button_ignore;
+  Buttons::ok = button_ignore;
+  Buttons::cancel = button_ignore;
+  Buttons::coffee = button_ignore;
 }

@@ -52,6 +52,7 @@ void Modes_Controller::loop()
     if (Modes_Controller::mode != Modes_Controller::prevMode)
     {
         Modes_Controller::prevMode = Modes_Controller::mode;
+        Buttons::ignoreAll();
         switch (Modes_Controller::mode)
         {
         default:

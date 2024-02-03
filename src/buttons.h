@@ -1,5 +1,6 @@
 #ifndef BUTTONS
 #define BUTTONS
+#include <button_states.h>
 
 /**
  * @brief tare button pin.
@@ -38,16 +39,17 @@ class Buttons
 {
 public:
     // properties
-    static byte tare;
-    static byte up;
-    static byte down;
-    static byte ok;
-    static byte cancel;
-    static byte coffee;
+    static button_states tare;
+    static button_states up;
+    static button_states down;
+    static button_states ok;
+    static button_states cancel;
+    static button_states coffee;
 
     // methods
     static void setup();
     static void loop();
+    static void ignoreAll();
 };
 
 #endif // BUTTONS

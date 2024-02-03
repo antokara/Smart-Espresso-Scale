@@ -18,15 +18,15 @@ void Mode_Scale::loop()
         Lcd::print(Scale::formatWeight(Scale::getWeight()), 0, 0);
     }
 
-    if (Buttons::tare == 1)
+    if (Buttons::tare == button_pressed)
     {
         Modes_Controller::mode = tare;
     }
-    else if (Buttons::ok == 1)
+    else if (Buttons::ok == button_pressed)
     {
         Modes_Controller::mode = customBrewMenu;
     }
-    else if (Buttons::coffee == 1)
+    else if (Buttons::coffee == button_pressed)
     {
         Modes_Controller::mode = selectPreset;
     }

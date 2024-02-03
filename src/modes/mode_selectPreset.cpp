@@ -10,7 +10,7 @@ void Mode_SelectPreset::setup()
 
 void Mode_SelectPreset::loop()
 {
-    if (Buttons::cancel == 1)
+    if (Buttons::cancel == button_pressed)
     {
         Modes_Controller::mode = scale;
     }
