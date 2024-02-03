@@ -1,5 +1,5 @@
-#include <buzzer.h>
-#include <device.h>
+#include "services/buzzer.h"
+#include "services/device.h"
 
 /**
  * @author Antonios Karagiannis (antokarag@gmail.com)

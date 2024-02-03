@@ -1,10 +1,10 @@
 #include <Arduino.h>
-#include "device.h"
-#include "buzzer.h"
-#include "lcd.h"
-#include "scale.h"
-#include "buttons.h"
-#include "modes/modes_controller.h"
+#include "services/device.h"
+#include "services/buzzer.h"
+#include "services/lcd.h"
+#include "services/scale.h"
+#include "services/buttons.h"
+#include "services/modes_controller.h"
 
 void setup()
 {
@@ -17,6 +17,7 @@ void setup()
 
 void loop()
 {
+    // services constantly run, regardless of the mode
     Buzzer::loop();
     Lcd::loop();
     Scale::loop();

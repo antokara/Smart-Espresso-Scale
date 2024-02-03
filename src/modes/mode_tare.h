@@ -1,6 +1,6 @@
 #ifndef MODE_TARE
 #define MODE_TARE
-#include <modes/mode_base.h>
+#include "modes/mode_base.h"
 
 class Mode_Tare : public Mode_Base
 {

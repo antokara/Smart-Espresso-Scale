@@ -1,6 +1,6 @@
 #ifndef MODE_SCALE
 #define MODE_SCALE
-#include <modes/mode_base.h>
+#include "modes/mode_base.h"
 
 class Mode_Scale : public Mode_Base
 {

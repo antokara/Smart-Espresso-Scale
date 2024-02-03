@@ -1,6 +1,6 @@
-#include <modes/mode_tare.h>
-#include <scale.h>
-#include <modes/modes_controller.h>
+#include "services/scale.h"
+#include "services/modes_controller.h"
+#include "modes/mode_tare.h"
 
 void Mode_Tare::setup()
 {

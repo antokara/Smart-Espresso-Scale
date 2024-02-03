@@ -1,6 +1,6 @@
 #ifndef MODE_SELECT_PRESET
 #define MODE_SELECT_PRESET
-#include <modes/mode_base.h>
+#include "modes/mode_base.h"
 
 class Mode_SelectPreset : public Mode_Base
 {

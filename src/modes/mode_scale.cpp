@@ -1,8 +1,8 @@
-#include <modes/mode_scale.h>
-#include <lcd.h>
-#include <scale.h>
-#include <buttons.h>
-#include <modes/modes_controller.h>
+#include "modes/mode_scale.h"
+#include "services/lcd.h"
+#include "services/scale.h"
+#include "services/buttons.h"
+#include "services/modes_controller.h"
 
 void Mode_Scale::setup()
 {

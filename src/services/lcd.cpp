@@ -1,5 +1,5 @@
-#include <lcd.h>
-#include <device.h>
+#include "services/lcd.h"
+#include "services/device.h"
 
 // set the LCD address to 0x27 for a 16 chars and 2 line display
 // the first parameter is  the I2C address

@@ -1,12 +1,12 @@
 #include <Arduino.h>
-#include <device.h>
-#include <buttons.h>
-#include <lcd.h>
-#include <modes/modes.h>
-#include <modes/mode_scale.h>
-#include <modes/mode_tare.h>
-#include <modes/mode_selectPreset.h>
-#include <modes/modes_controller.h>
+#include "services/device.h"
+#include "services/buttons.h"
+#include "services/lcd.h"
+#include "modes/modes.h"
+#include "modes/mode_scale.h"
+#include "modes/mode_tare.h"
+#include "modes/mode_selectPreset.h"
+#include "services/modes_controller.h"
 
 /**
  * @brief the active mode

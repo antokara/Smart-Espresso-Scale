@@ -1,10 +1,10 @@
 #include <Arduino.h>
-#include "buttons.h"
-#include "scale.h"
-#include "lcd.h"
-#include "device.h"
+#include "services/buttons.h"
+#include "services/scale.h"
+#include "services/lcd.h"
+#include "services/device.h"
 #include "modes/modes.h"
-#include "modes/modes_controller.h"
+#include "services/modes_controller.h"
 
 /**
  * @author Antonios Karagiannis (antokarag@gmail.com)

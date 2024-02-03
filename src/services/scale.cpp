@@ -9,10 +9,10 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include <SparkFun_Qwiic_Scale_NAU7802_Arduino_Library.h>
-#include <scale.h>
-#include <device.h>
-#include <lcd.h>
-#include <buzzer.h>
+#include "services/scale.h"
+#include "services/device.h"
+#include "services/lcd.h"
+#include "services/buzzer.h"
 
 // the actual scale device instance
 NAU7802 scaleDev;
