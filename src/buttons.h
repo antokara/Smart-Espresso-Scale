@@ -38,13 +38,12 @@ class Buttons
 {
 public:
     // properties
-    // TODO: make them bytes to allow for actions
-    static bool isTarePressed;
-    static bool isUpPressed;
-    static bool isDownPressed;
-    static bool isOkPressed;
-    static bool isCancelPressed;
-    static bool isCoffeePressed;
+    static byte tare;
+    static byte up;
+    static byte down;
+    static byte ok;
+    static byte cancel;
+    static byte coffee;
 
     // methods
     static void setup();

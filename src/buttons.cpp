@@ -16,40 +16,17 @@
  */
 
 /**
- * @brief if the tare button is pressed
- *
+ * @brief the state of the button:
+ *        0: not pressed
+ *        1: currently down/pressed and first loop
+ *        2: currently down/pressed and consecutive loop
  */
-bool Buttons::isTarePressed = false;
-
-/**
- * @brief if the up button is pressed
- *
- */
-bool Buttons::isUpPressed = false;
-
-/**
- * @brief if the down button is pressed
- *
- */
-bool Buttons::isDownPressed = false;
-
-/**
- * @brief if the ok button is pressed
- *
- */
-bool Buttons::isOkPressed = false;
-
-/**
- * @brief if the cancel button is pressed
- *
- */
-bool Buttons::isCancelPressed = false;
-
-/**
- * @brief if the coffee button is pressed
- *
- */
-bool Buttons::isCoffeePressed = false;
+byte Buttons::tare = 0;
+byte Buttons::up = 0;
+byte Buttons::down = 0;
+byte Buttons::ok = 0;
+byte Buttons::cancel = 0;
+byte Buttons::coffee = 0;
 
 /**
  * @brief should be called once, from the main setup() function
@@ -78,64 +55,99 @@ void Buttons::setup()
 void Buttons::loop()
 {
   // check the buttons
-  if (digitalRead(TARE_BUTTON_PIN) == HIGH && Buttons::isTarePressed == false)
+  if (digitalRead(TARE_BUTTON_PIN) == HIGH)
   {
-    // TODO: move to scene controller;
-    Buttons::isTarePressed = true;
-    Modes_Controller::mode = tare;
+    if (Buttons::tare == 0)
+    {
+      Buttons::tare = 1;
+    }
+    else if (Buttons::tare == 1)
+    {
+      Buttons::tare == 2;
+    }
   }
   else
   {
-    Buttons::isTarePressed = false;
+    Buttons::tare = 0;
   }
 
-  if (digitalRead(UP_BUTTON_PIN) == HIGH && Buttons::isUpPressed == false)
+  if (digitalRead(UP_BUTTON_PIN) == HIGH)
   {
-    Buttons::isUpPressed = true;
-    Lcd::print("up    ", 0, 1);
+    if (Buttons::up == 0)
+    {
+      Buttons::up = 1;
+    }
+    else if (Buttons::up == 1)
+    {
+      Buttons::up == 2;
+    }
   }
   else
   {
-    Buttons::isUpPressed = false;
+    Buttons::up = 0;
   }
 
-  if (digitalRead(DOWN_BUTTON_PIN) == HIGH && Buttons::isDownPressed == false)
+  if (digitalRead(DOWN_BUTTON_PIN) == HIGH)
   {
-    Buttons::isDownPressed = true;
-    Lcd::print("down  ", 0, 1);
+    if (Buttons::down == 0)
+    {
+      Buttons::down = 1;
+    }
+    else if (Buttons::down == 1)
+    {
+      Buttons::down == 2;
+    }
   }
   else
   {
-    Buttons::isDownPressed = false;
+    Buttons::down = 0;
   }
 
-  if (digitalRead(OK_BUTTON_PIN) == HIGH && Buttons::isOkPressed == false)
+  if (digitalRead(OK_BUTTON_PIN) == HIGH)
   {
-    Buttons::isOkPressed = true;
-    Lcd::print("ok    ", 0, 1);
+    if (Buttons::ok == 0)
+    {
+      Buttons::ok = 1;
+    }
+    else if (Buttons::ok == 1)
+    {
+      Buttons::ok == 2;
+    }
   }
   else
   {
-    Buttons::isOkPressed = false;
+    Buttons::ok = 0;
   }
 
-  if (digitalRead(CANCEL_BUTTON_PIN) == HIGH && Buttons::isCancelPressed == false)
+  if (digitalRead(CANCEL_BUTTON_PIN) == HIGH)
   {
-    Buttons::isCancelPressed = true;
-    Lcd::print("cancel", 0, 1);
+    if (Buttons::cancel == 0)
+    {
+      Buttons::cancel = 1;
+    }
+    else if (Buttons::cancel == 1)
+    {
+      Buttons::cancel == 2;
+    }
   }
   else
   {
-    Buttons::isCancelPressed = false;
+    Buttons::cancel = 0;
   }
 
-  if (digitalRead(COFFEE_BUTTON_PIN) == HIGH && Buttons::isCoffeePressed == false)
+  if (digitalRead(COFFEE_BUTTON_PIN) == HIGH)
   {
-    Buttons::isCoffeePressed = true;
-    Lcd::print("coffee", 0, 1);
+    if (Buttons::coffee == 0)
+    {
+      Buttons::coffee = 1;
+    }
+    else if (Buttons::coffee == 1)
+    {
+      Buttons::coffee == 2;
+    }
   }
   else
   {
-    Buttons::isCoffeePressed = false;
+    Buttons::coffee = 0;
   }
 }

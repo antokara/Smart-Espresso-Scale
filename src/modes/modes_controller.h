@@ -5,6 +5,8 @@
 #include <modes/mode_scale.h>
 #include <modes/mode_tare.h>
 #include <device.h>
+#include <buttons.h>
+#include <lcd.h>
 
 class Modes_Controller
 {

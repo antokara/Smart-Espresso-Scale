@@ -104,7 +104,7 @@ void Scale::setup()
         Serial.println("Scale::setup - Scale not detected. Please check wiring!");
 #endif
         Scale::isAvailable = SCALE_IS_AVAILABLE_NO;
-        // TODO: show in screen
+        // TODO: show error in screen
     }
     else
     {
