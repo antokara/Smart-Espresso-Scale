@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include <device.h>
 #include <buttons.h>
 #include <lcd.h>
@@ -26,8 +27,13 @@ modes Modes_Controller::prevMode = scale;
 Mode_Scale Modes_Controller::modeScale = Mode_Scale();
 Mode_Tare Modes_Controller::modeTare = Mode_Tare();
 Mode_SelectPreset Modes_Controller::modeSelectPreset = Mode_SelectPreset();
+Mode_Base *Modes_Controller::currentMode;
 
-void Modes_Controller::setup(){};
+void Modes_Controller::setup()
+{
+    // TODO: test
+    Modes_Controller::currentMode = &Modes_Controller::modeScale;
+};
 
 void Modes_Controller::loop()
 {
@@ -49,6 +55,7 @@ void Modes_Controller::loop()
         Lcd::print("cancel", 0, 1);
     }
 
+    // when the mode changes
     if (Modes_Controller::mode != Modes_Controller::prevMode)
     {
         Modes_Controller::prevMode = Modes_Controller::mode;
@@ -66,8 +73,10 @@ void Modes_Controller::loop()
             Modes_Controller::modeSelectPreset.setup();
             break;
         }
+        Modes_Controller::currentMode->test();
     }
 
+    // run the mode's loop
     switch (Modes_Controller::mode)
     {
     default:
