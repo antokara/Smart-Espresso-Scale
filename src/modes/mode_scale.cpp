@@ -31,3 +31,19 @@ void Mode_Scale::loop()
         Modes_Controller::mode = selectPreset;
     }
 };
+
+void Mode_Scale::up()
+{
+}
+
+void Mode_Scale::down()
+{
+}
+
+void Mode_Scale::ok()
+{
+}
+
+void Mode_Scale::cancel()
+{
+}

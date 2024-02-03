@@ -13,7 +13,6 @@ void Mode_Base::loop(){
 
 };
 
-void Mode_Base::test()
-{
-    Lcd::print("test    ", 0, 1);
-};
+// void Mode_Base::up(){
+
+// };

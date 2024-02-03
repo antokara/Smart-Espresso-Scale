@@ -8,6 +8,12 @@ class Mode_Scale : public Mode_Base
 public:
     void setup();
     void loop();
+
+    // user actions
+    void up();
+    void down();
+    void ok();
+    void cancel();
 };
 
 #endif // MODE_SCALE

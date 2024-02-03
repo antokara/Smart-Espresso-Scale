@@ -73,7 +73,7 @@ void Modes_Controller::loop()
             Modes_Controller::modeSelectPreset.setup();
             break;
         }
-        Modes_Controller::currentMode->test();
+        // Modes_Controller::currentMode->test();
     }
 
     // run the mode's loop
