@@ -12,17 +12,18 @@ modes Modes_Controller::mode = scale;
  *
  */
 Mode_Scale Modes_Controller::modeScale = Mode_Scale();
-
 Mode_Tare Modes_Controller::modeTare = Mode_Tare();
+Mode_SelectPreset Modes_Controller::modeSelectPreset = Mode_SelectPreset();
 
 void Modes_Controller::setup(){};
 
 void Modes_Controller::loop()
 {
     // TODO: add timeout when no button has been pressed for 1 minute and start beeping. maybe add scene?
-    if (Buttons::tare == 1)
+    if (Buttons::tare == 1 && Modes_Controller::mode == scale)
     {
         Modes_Controller::mode = tare;
+        Modes_Controller::modeTare.setup();
     }
     else if (Buttons::up == 1)
     {
@@ -40,12 +41,13 @@ void Modes_Controller::loop()
     {
         Lcd::print("cancel", 0, 1);
     }
-    else if (Buttons::coffee == 1)
+    else if (Buttons::coffee == 1 && Modes_Controller::mode == scale)
     {
         Lcd::print("coffee", 0, 1);
+        Modes_Controller::mode = selectPreset;
+        Modes_Controller::modeSelectPreset.setup();
     }
 
-    // TODO: consider adding a setup call, upon mode switch;
     switch (Modes_Controller::mode)
     {
     default:
@@ -54,6 +56,10 @@ void Modes_Controller::loop()
         break;
     case tare:
         Modes_Controller::modeTare.loop();
+        break;
+
+    case selectPreset:
+        Modes_Controller::modeSelectPreset.loop();
         break;
     }
 };

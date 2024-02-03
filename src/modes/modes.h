@@ -21,7 +21,7 @@ enum modes
      *        ok: start brewing with that preset
      *        cancel: scale
      */
-    presetSelection,
+    selectPreset,
 
     /**
      * @brief the actual brew in-progress.

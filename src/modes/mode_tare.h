@@ -5,6 +5,7 @@
 class Mode_Tare
 {
 public:
+    void setup();
     void loop();
 };
 

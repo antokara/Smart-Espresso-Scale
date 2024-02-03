@@ -416,13 +416,6 @@ void Scale::loop()
         // calculate the average weight and set the hasWeightChanged
         Scale::calcAvgWeight(Scale::getRawWeight());
 
-        if (Scale::hasWeightChanged)
-        {
-            // TODO: debounce the screen updates because the LCD has a very slow refresh rate
-            //       the last value, must be retained/shown eventually...
-            Lcd::print(Scale::formatWeight(Scale::getWeight()), 0, 0);
-        }
-
 #ifdef SCALE_CALIBRATE
         if (Serial.available())
         {
