@@ -4,15 +4,3 @@
 Mode_Base::Mode_Base(){
     // constructor
 };
-
-void Mode_Base::setup(){
-
-};
-
-void Mode_Base::loop(){
-
-};
-
-// void Mode_Base::up(){
-
-// };

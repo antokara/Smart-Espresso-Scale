@@ -7,13 +7,13 @@ enum modes
      * @brief starts to tare
      *
      */
-    tare,
+    modes_tare,
 
     /**
      * @brief default, scale mode.
      *        shows the weight and nothing else.
      */
-    scale,
+    modes_scale,
 
     /**
      * @brief shows the currently selected preset, to brew with
@@ -21,7 +21,7 @@ enum modes
      *        ok: start brewing with that preset
      *        cancel: scale
      */
-    selectPreset,
+    modes_selectPreset,
 
     /**
      * @brief the actual brew in-progress.
@@ -31,7 +31,7 @@ enum modes
      *        cancel: brewDone
      *
      */
-    brew,
+    modes_brew,
 
     /**
      * @brief stop brewing
@@ -39,7 +39,7 @@ enum modes
      *        ok: brewDone
      *        cancel: brewDone
      */
-    brewStop,
+    modes_brewStop,
 
     /**
      * @brief brew is done
@@ -47,7 +47,7 @@ enum modes
      *        ok: scale
      *        cancel: scale
      */
-    brewDone,
+    modes_brewDone,
 
     /**
      * @brief shows the custom brew menu
@@ -56,13 +56,13 @@ enum modes
      *        cancel: scale
      *
      */
-    customBrewMenu,
+    modes_customBrewMenu,
 
     /**
      * @brief asks the user to confirm start of custom brew
      *
      */
-    customBrewConfirm,
+    modes_customBrewConfirm,
 
     /**
      * @brief just shows that this is the presets menu
@@ -70,7 +70,7 @@ enum modes
      *        ok: configurePreset
      *        cancel: parent menu
      */
-    presetsMenu,
+    modes_presetsMenu,
 
     /**
      * @brief shows the currently selected preset, to configure
@@ -78,7 +78,7 @@ enum modes
      *        ok: preset configuration menus (e.g. change name, coffee weight)
      *        cancel: parent menu
      */
-    configurePreset,
+    modes_configurePreset,
 
     /**
      * @brief shows the "change name" of preset, menu
@@ -86,14 +86,14 @@ enum modes
      *        ok: changePresetName
      *        cancel: parent menu
      */
-    changePresetNameMenu,
+    modes_changePresetNameMenu,
     /**
      * @brief actively change the preset name
      *        up/down: change the current charater shown (that's blinking)
      *        ok: accept the current charater and move to next until the end (next char. should be space)
      *        cancel: do not save new profile name and go to parent
      */
-    changePresetName,
+    modes_changePresetName,
 
     /**
      * @brief shows the coffee weight menu
@@ -101,7 +101,7 @@ enum modes
      *        ok: coffeeWeightSelection
      *        cancel: parent menuss
      */
-    coffeeWeightMenu,
+    modes_coffeeWeightMenu,
     /**
      * @brief shows the current coffee weight and
      *        allows the user to change that
@@ -112,19 +112,19 @@ enum modes
      *
      * TODO: add pointer; to parent/siblings/children; use tuples
      */
-    coffeeWeightSelection,
+    modes_coffeeWeightSelection,
 
-    brewRatioMenu,
-    brewRatioSelection,
+    modes_brewRatioMenu,
+    modes_brewRatioSelection,
 
-    brewDurationMenu,
-    brewDurationSelection,
+    modes_brewDurationMenu,
+    modes_brewDurationSelection,
 
-    startTimerMenu,
-    startTimerSelection,
+    modes_startTimerMenu,
+    modes_startTimerSelection,
 
-    stopTimerMenu,
-    stopTimerSelection,
+    modes_stopTimerMenu,
+    modes_stopTimerSelection,
 };
 
 #endif // MODES

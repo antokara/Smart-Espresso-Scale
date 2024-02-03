@@ -12,13 +12,13 @@
  * @brief the active mode
  *
  */
-modes Modes_Controller::mode = scale;
+modes Modes_Controller::mode = modes_scale;
 
 /**
  * @brief the previously active mode
  *
  */
-modes Modes_Controller::prevMode = scale;
+modes Modes_Controller::prevMode;
 
 /**
  * @brief our mode scale
@@ -29,65 +29,79 @@ Mode_Tare Modes_Controller::modeTare = Mode_Tare();
 Mode_SelectPreset Modes_Controller::modeSelectPreset = Mode_SelectPreset();
 Mode_Base *Modes_Controller::currentMode;
 
-void Modes_Controller::setup()
-{
-    // TODO: test
-    Modes_Controller::currentMode = &Modes_Controller::modeScale;
+void Modes_Controller::setup(){
+
 };
 
 void Modes_Controller::loop()
 {
-    // TODO: add timeout when no button has been pressed for 1 minute and start beeping. maybe add scene?
-    if (Buttons::up == 1)
-    {
-        Lcd::print("up    ", 0, 1);
-    }
-    else if (Buttons::down == 1)
-    {
-        Lcd::print("down   ", 0, 1);
-    }
-    else if (Buttons::ok == 1)
-    {
-        Lcd::print("ok   ", 0, 1);
-    }
-    else if (Buttons::cancel == 1)
-    {
-        Lcd::print("cancel", 0, 1);
-    }
-
-    // when the mode changes
+    // at the very start, handle mode changes (to also apply on the very first run...)
     if (Modes_Controller::mode != Modes_Controller::prevMode)
     {
+        Serial.print("new mode");
+        Serial.println(Modes_Controller::mode);
         Modes_Controller::prevMode = Modes_Controller::mode;
         Buttons::ignoreAll();
         switch (Modes_Controller::mode)
         {
         default:
-        case scale:
-            Modes_Controller::modeScale.setup();
+        case modes_scale:
+            Modes_Controller::currentMode = &Modes_Controller::modeScale;
             break;
-        case tare:
-            Modes_Controller::modeTare.setup();
+        case modes_tare:
+            Modes_Controller::currentMode = &Modes_Controller::modeTare;
             break;
-        case selectPreset:
-            Modes_Controller::modeSelectPreset.setup();
+        case modes_selectPreset:
+            Modes_Controller::currentMode = &Modes_Controller::modeSelectPreset;
             break;
         }
-        // Modes_Controller::currentMode->test();
+        Modes_Controller::currentMode->setup();
+    }
+
+    // TODO: add timeout when no button has been pressed for 1 minute and start beeping. maybe add scene?
+    if (Buttons::up == button_pressed)
+    {
+        Lcd::print("up    ", 0, 1);
+    }
+    else if (Buttons::down == button_pressed)
+    {
+        Lcd::print("down   ", 0, 1);
+    }
+    else if (Buttons::ok == button_pressed)
+    {
+        Lcd::print("ok   ", 0, 1);
+    }
+    else if (Buttons::cancel == button_pressed)
+    {
+        Lcd::print("cancel", 0, 1);
     }
 
     // run the mode's loop
-    switch (Modes_Controller::mode)
+    Modes_Controller::currentMode->loop();
+
+    // check for user actions (buttons)
+    if (Buttons::tare == button_pressed)
     {
-    default:
-    case scale:
-        Modes_Controller::modeScale.loop();
-        break;
-    case tare:
-        Modes_Controller::modeTare.loop();
-        break;
-    case selectPreset:
-        Modes_Controller::modeSelectPreset.loop();
-        break;
+        Modes_Controller::currentMode->tare();
+    }
+    else if (Buttons::up == button_pressed)
+    {
+        Modes_Controller::currentMode->up();
+    }
+    else if (Buttons::down == button_pressed)
+    {
+        Modes_Controller::currentMode->down();
+    }
+    else if (Buttons::ok == button_pressed)
+    {
+        Modes_Controller::currentMode->ok();
+    }
+    else if (Buttons::cancel == button_pressed)
+    {
+        Modes_Controller::currentMode->cancel();
+    }
+    else if (Buttons::coffee == button_pressed)
+    {
+        Modes_Controller::currentMode->coffee();
     }
 };
