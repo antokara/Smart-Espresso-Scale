@@ -8,7 +8,10 @@
 
 void Mode_Brew::setup()
 {
+    // auto-tare right before we start, to negate the cup (that should already be on the scale)
+    Scale::tare();
     Mode_Brew::render();
+    // TODO: start the brew (toggle the relay switch)
 };
 
 void Mode_Brew::loop()
