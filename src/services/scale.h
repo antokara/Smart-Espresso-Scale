@@ -49,8 +49,10 @@
  * it also slows down the processing time...
  *
  * 255 is the hard maximum.
+ * 1kg needs 255
+ * 500g needs 32
  */
-#define SCALE_AVG_WEIGHT_SAMPLES_MAX 255
+#define SCALE_AVG_WEIGHT_SAMPLES_MAX 32
 
 /**
  * @brief the delta threshold between two average weight values
