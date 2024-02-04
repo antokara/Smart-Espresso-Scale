@@ -143,7 +143,7 @@ void Buttons::loop()
       Buttons::coffee = button_down;
     }
   }
-  else if (Buttons::up != button_up)
+  else if (Buttons::coffee != button_up)
   {
     Buttons::coffee = button_up;
   }
