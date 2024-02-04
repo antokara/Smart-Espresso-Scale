@@ -49,10 +49,13 @@
  * it also slows down the processing time...
  *
  * 255 is the hard maximum.
- * 1kg needs 255
- * 500g needs 32
+ * 1kg
+ *  255 ~ 0.1
+ * 500g
+ *  24 ~ 0.03
+ *  16 ~ 0.05
  */
-#define SCALE_AVG_WEIGHT_SAMPLES_MAX 32
+#define SCALE_AVG_WEIGHT_SAMPLES_MAX 24
 
 /**
  * @brief the delta threshold between two average weight values
@@ -78,6 +81,7 @@
 
 /**
  * @brief the number of weight decimals accurancy, to show to the user
+ * @example 1 will give 0.1 and 2 will give 0.01
  *
  */
 #define SCALE_WEIGHT_DECIMALS 1
@@ -98,8 +102,8 @@
  * @brief scale unit suffixes
  *
  */
-#define SCALE_UNIT_SUFFIX_GRAMS "gr."
-#define SCALE_UNIT_SUFFIX_POUNDS "lb."
+#define SCALE_UNIT_SUFFIX_GRAMS "g."
+#define SCALE_UNIT_SUFFIX_OUNCES "oz."
 
 /**
  * @brief the sensor gain
