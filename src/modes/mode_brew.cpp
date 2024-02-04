@@ -1,15 +1,20 @@
+#include "services/device.h"
 #include "services/lcd.h"
 #include "services/buttons.h"
 #include "services/modes_controller.h"
 #include "services/presets/presets.h"
+#include "services/scale.h"
 #include "modes/mode_selectPreset.h"
 #include "modes/mode_brew.h"
-#include "services/scale.h"
 
 void Mode_Brew::setStage(brew_stages stage)
 {
     if (Mode_Brew::stage != stage)
     {
+#ifdef SERIAL_DEBUG
+        Serial.print("Mode_Brew::setStage ");
+        Serial.println(stage);
+#endif
         Mode_Brew::stage = stage;
         Buttons::ignoreAll();
         Mode_Brew::render();

@@ -21,7 +21,7 @@ enum brew_stages
      */
     brew_stage_stopping,
     /**
-     * @brief no more dripping
+     * @brief no more dripping. show the "summary"
      *
      */
     brew_stage_done
