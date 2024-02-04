@@ -8,6 +8,12 @@ public:
     void setup();
     void loop();
     void render();
+
+    /**
+     * @brief static so that we can access that information
+     * from other modes (even when this mode is not active)
+     *
+     */
     static byte selectedPresetIndex;
 
     // user actions

@@ -152,7 +152,7 @@ void Buttons::loop()
 /**
  * @brief set all buttons to ignore state.
  *
- * This is needed after a navigation, to prevent
+ * This is needed after a navigation or action within a mode, to prevent
  * actions to be taken on a different menu
  * for a button that was will pressed (e.g. cancel).
  *

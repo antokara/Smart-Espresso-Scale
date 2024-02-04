@@ -6,6 +6,7 @@
 #include "modes/mode_scale.h"
 #include "modes/mode_tare.h"
 #include "modes/mode_selectPreset.h"
+#include "modes/mode_brew.h"
 #include "services/modes_controller.h"
 
 /**
@@ -68,6 +69,9 @@ void Modes_Controller::loop()
             break;
         case modes_selectPreset:
             Modes_Controller::currentMode = new Mode_SelectPreset();
+            break;
+        case modes_brew:
+            Modes_Controller::currentMode = new Mode_Brew();
             break;
         }
         Modes_Controller::currentMode->setup();

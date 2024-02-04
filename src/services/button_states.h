@@ -1,3 +1,6 @@
+#ifndef BUTTON_STATES
+#define BUTTON_STATES
+
 enum button_states
 {
     /**
@@ -20,3 +23,5 @@ enum button_states
      */
     button_ignore,
 };
+
+#endif // BUTTON_STATES

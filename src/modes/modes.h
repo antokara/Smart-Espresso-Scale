@@ -34,22 +34,6 @@ enum modes
     modes_brew,
 
     /**
-     * @brief stop brewing
-     *        up/down: nothing
-     *        ok: brewDone
-     *        cancel: brewDone
-     */
-    modes_brewStop,
-
-    /**
-     * @brief brew is done
-     *        up/down: nothing
-     *        ok: scale
-     *        cancel: scale
-     */
-    modes_brewDone,
-
-    /**
      * @brief shows the custom brew menu
      *        up/down: presetsMenu
      *        ok: coffeeWeightMenu

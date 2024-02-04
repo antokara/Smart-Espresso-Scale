@@ -1,18 +1,8 @@
 #ifndef PRESET
 #define PRESET
 #include <Arduino.h>
-
-enum startTimers
-{
-    startTimer_pump,
-    startTimer_first_drop
-};
-
-enum stopTimers
-{
-    stopTimer_pump,
-    stopTimer_last_drop
-};
+#include "services/presets/startTimers.h"
+#include "services/presets/stopTimers.h"
 
 class Preset
 {
