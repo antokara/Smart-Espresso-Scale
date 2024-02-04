@@ -5,6 +5,7 @@
 #include "services/scale.h"
 #include "services/buttons.h"
 #include "services/modes_controller.h"
+#include "services/presets/presets.h"
 
 void setup()
 {
@@ -12,6 +13,7 @@ void setup()
     Lcd::setup();
     Scale::setup();
     Buttons::setup();
+    Presets::setup();
     Modes_Controller::setup();
 }
 

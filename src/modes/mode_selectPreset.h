@@ -7,6 +7,8 @@ class Mode_SelectPreset : public Mode_Base
 public:
     void setup();
     void loop();
+    void render();
+    static byte selectedPresetIndex;
 
     // user actions
     void tare();
