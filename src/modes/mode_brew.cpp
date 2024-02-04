@@ -4,31 +4,38 @@
 #include "services/presets/presets.h"
 #include "modes/mode_selectPreset.h"
 #include "modes/mode_brew.h"
+#include "services/scale.h"
 
 void Mode_Brew::setup()
 {
     Mode_Brew::render();
 };
 
-void Mode_Brew::loop(){
+void Mode_Brew::loop()
+{
     // TODO:
+    if (Scale::hasWeightChanged)
+    {
+        Mode_Brew::render();
+    }
 };
 
 void Mode_Brew::render()
 {
     // TODO:
-    if (Mode_Brew::stage == brew_stage_in_progress)
-    {
-        Lcd::print("brew -progress-", 0, 0, 1);
-    }
-    else if (Mode_Brew::stage == brew_stage_stopping)
-    {
-        Lcd::print("brew -stopping-", 0, 0, 1);
-    }
-    else if (Mode_Brew::stage == brew_stage_done)
-    {
-        Lcd::print("brew -done-", 0, 0, 1);
-    }
+    // if (Mode_Brew::stage == brew_stage_in_progress)
+    // {
+    //     Lcd::print("brew -progress-", 0, 0, 1);
+    // }
+    // else if (Mode_Brew::stage == brew_stage_stopping)
+    // {
+    //     Lcd::print("brew -stopping-", 0, 0, 1);
+    // }
+    // else if (Mode_Brew::stage == brew_stage_done)
+    // {
+    //     Lcd::print("brew -done-", 0, 0, 1);
+    // }
+    Lcd::print("Brew " + Scale::formatWeight(Scale::getWeight()), 0, 0);
     Lcd::print(Presets::presets[Mode_SelectPreset::selectedPresetIndex]->name, 0, 1);
 };
 
@@ -57,7 +64,7 @@ void Mode_Brew::setStage(brew_stages stage)
         {
             // TODO: stop the brew (toggle the relay switch)
         }
-        }
+    }
 }
 
 void Mode_Brew::cancel()
