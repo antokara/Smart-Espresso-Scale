@@ -13,7 +13,7 @@ void Presets::setup()
         Presets::presets[i]->brewDuration = 30;
         Presets::presets[i]->brewRatio = 2;
         Presets::presets[i]->coffeeWeight = 18;
-        Presets::presets[i]->startTimer = startTimer_pump;
+        Presets::presets[i]->startTimer = startTimer_manual_pump;
         Presets::presets[i]->stopTimer = stopTimer_last_drop;
     }
 }

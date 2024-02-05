@@ -137,6 +137,8 @@ public:
     static float avgWeights[SCALE_AVG_WEIGHT_SAMPLES_MAX];
     static byte avgWeightIndex;
     static byte avgWeightSamples;
+    static float weight;
+    static float prevWeight;
 
     // methods
     static void setup();
@@ -144,6 +146,7 @@ public:
     static void calcAvgWeight(float weight);
     static float getRawWeight();
     static float getWeight();
+    static String getFormattedWeight();
     static void calculateZeroOffset();
     static void calibrate();
     static void setCalibrationFactor();

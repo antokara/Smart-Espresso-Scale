@@ -13,7 +13,7 @@ void Mode_Scale::loop()
 {
     if (Scale::hasWeightChanged)
     {
-        Lcd::print(Scale::formatWeight(Scale::getWeight()), 0, 0);
+        Lcd::print(Scale::getFormattedWeight(), 0, 0);
     }
 }
 

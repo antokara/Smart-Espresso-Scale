@@ -7,6 +7,11 @@
 #include "modes/mode_selectPreset.h"
 #include "modes/mode_brew.h"
 
+/**
+ * @brief sets the brewing stage (it's kind of a like a sub-mode)
+ *
+ * @param stage
+ */
 void Mode_Brew::setStage(brew_stages stage)
 {
     if (Mode_Brew::stage != stage)
@@ -20,7 +25,9 @@ void Mode_Brew::setStage(brew_stages stage)
         Mode_Brew::render();
         if (stage == brew_stage_stopping)
         {
-            if (Presets::presets[Mode_SelectPreset::selectedPresetIndex]->stopTimer == stopTimer_pump)
+            if (
+                Presets::presets[Mode_SelectPreset::selectedPresetIndex]->stopTimer == stopTimer_auto_pump ||
+                Presets::presets[Mode_SelectPreset::selectedPresetIndex]->stopTimer == stopTimer_manual_pump)
             {
                 // TODO: stop the brew (toggle the relay switch)
                 Mode_Brew::setStage(brew_stage_done);
@@ -35,7 +42,7 @@ void Mode_Brew::setup()
     // auto-tare right before we start, to negate the cup (that should already be on the scale)
     Scale::tare();
     Mode_Brew::render();
-    if (Presets::presets[Mode_SelectPreset::selectedPresetIndex]->startTimer == startTimer_pump)
+    if (Presets::presets[Mode_SelectPreset::selectedPresetIndex]->stopTimer == stopTimer_auto_pump)
     {
         Mode_Brew::setStage(brew_stage_in_progress);
         // TODO: start the brew (toggle the relay switch)
@@ -63,21 +70,15 @@ void Mode_Brew::loop()
 
 void Mode_Brew::render()
 {
-    // TODO:
-    // if (Mode_Brew::stage == brew_stage_in_progress)
-    // {
-    //     Lcd::print("brew -progress-", 0, 0, 1);
-    // }
-    // else if (Mode_Brew::stage == brew_stage_stopping)
-    // {
-    //     Lcd::print("brew -stopping-", 0, 0, 1);
-    // }
-    // else if (Mode_Brew::stage == brew_stage_done)
-    // {
-    //     Lcd::print("brew -done-", 0, 0, 1);
-    // }
-    Lcd::print("Brew " + Scale::formatWeight(Scale::getWeight()), 0, 0);
-    Lcd::print(Presets::presets[Mode_SelectPreset::selectedPresetIndex]->name, 0, 1);
+    Lcd::print("Brew " + Scale::getFormattedWeight(), 0, 0);
+    if (Mode_Brew::stage == brew_stage_waiting && Presets::presets[Mode_SelectPreset::selectedPresetIndex]->startTimer == startTimer_manual_pump)
+    {
+        Lcd::print("Press Coffee...", 0, 1, clearLcd_row);
+    }
+    else if (Mode_Brew::stage == brew_stage_in_progress)
+    {
+        Lcd::print("1 second", 0, 1, clearLcd_row);
+    }
 };
 
 void Mode_Brew::tare() {}
@@ -109,4 +110,8 @@ void Mode_Brew::cancel()
 
 void Mode_Brew::coffee()
 {
+    if (Mode_Brew::stage == brew_stage_waiting && Presets::presets[Mode_SelectPreset::selectedPresetIndex]->startTimer == startTimer_manual_pump)
+    {
+        Mode_Brew::setStage(brew_stage_in_progress);
+    }
 }

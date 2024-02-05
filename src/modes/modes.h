@@ -109,6 +109,10 @@ enum modes
 
     modes_stopTimerMenu,
     modes_stopTimerSelection,
+
+    // TODO: consider adding
+    //  - sound on/off
+    //  - gravity offset
 };
 
 #endif // MODES

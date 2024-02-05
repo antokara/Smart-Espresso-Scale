@@ -14,7 +14,7 @@ void Mode_SelectPreset::loop(){};
 
 void Mode_SelectPreset::render()
 {
-    Lcd::print("Select Preset", 0, 0, 1);
+    Lcd::print("Select Preset", 0, 0, clearLcd_all);
     Lcd::print(Presets::presets[Mode_SelectPreset::selectedPresetIndex]->name, 0, 1);
 };
 

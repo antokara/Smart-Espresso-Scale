@@ -11,13 +11,24 @@
 #define LCD_SDA_PIN D0
 #define LCD_SCL_PIN D1
 
+// count of rows and columns
+#define LCD_ROWS 2
+#define LCD_COLS 16
+
+enum clearLcd
+{
+    clearLcd_none,
+    clearLcd_all,
+    clearLcd_row
+};
+
 class Lcd
 {
 public:
     // methods
     static void setup();
     static void loop();
-    static void print(String text, uint8_t col, uint8_t row, bool clear = false);
+    static void print(String text, uint8_t col, uint8_t row, clearLcd clear = clearLcd_none);
     static void clear();
 };
 

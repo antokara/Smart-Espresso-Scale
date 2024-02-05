@@ -23,13 +23,23 @@ LiquidCrystal_I2C lcd(LCD_I2C_ADDRESS, 20, 4);
  * @param text what to print
  * @param col column (0 based)
  * @param row row (0 based)
- * @param clear whether or not to clear before printing
+ * @param clear nothing, all the screen or just the row
  */
-void Lcd::print(String text, uint8_t col, uint8_t row, bool clear)
+void Lcd::print(String text, uint8_t col, uint8_t row, clearLcd clear)
 {
-    if (clear)
+    if (clear == clearLcd_all)
     {
         Lcd::clear();
+    }
+    else if (clear == clearLcd_row)
+    {
+        lcd.setCursor(0, row);
+        String spaces = "";
+        for (int i = 0; i < LCD_COLS; i++)
+        {
+            spaces += " ";
+        }
+        lcd.print(spaces);
     }
     lcd.setCursor(col, row);
     lcd.print(text);

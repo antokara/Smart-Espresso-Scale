@@ -58,6 +58,10 @@ long Scale::zeroOffset = 175782;
  */
 float Scale::avgWeight = 0;
 
+// init
+float Scale::weight = 0;
+float Scale::prevWeight = 0;
+
 /**
  * @brief the list of weights,
  * for the average weight calculation
@@ -186,11 +190,17 @@ void Scale::calcAvgWeight(float rawWeight)
     {
         // keep the prev avg weight
         Scale::avgWeight = avgWeight;
-        Scale::hasWeightChanged = true;
-    }
-    else
-    {
-        Scale::hasWeightChanged = false;
+
+        Scale::weight = Scale::roundFloat(avgWeight, SCALE_WEIGHT_DECIMALS);
+        if (Scale::weight != Scale::prevWeight)
+        {
+            Scale::prevWeight = Scale::weight;
+            Scale::hasWeightChanged = true;
+        }
+        else
+        {
+            Scale::hasWeightChanged = false;
+        }
     }
 }
 
@@ -237,10 +247,6 @@ String Scale::formatWeight(float weight)
     else if (formattedWeight > SCALE_WEIGHT_MAX)
     {
         return SCALE_WEIGHT_MAX_MSG;
-    }
-    else
-    {
-        formattedWeight = Scale::roundFloat(formattedWeight, SCALE_WEIGHT_DECIMALS);
     }
 
     // pad prefix with spaces
@@ -308,13 +314,13 @@ void Scale::tare()
 {
     // TODO: properly tare with a watch. this basically needs to "start" taring
     Buzzer::on();
-    Lcd::print("Tearing...", 0, 0, true);
+    Lcd::print("Tearing...", 0, 0, clearLcd_all);
 
     // tare
     Scale::calculateZeroOffset();
 
     // show zero to the screen
-    Lcd::print(Scale::formatWeight(0), 0, 0, true);
+    Lcd::print(Scale::formatWeight(0), 0, 0, clearLcd_all);
 
     // reset all avg weight values
     for (int x = 0; x < SCALE_AVG_WEIGHT_SAMPLES_MAX; x++)
@@ -344,6 +350,16 @@ float Scale::getRawWeight()
 float Scale::getWeight()
 {
     return Scale::avgWeight;
+}
+
+/**
+ * @brief Get the Formatted Weight string for use in LCD display
+ *
+ * @return string
+ */
+String Scale::getFormattedWeight()
+{
+    return Scale::formatWeight(Scale::getWeight());
 }
 
 #ifdef SCALE_CALIBRATE
