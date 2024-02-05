@@ -27,8 +27,7 @@ void Mode_Brew::setStage(brew_stages stage)
         if (stage == brew_stage_stopping)
         {
             if (
-                Presets::presets[Mode_SelectPreset::selectedPresetIndex]->stopTimer == stopTimer_auto_pump ||
-                Presets::presets[Mode_SelectPreset::selectedPresetIndex]->stopTimer == stopTimer_manual_pump)
+                Presets::presets[Mode_SelectPreset::selectedPresetIndex]->autoPump == true)
             {
                 // TODO: stop the brew (toggle the relay switch)
                 Mode_Brew::setStage(brew_stage_done);
@@ -52,7 +51,7 @@ void Mode_Brew::setup()
     // auto-tare right before we start, to negate the cup (that should already be on the scale)
     Scale::tare();
     Mode_Brew::render();
-    if (Presets::presets[Mode_SelectPreset::selectedPresetIndex]->stopTimer == stopTimer_auto_pump)
+    if (Presets::presets[Mode_SelectPreset::selectedPresetIndex]->autoPump == false)
     {
         Mode_Brew::setStage(brew_stage_in_progress);
         // TODO: start the brew (toggle the relay switch)
@@ -91,14 +90,17 @@ void Mode_Brew::loop()
 void Mode_Brew::render()
 {
     Lcd::print("Brew " + Scale::getFormattedWeight(), 0, 0);
-    if (Mode_Brew::stage == brew_stage_waiting && Presets::presets[Mode_SelectPreset::selectedPresetIndex]->startTimer == startTimer_manual_pump)
+    if (
+        Mode_Brew::stage == brew_stage_waiting && Presets::presets[Mode_SelectPreset::selectedPresetIndex]->startTimer == startTimer_pump && Presets::presets[Mode_SelectPreset::selectedPresetIndex]->autoPump == false)
     {
         Lcd::print("Press OK...", 0, 1, clearLcd_row);
     }
     else if (Mode_Brew::stage == brew_stage_in_progress)
     {
-        // TODO: calculate the flow speed, relative to the target...
-        Lcd::print(Mode_Brew::getFormattedBrewSeconds(), 0, 1, clearLcd_row);
+        // TODO: inside loop, calculate the flow speed, relative to the target...
+        //       also, as we approach the target weight, start beeping 3 seconds in advance (on manual pump)
+        String postMsg = "good";
+        Lcd::print(Mode_Brew::getFormattedBrewSeconds() + " - " + postMsg, 0, 1, clearLcd_row);
     }
     else if (Mode_Brew::stage == brew_stage_stopping)
     {
@@ -132,7 +134,7 @@ void Mode_Brew::down()
 
 void Mode_Brew::ok()
 {
-    if (Mode_Brew::stage == brew_stage_waiting && Presets::presets[Mode_SelectPreset::selectedPresetIndex]->startTimer == startTimer_manual_pump)
+    if (Mode_Brew::stage == brew_stage_waiting && Presets::presets[Mode_SelectPreset::selectedPresetIndex]->startTimer == startTimer_pump && Presets::presets[Mode_SelectPreset::selectedPresetIndex]->autoPump == false)
     {
         Mode_Brew::setStage(brew_stage_in_progress);
     }

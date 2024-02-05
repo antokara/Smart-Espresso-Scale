@@ -3,8 +3,7 @@
 
 enum stopTimers
 {
-    stopTimer_auto_pump,
-    stopTimer_manual_pump,
+    stopTimer_pump,
     stopTimer_last_drop
 };
 

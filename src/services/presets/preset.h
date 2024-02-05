@@ -13,6 +13,7 @@ public:
     int brewDuration;
     startTimers startTimer;
     stopTimers stopTimer;
+    bool autoPump;
 };
 
 #endif // PRESET

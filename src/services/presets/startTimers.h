@@ -3,8 +3,7 @@
 
 enum startTimers
 {
-    startTimer_auto_pump,
-    startTimer_manual_pump,
+    startTimer_pump,
     startTimer_first_drop
 };
 
