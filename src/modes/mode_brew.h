@@ -11,6 +11,9 @@ public:
     void render();
     void setStage(brew_stages stage);
     brew_stages stage;
+    unsigned long brewStartTime;
+    unsigned int brewSeconds;
+    String getFormattedBrewSeconds();
 
     // user actions
     void tare();

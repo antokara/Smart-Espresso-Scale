@@ -13,6 +13,7 @@
 #include "services/device.h"
 #include "services/lcd.h"
 #include "services/buzzer.h"
+#include "utils.h"
 
 // the actual scale device instance
 NAU7802 scaleDev;
@@ -191,7 +192,7 @@ void Scale::calcAvgWeight(float rawWeight)
         // keep the prev avg weight
         Scale::avgWeight = avgWeight;
 
-        Scale::weight = Scale::roundFloat(avgWeight, SCALE_WEIGHT_DECIMALS);
+        Scale::weight = Utils::roundFloat(avgWeight, SCALE_WEIGHT_DECIMALS);
         if (Scale::weight != Scale::prevWeight)
         {
             Scale::prevWeight = Scale::weight;
@@ -202,30 +203,6 @@ void Scale::calcAvgWeight(float rawWeight)
             Scale::hasWeightChanged = false;
         }
     }
-}
-
-/**
- * @brief rounds the value provided to the decimal points
- *
- * @param value
- * @param decimalPoints
- * @return float
- */
-float Scale::roundFloat(float value, int decimalPoints)
-{
-    float multiplier = pow(10, decimalPoints);
-    return round(value * multiplier) / multiplier;
-}
-
-/**
- * @brief get the length of characters in a number
- *
- * @param number
- * @return int
- */
-int Scale::numberLength(float number)
-{
-    return floor(log10(abs(number))) + 1;
 }
 
 /**
@@ -250,7 +227,7 @@ String Scale::formatWeight(float weight)
     }
 
     // pad prefix with spaces
-    const int totalWidth = Scale::numberLength(SCALE_WEIGHT_DECIMALS + SCALE_WEIGHT_MAX);
+    const int totalWidth = Utils::numberLength(SCALE_WEIGHT_DECIMALS + SCALE_WEIGHT_MAX);
     // +1 for the null terminator
     char buffer[totalWidth + 1];
     dtostrf(formattedWeight, totalWidth, SCALE_WEIGHT_DECIMALS, buffer);

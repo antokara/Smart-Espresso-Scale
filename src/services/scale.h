@@ -152,8 +152,6 @@ public:
     static void setCalibrationFactor();
     static void tare();
     static String formatWeight(float weight);
-    static float roundFloat(float value, int decimalPoints);
-    static int numberLength(float number);
 };
 
 #endif // SCALE

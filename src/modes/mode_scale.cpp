@@ -6,7 +6,7 @@
 
 void Mode_Scale::setup()
 {
-    Lcd::clear();
+    Lcd::print(Scale::getFormattedWeight(), 0, 0, clearLcd_all);
 };
 
 void Mode_Scale::loop()

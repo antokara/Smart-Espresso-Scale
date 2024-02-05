@@ -6,6 +6,7 @@
 #include "services/scale.h"
 #include "modes/mode_selectPreset.h"
 #include "modes/mode_brew.h"
+#include "utils.h"
 
 /**
  * @brief sets the brewing stage (it's kind of a like a sub-mode)
@@ -33,12 +34,21 @@ void Mode_Brew::setStage(brew_stages stage)
                 Mode_Brew::setStage(brew_stage_done);
             }
         }
+        else if (stage == brew_stage_in_progress)
+        {
+            // keep the time the brew started
+            Mode_Brew::brewStartTime = millis();
+        }
     }
 }
 
 void Mode_Brew::setup()
 {
+    // reset
+    Mode_Brew::brewStartTime = 0;
+    Mode_Brew::brewSeconds = 0;
     Mode_Brew::setStage(brew_stage_waiting);
+
     // auto-tare right before we start, to negate the cup (that should already be on the scale)
     Scale::tare();
     Mode_Brew::render();
@@ -62,9 +72,19 @@ void Mode_Brew::loop()
         }
         Mode_Brew::render();
     }
-    else if (Mode_Brew::stage == brew_stage_in_progress && Presets::presets[Mode_SelectPreset::selectedPresetIndex]->stopTimer == stopTimer_last_drop)
+    else if (Mode_Brew::stage == brew_stage_in_progress)
     {
-        // TODO: detect timeout without a drop and if true, switch stage to done
+        unsigned int brewSeconds = round((millis() - Mode_Brew::brewStartTime) / 1000);
+        if (Mode_Brew::brewSeconds != brewSeconds)
+        {
+            Mode_Brew::brewSeconds = brewSeconds;
+            Mode_Brew::render();
+        }
+
+        if (Presets::presets[Mode_SelectPreset::selectedPresetIndex]->stopTimer == stopTimer_last_drop)
+        {
+            // TODO: detect timeout without a drop and if true, switch stage to done
+        }
     }
 };
 
@@ -73,12 +93,31 @@ void Mode_Brew::render()
     Lcd::print("Brew " + Scale::getFormattedWeight(), 0, 0);
     if (Mode_Brew::stage == brew_stage_waiting && Presets::presets[Mode_SelectPreset::selectedPresetIndex]->startTimer == startTimer_manual_pump)
     {
-        Lcd::print("Press Coffee...", 0, 1, clearLcd_row);
+        Lcd::print("Press OK...", 0, 1, clearLcd_row);
     }
     else if (Mode_Brew::stage == brew_stage_in_progress)
     {
-        Lcd::print("1 second", 0, 1, clearLcd_row);
+        // TODO: calculate the flow speed, relative to the target...
+        Lcd::print(Mode_Brew::getFormattedBrewSeconds(), 0, 1, clearLcd_row);
     }
+    else if (Mode_Brew::stage == brew_stage_stopping)
+    {
+        Lcd::print(Mode_Brew::getFormattedBrewSeconds() + " - stop", 0, 1, clearLcd_row);
+    }
+    else if (Mode_Brew::stage == brew_stage_done)
+    {
+        Lcd::print(Mode_Brew::getFormattedBrewSeconds() + " - done", 0, 1, clearLcd_row);
+    }
+};
+
+String Mode_Brew::getFormattedBrewSeconds()
+{
+    if (Mode_Brew::brewSeconds == 1)
+    {
+        return "1 sec.";
+    }
+
+    return String(Mode_Brew::brewSeconds) + " secs.";
 };
 
 void Mode_Brew::tare() {}
@@ -93,6 +132,10 @@ void Mode_Brew::down()
 
 void Mode_Brew::ok()
 {
+    if (Mode_Brew::stage == brew_stage_waiting && Presets::presets[Mode_SelectPreset::selectedPresetIndex]->startTimer == startTimer_manual_pump)
+    {
+        Mode_Brew::setStage(brew_stage_in_progress);
+    }
 }
 
 void Mode_Brew::cancel()
@@ -110,8 +153,4 @@ void Mode_Brew::cancel()
 
 void Mode_Brew::coffee()
 {
-    if (Mode_Brew::stage == brew_stage_waiting && Presets::presets[Mode_SelectPreset::selectedPresetIndex]->startTimer == startTimer_manual_pump)
-    {
-        Mode_Brew::setStage(brew_stage_in_progress);
-    }
 }
