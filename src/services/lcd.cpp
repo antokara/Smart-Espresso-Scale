@@ -31,18 +31,29 @@ void Lcd::print(String text, uint8_t col, uint8_t row, clearLcd clear)
     {
         Lcd::clear();
     }
-    else if (clear == clearLcd_row)
+    if (clear == clearLcd_row)
     {
-        lcd.setCursor(0, row);
-        String spaces = "";
-        for (int i = 0; i < LCD_COLS; i++)
+        // prefix spaces
+        String formattedText = "";
+        for (int i = 0; i < col; i++)
         {
-            spaces += " ";
+            formattedText += " ";
         }
-        lcd.print(spaces);
+        // add the actual text
+        formattedText += text;
+        // suffix spaces
+        for (int i = col + text.length(); i < LCD_COLS; i++)
+        {
+            formattedText += " ";
+        }
+        lcd.setCursor(0, row);
+        lcd.print(formattedText);
     }
-    lcd.setCursor(col, row);
-    lcd.print(text);
+    else
+    {
+        lcd.setCursor(col, row);
+        lcd.print(text);
+    }
 }
 
 /**
