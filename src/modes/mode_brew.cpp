@@ -37,6 +37,10 @@ void Mode_Brew::setStage(brew_stages stage)
         {
             // keep the time the brew started
             Mode_Brew::brewStartTime = millis();
+            if (Presets::presets[Mode_SelectPreset::selectedPresetIndex]->autoPump == true)
+            {
+                // TODO: start the brew (toggle the relay switch)
+            }
         }
     }
 }
@@ -51,11 +55,9 @@ void Mode_Brew::setup()
     // auto-tare right before we start, to negate the cup (that should already be on the scale)
     Scale::tare();
     Mode_Brew::render();
-    if (Presets::presets[Mode_SelectPreset::selectedPresetIndex]->autoPump == false)
+    if (Presets::presets[Mode_SelectPreset::selectedPresetIndex]->autoPump == true)
     {
         Mode_Brew::setStage(brew_stage_in_progress);
-        // TODO: start the brew (toggle the relay switch)
-        // TODO: start the timer, if set on pump
     }
 };
 
