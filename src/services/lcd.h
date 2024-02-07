@@ -4,6 +4,10 @@
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 
+// milliseconds that pixels take to turn off
+// anything less than, can create ghosting
+#define LCD_REFRESH_RATE 500
+
 // the I2C address of the LCD display (hard coded usually)
 #define LCD_I2C_ADDRESS 0x27
 

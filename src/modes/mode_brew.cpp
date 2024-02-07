@@ -91,7 +91,9 @@ void Mode_Brew::loop()
 
 void Mode_Brew::render()
 {
+    // while brewing, always show the weight
     Lcd::print("Brew " + Scale::getFormattedWeight(), 0, 0);
+
     if (
         Mode_Brew::stage == brew_stage_waiting && Presets::presets[Mode_SelectPreset::selectedPresetIndex]->startTimer == startTimer_pump && Presets::presets[Mode_SelectPreset::selectedPresetIndex]->autoPump == false)
     {
