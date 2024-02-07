@@ -8,8 +8,6 @@ class Mode_Scale : public Mode_Base
 public:
     void setup();
     void loop();
-    unsigned long lastRender;
-    String bufferedRender;
 
     // user actions
     void tare();

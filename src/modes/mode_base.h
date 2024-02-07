@@ -1,5 +1,7 @@
 #ifndef MODE_BASE
 #define MODE_BASE
+#include <Arduino.h>
+#include "services/lcd.h"
 
 class Mode_Base
 {
@@ -7,6 +9,16 @@ public:
     // standard methods (must be implemented by the derived class)
     virtual void setup() = 0;
     virtual void loop() = 0;
+
+    // LCD render debouncer
+    unsigned long lastRenderTime;
+    String bufferedRenderText;
+    uint8_t bufferedRenderCol;
+    uint8_t bufferedRenderRow;
+    clearLcd bufferedRenderClear;
+    void tryRenderNow(String text, uint8_t col, uint8_t row, clearLcd clear = clearLcd_none);
+    void tryRenderBuffered();
+    void clearBufferedRender();
 
     /**
      * @brief user actions

@@ -11,25 +11,13 @@ void Mode_Scale::setup()
 
 void Mode_Scale::loop()
 {
-    // TODO: make it a service?
     if (Scale::hasWeightChanged)
     {
-        if (millis() - Mode_Scale::lastRender > LCD_REFRESH_RATE)
-        {
-            Lcd::print(Scale::getFormattedWeight(), 0, 0);
-            Mode_Scale::lastRender = millis();
-            Mode_Scale::bufferedRender = "";
-        }
-        else
-        {
-            Mode_Scale::bufferedRender = Scale::getFormattedWeight();
-        }
+        Mode_Scale::tryRenderNow(Scale::getFormattedWeight(), 0, 0);
     }
-    else if (Mode_Scale::bufferedRender != "" && millis() - Mode_Scale::lastRender > LCD_REFRESH_RATE)
+    else
     {
-        Lcd::print(Mode_Scale::bufferedRender, 0, 0);
-        Mode_Scale::lastRender = millis();
-        Mode_Scale::bufferedRender = "";
+        Mode_Scale::tryRenderBuffered();
     }
 }
 
