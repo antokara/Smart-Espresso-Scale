@@ -193,6 +193,7 @@ void Scale::calcAvgWeight(float rawWeight)
         // to prevent any previous value to affect the next average...
         Scale::weights[++Scale::weightSamplesLimit] = rawWeight;
 
+#ifdef SERIAL_DEBUG
         Serial.print("avgWeights: ");
         for (int x = 0; x < Scale::weightSamplesLimit; x++)
         {
@@ -200,6 +201,7 @@ void Scale::calcAvgWeight(float rawWeight)
             Serial.print("    ");
         }
         Serial.println("");
+#endif
     }
     else if (delta > SCALE_AVG_WEIGHT_DELTA_THRESHOLD && Scale::weightSamplesLimit > SCALE_WEIGHT_SAMPLES_MIN)
     {
@@ -214,6 +216,7 @@ void Scale::calcAvgWeight(float rawWeight)
         for (int x = 0; x < SCALE_WEIGHT_SAMPLES_MAX; x++)
             Scale::weights[x] = rawWeight;
 
+#ifdef SERIAL_DEBUG
         Serial.print("avgWeights: ");
         for (int x = 0; x < Scale::weightSamplesLimit; x++)
         {
@@ -221,6 +224,7 @@ void Scale::calcAvgWeight(float rawWeight)
             Serial.print("    ");
         }
         Serial.println("");
+#endif SERIAL_DEBUG
     }
 
     // reset this flag on each loop iteration, unless we make it true later on
@@ -232,13 +236,6 @@ void Scale::calcAvgWeight(float rawWeight)
         // update the prev. avg weight
         // so that our moving avg. window keeps rolling/converging towards the new weight
         Scale::avgWeight = avgWeight;
-
-        // // round to avoid trying to compare "hidden" decimals e.g. 0.00001 to 0.00002
-        // if (abs(Utils::roundFloat(Scale::weight, SCALE_WEIGHT_DECIMALS)) == 0)
-        // {
-        //     // make sure we don't compare +0 and -0 below...
-        //     Scale::weight = 0;
-        // }
 
         // check if there's a "big" difference between the prev/new avg weight
         // over the threshold that we want to consider a "weight changed"
