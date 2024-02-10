@@ -8,6 +8,7 @@ class Presets
 {
 public:
     static Preset *presets[PRESETS_COUNT];
+    static Preset *getPreset();
     static void setup();
 };
 

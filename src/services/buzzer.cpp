@@ -15,10 +15,10 @@
  *
  * This function is non-blocking, which means that even if you provide the duration parameter
  * the sketch execution will continue immediately even if the tone hasn’t finished playing.
- * @param frequency optional frequency (in Hertz), of the tone
  * @param duration optional duration of the tone (in milliseconds), 0 means never ending
+ * @param frequency optional frequency (in Hertz), of the tone
  */
-void Buzzer::on(unsigned int frequency, unsigned long duration)
+void Buzzer::on(unsigned long duration, unsigned int frequency)
 {
     tone(BUZZER_PIN, frequency, duration);
 }

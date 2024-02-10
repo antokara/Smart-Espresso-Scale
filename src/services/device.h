@@ -9,4 +9,8 @@
 // uncomment to enable serial.print debug messages
 #define SERIAL_DEBUG
 
+// uncomment to plot the weight of the scale
+// press F1 and enter ">teleplot: Start teleplot session"
+#define SERIAL_DEBUG_PLOT_WEIGHT
+
 #endif // DEVICE

@@ -82,7 +82,6 @@
 /**
  * @brief the number of weight decimals accurancy, to show to the user
  * @example 1 will give 0.1 and 2 will give 0.01
- *
  */
 #define SCALE_WEIGHT_DECIMALS 1
 

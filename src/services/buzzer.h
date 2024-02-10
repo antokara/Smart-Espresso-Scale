@@ -30,7 +30,7 @@ public:
     // methods
     static void setup();
     static void loop();
-    static void on(unsigned int frequency = BUZZER_FREQUENCY_HZ, unsigned long duration = BUZZER_DURATION_MS);
+    static void on(unsigned long duration = BUZZER_DURATION_MS, unsigned int frequency = BUZZER_FREQUENCY_HZ);
     static void off();
 };
 

@@ -25,6 +25,7 @@ TODO: add the rest
       1. `sudo apt-get install python3-venv`
       1. restart VSCode
       1. warning: it may take up to 10 minutes to finish the installation and all the pio commands to become available
+1. [install the teleplot extension](https://marketplace.visualstudio.com/items?itemName=alexnesnes.teleplot)
 1. install [99-platformio-udev.rules](https://docs.platformio.org/en/latest/core/installation/udev-rules.html)
    1. `curl -fsSL https://raw.githubusercontent.com/platformio/platformio-core/develop/platformio/assets/system/99-platformio-udev.rules | sudo tee /etc/udev/rules.d/99-platformio-udev.rules`
    1. on Fedora
