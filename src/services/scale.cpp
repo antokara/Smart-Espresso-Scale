@@ -149,6 +149,12 @@ void Scale::setup()
  */
 void Scale::calcAvgWeight(float rawWeight)
 {
+    if (Scale::hasWeightChanged)
+    {
+        // reset this flag on each loop iteration, unless we make it true later on
+        Scale::hasWeightChanged = false;
+    }
+
     // only add this rawWeight, if there's a significant delta between it and the previous average
     // otherwise, we may as well be adding the same value, over and over without affecting the avg...
     // also, do not add if the last sample weight, is too close to the new raw weight...
@@ -218,7 +224,7 @@ void Scale::calcAvgWeight(float rawWeight)
         // the samples are above the min. limit
         //
         // reset the samples to the min. limit
-        Scale::weightSamplesLimit = SCALE_WEIGHT_SAMPLES_MIN;
+        Scale::weightSamplesLimit = SCALE_WEIScale::hasWeightChangedGHT_SAMPLES_MIN;
         // overwrite all the samples
         // with the average weight, to prevent any previous value to affect the next average...
         for (int x = 0; x < SCALE_WEIGHT_SAMPLES_MAX; x++)
@@ -237,9 +243,6 @@ void Scale::calcAvgWeight(float rawWeight)
         Serial.println("");
 #endif SERIAL_DEBUG
     }
-
-    // reset this flag on each loop iteration, unless we make it true later on
-    Scale::hasWeightChanged = false;
 
     // when there's a notable difference between the prev/new avg weight
     if (delta > SCALE_AVG_WEIGHT_DELTA_IGNORE_THRESHOLD)
@@ -465,7 +468,7 @@ void Scale::calibrate(void)
 void Scale::loop()
 {
     float lastAvgWeight = 0;
-    if (Scale::isAvailable == SCALE_IS_AVAILABLE_YES && scaleDev.available() == true)
+    if (Scale::isAvailable == SCALE_IS_AVAILABLE_YES)
     {
         if (Scale::firstAvailability == SCALE_FIRST_AVAILABILITY_UNKNOWN)
         {
@@ -497,5 +500,12 @@ void Scale::loop()
         {
             Scale::firstAvailability = SCALE_FIRST_AVAILABILITY_NO;
         }
+    }
+    else
+    {
+#ifdef SERIAL_DEBUG
+
+        Serial.println("******* WARNING: scale is NOT available! *******");
+#endif
     }
 }
