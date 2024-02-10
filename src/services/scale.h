@@ -41,7 +41,7 @@
  *
  * 1 is the hard minimum.
  */
-#define SCALE_AVG_WEIGHT_SAMPLES_MIN 4
+#define SCALE_WEIGHT_SAMPLES_MIN 4
 
 /**
  * @brief the max samples to collect for the moving average window
@@ -55,7 +55,7 @@
  *  24 ~ 0.03
  *  16 ~ 0.05
  */
-#define SCALE_AVG_WEIGHT_SAMPLES_MAX 24
+#define SCALE_WEIGHT_SAMPLES_MAX 24
 
 /**
  * @brief the delta threshold between two average weight values
@@ -132,12 +132,11 @@ public:
     static byte hasWeightChanged;
     static long zeroOffset;
     static float calibrationFactor;
+    static float weights[SCALE_WEIGHT_SAMPLES_MAX];
+    static byte weightIndex;
+    static byte weightSamplesLimit;
     static float avgWeight;
-    static float avgWeights[SCALE_AVG_WEIGHT_SAMPLES_MAX];
-    static byte avgWeightIndex;
-    static byte avgWeightSamples;
     static float weight;
-    static float prevWeight;
 
     // methods
     static void setup();

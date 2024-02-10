@@ -61,7 +61,6 @@ float Scale::avgWeight = 0;
 
 // init
 float Scale::weight = 0;
-float Scale::prevWeight = 0;
 
 /**
  * @brief the list of weights,
@@ -69,23 +68,23 @@ float Scale::prevWeight = 0;
  *
  * This helps smooth out jitter.
  */
-float Scale::avgWeights[SCALE_AVG_WEIGHT_SAMPLES_MAX];
+float Scale::weights[SCALE_WEIGHT_SAMPLES_MAX];
 
 /**
- * @brief the current index of the avgWeights list.
+ * @brief the current index of the weights list.
  * that's where we will add the next weight...
  */
-byte Scale::avgWeightIndex = 0;
+byte Scale::weightIndex = 0;
 
 /**
- * @brief the current number of sample weights
+ * @brief the current number of sample weights (limit)
  * that we are using from the list of weights
  * in order to calculate the average.
  *
  * the smaller the number of samples, the more agressive/faster
  * but also noisier, the avg weight calculation will be.
  */
-byte Scale::avgWeightSamples = SCALE_AVG_WEIGHT_SAMPLES_MIN;
+byte Scale::weightSamplesLimit = SCALE_WEIGHT_SAMPLES_MIN;
 
 /**
  * @brief true if the weight has changed in this loop iteration
@@ -138,7 +137,7 @@ void Scale::setup()
 #endif
 
     // start at 0
-    Scale::avgWeights[Scale::avgWeightIndex] = 0;
+    Scale::weights[Scale::weightIndex] = 0;
 }
 
 /**
@@ -150,7 +149,7 @@ void Scale::setup()
  */
 void Scale::calcAvgWeight(float rawWeight)
 {
-    // only add this rawWeight, if there's a significant delta between it and the current average
+    // only add this rawWeight, if there's a significant delta between it and the previous average
     // otherwise, we may as well be adding the same value, over and over without affecting the avg...
     float delta = abs(rawWeight - Scale::avgWeight);
     if (delta < SCALE_AVG_WEIGHT_DELTA_THRESHOLD)
@@ -159,19 +158,21 @@ void Scale::calcAvgWeight(float rawWeight)
         return;
     }
 
-    // add the new weight to the list of average weights
-    Scale::avgWeights[Scale::avgWeightIndex++] = rawWeight;
+    // add the new weight to the list of weights
+    Scale::weights[Scale::weightIndex++] = rawWeight;
 
-    // reset the index to the start,
-    // if it has reached the max limit of the list or the current limit
-    if (Scale::avgWeightIndex == SCALE_AVG_WEIGHT_SAMPLES_MAX || Scale::avgWeightIndex >= Scale::avgWeightSamples)
-        Scale::avgWeightIndex = 0;
+    // if the weight index has reached the max OR the current weight samples limit,
+    // reset to zero, for the next addition...
+    if (Scale::weightIndex == SCALE_WEIGHT_SAMPLES_MAX || Scale::weightIndex >= Scale::weightSamplesLimit)
+        Scale::weightIndex = 0;
 
-    // get the current average weight
+    // get the new average weight (using the current samples limit)
     float avgWeight = 0;
-    for (int x = 0; x < Scale::avgWeightSamples; x++)
-        avgWeight += Scale::avgWeights[x];
-    avgWeight = avgWeight / Scale::avgWeightSamples;
+    for (int x = 0; x < Scale::weightSamplesLimit; x++)
+    {
+        avgWeight += Scale::weights[x];
+    }
+    avgWeight = avgWeight / Scale::weightSamplesLimit;
     // round to avoid trying to compare "hidden" decimals e.g. 0.00001 to 0.00002
     if (abs(Utils::roundFloat(avgWeight, SCALE_WEIGHT_DECIMALS)) == 0)
     {
@@ -181,7 +182,7 @@ void Scale::calcAvgWeight(float rawWeight)
 
     // get the delta between current avg and previous
     delta = abs(avgWeight - Scale::avgWeight);
-    if (delta > 0 && delta <= SCALE_AVG_WEIGHT_DELTA_THRESHOLD && Scale::avgWeightSamples < SCALE_AVG_WEIGHT_SAMPLES_MAX)
+    if (delta > 0 && delta <= SCALE_AVG_WEIGHT_DELTA_THRESHOLD && Scale::weightSamplesLimit < SCALE_WEIGHT_SAMPLES_MAX)
     {
         // when there's a delta but it's under the threshold
         // (most likely the item on the scale is stabilizing) and
@@ -190,61 +191,70 @@ void Scale::calcAvgWeight(float rawWeight)
         // increase the samples in an effort to stabilize the weight and
         // set the average weight to the new maximum sample slot
         // to prevent any previous value to affect the next average...
-        Scale::avgWeights[++Scale::avgWeightSamples] = avgWeight;
+        Scale::weights[++Scale::weightSamplesLimit] = rawWeight;
 
-        // Serial.print("avgWeights: ");
-        // for (int x = 0; x < Scale::avgWeightSamples; x++)
-        // {
-        //     Serial.print(Scale::avgWeights[x]);
-        //     Serial.print("    ");
-        // }
-        // Serial.println("");
+        Serial.print("avgWeights: ");
+        for (int x = 0; x < Scale::weightSamplesLimit; x++)
+        {
+            Serial.print(Scale::weights[x]);
+            Serial.print("    ");
+        }
+        Serial.println("");
     }
-    else if (delta > SCALE_AVG_WEIGHT_DELTA_THRESHOLD && Scale::avgWeightSamples > SCALE_AVG_WEIGHT_SAMPLES_MIN)
+    else if (delta > SCALE_AVG_WEIGHT_DELTA_THRESHOLD && Scale::weightSamplesLimit > SCALE_WEIGHT_SAMPLES_MIN)
     {
         // when there's a delta greater than the threshold
         // (most likely the item on the scale was added or removed) and
         // the samples are above the min. limit
         //
         // reset the samples to the min. limit
-        Scale::avgWeightSamples = SCALE_AVG_WEIGHT_SAMPLES_MIN;
+        Scale::weightSamplesLimit = SCALE_WEIGHT_SAMPLES_MIN;
         // overwrite all the samples
         // with the average weight, to prevent any previous value to affect the next average...
-        for (int x = 0; x < SCALE_AVG_WEIGHT_SAMPLES_MAX; x++)
-            Scale::avgWeights[x] = avgWeight;
+        for (int x = 0; x < SCALE_WEIGHT_SAMPLES_MAX; x++)
+            Scale::weights[x] = rawWeight;
 
-        // Serial.print("avgWeights: ");
-        // for (int x = 0; x < Scale::avgWeightSamples; x++)
-        // {
-        //     Serial.print(Scale::avgWeights[x]);
-        //     Serial.print("    ");
-        // }
-        // Serial.println("");
+        Serial.print("avgWeights: ");
+        for (int x = 0; x < Scale::weightSamplesLimit; x++)
+        {
+            Serial.print(Scale::weights[x]);
+            Serial.print("    ");
+        }
+        Serial.println("");
     }
 
+    // reset this flag on each loop iteration, unless we make it true later on
     Scale::hasWeightChanged = false;
+
+    // when there's any difference between the prev/new avg weight
     if (Scale::avgWeight != avgWeight)
     {
-        // keep the prev avg weight
+        // update the prev. avg weight
+        // so that our moving avg. window keeps rolling/converging towards the new weight
         Scale::avgWeight = avgWeight;
-        Scale::weight = avgWeight;
-        // round to avoid trying to compare "hidden" decimals e.g. 0.00001 to 0.00002
-        if (abs(Utils::roundFloat(Scale::weight, SCALE_WEIGHT_DECIMALS)) == 0)
-        {
-            // make sure we don't compare +0 and -0 below...
-            Scale::weight = 0;
-        }
 
-        if (abs(Scale::weight - Scale::prevWeight) > SCALE_AVG_WEIGHT_DELTA_THRESHOLD)
+        // // round to avoid trying to compare "hidden" decimals e.g. 0.00001 to 0.00002
+        // if (abs(Utils::roundFloat(Scale::weight, SCALE_WEIGHT_DECIMALS)) == 0)
+        // {
+        //     // make sure we don't compare +0 and -0 below...
+        //     Scale::weight = 0;
+        // }
+
+        // check if there's a "big" difference between the prev/new avg weight
+        // over the threshold that we want to consider a "weight changed"
+        if (abs(Scale::weight - avgWeight) > SCALE_AVG_WEIGHT_DELTA_THRESHOLD)
         {
+            // update the weight, with the new average
+            Scale::weight = avgWeight;
+
+            // since we update the weight, mark it as changed
+            Scale::hasWeightChanged = true;
+
+            // if plot is enabled, plot the new weight!
 #ifdef SERIAL_DEBUG_PLOT_WEIGHT
             Serial.print(">weight:");
             Serial.println(String(Scale::weight));
 #endif
-            // we must round again here, to avoid decimal numbers appearing out of nowhere
-            // Scale::prevWeight = Utils::roundFloat(Scale::weight, SCALE_WEIGHT_DECIMALS);
-            Scale::prevWeight = Scale::weight;
-            Scale::hasWeightChanged = true;
         }
     }
 }
@@ -344,8 +354,8 @@ void Scale::tare()
     Lcd::print(Scale::formatWeight(0), 0, 0, clearLcd_all);
 
     // reset all avg weight values
-    for (int x = 0; x < SCALE_AVG_WEIGHT_SAMPLES_MAX; x++)
-        Scale::avgWeights[x] = 0;
+    for (int x = 0; x < SCALE_WEIGHT_SAMPLES_MAX; x++)
+        Scale::weights[x] = 0;
 
     Buzzer::off();
 }

@@ -139,6 +139,7 @@ void Mode_Brew::loop()
     // handle stopTimer_last_drop
     if (Mode_Brew::stage == brew_stage_stopping && Presets::getPreset()->stopTimer == stopTimer_last_drop)
     {
+        // TODO: specify a delta for weight of drop. maybe use the FIRST_DROP_WEIGHT and rename
         if (Scale::hasWeightChanged)
         {
             // refresh the time the last drop fell
