@@ -224,7 +224,7 @@ void Scale::calcAvgWeight(float rawWeight)
         // the samples are above the min. limit
         //
         // reset the samples to the min. limit
-        Scale::weightSamplesLimit = SCALE_WEIScale::hasWeightChangedGHT_SAMPLES_MIN;
+        Scale::weightSamplesLimit = SCALE_WEIGHT_SAMPLES_MIN;
         // overwrite all the samples
         // with the average weight, to prevent any previous value to affect the next average...
         for (int x = 0; x < SCALE_WEIGHT_SAMPLES_MAX; x++)

@@ -135,6 +135,10 @@ void Mode_Brew::loop()
         }
         render = true;
     }
+    else if (Mode_Brew::hasRenderBuffered())
+    {
+        render = true;
+    }
 
     // handle stopTimer_last_drop
     if (Mode_Brew::stage == brew_stage_stopping && Presets::getPreset()->stopTimer == stopTimer_last_drop)

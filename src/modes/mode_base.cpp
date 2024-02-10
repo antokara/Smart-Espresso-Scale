@@ -44,6 +44,17 @@ void Mode_Base::tryRenderBuffered()
 }
 
 /**
+ * @brief checks if there's a render in the buffer, so that we should call tryRenderBuffered
+ *
+ * @return true when there's a render in the buffer, waiting to be rendered
+ * @return false
+ */
+bool Mode_Base::hasRenderBuffered()
+{
+    return Mode_Base::bufferedRenderText != "";
+}
+
+/**
  * @brief clears any previously buffered render values and
  * resets the lastRenderTime
  *

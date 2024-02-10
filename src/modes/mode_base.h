@@ -18,6 +18,7 @@ public:
     clearLcd bufferedRenderClear;
     void tryRenderNow(String text, uint8_t col, uint8_t row, clearLcd clear = clearLcd_none);
     void tryRenderBuffered();
+    bool hasRenderBuffered();
     void clearBufferedRender();
 
     /**
