@@ -68,9 +68,10 @@
 
 /**
  * @brief the delta threshold between two average weight values
- * that when smaller, we ignore and consider at that point, noise.
+ * that when smaller or equal, we ignore and consider at that point, noise.
  *
  * this is in an effort to reduce the list of samples from growing too fast.
+ * must be greather than, to qualify for change.
  *
  */
 #define SCALE_AVG_WEIGHT_DELTA_IGNORE_THRESHOLD 0.01

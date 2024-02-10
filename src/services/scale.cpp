@@ -151,8 +151,9 @@ void Scale::calcAvgWeight(float rawWeight)
 {
     // only add this rawWeight, if there's a significant delta between it and the previous average
     // otherwise, we may as well be adding the same value, over and over without affecting the avg...
+    // also, do not add if the last sample weight, is too close to the new raw weight...
     float delta = abs(rawWeight - Scale::avgWeight);
-    if (delta < SCALE_AVG_WEIGHT_DELTA_THRESHOLD)
+    if (delta < SCALE_AVG_WEIGHT_DELTA_THRESHOLD || abs(Scale::weights[Scale::weightIndex] - rawWeight) <= SCALE_AVG_WEIGHT_DELTA_IGNORE_THRESHOLD)
     {
         // do nothing when the delta is too small
         return;
@@ -198,7 +199,7 @@ void Scale::calcAvgWeight(float rawWeight)
         Scale::weights[++Scale::weightSamplesLimit] = rawWeight;
 
 #ifdef SERIAL_DEBUG
-        Serial.print("avgWeights ");
+        Serial.print("weights ");
         Serial.print("(");
         Serial.print(Scale::weightSamplesLimit);
         Serial.print("): ");
@@ -224,7 +225,7 @@ void Scale::calcAvgWeight(float rawWeight)
             Scale::weights[x] = rawWeight;
 
 #ifdef SERIAL_DEBUG
-        Serial.print("avgWeights ");
+        Serial.print("weights ");
         Serial.print("(");
         Serial.print(Scale::weightSamplesLimit);
         Serial.print("): ");
