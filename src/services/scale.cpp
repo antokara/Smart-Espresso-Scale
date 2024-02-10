@@ -182,7 +182,7 @@ void Scale::calcAvgWeight(float rawWeight)
 
     // get the delta between current avg and previous
     delta = abs(avgWeight - Scale::avgWeight);
-    if (delta > 0 && delta <= SCALE_AVG_WEIGHT_DELTA_THRESHOLD && Scale::weightSamplesLimit < SCALE_WEIGHT_SAMPLES_MAX)
+    if (delta > SCALE_AVG_WEIGHT_DELTA_IGNORE_THRESHOLD && delta <= SCALE_AVG_WEIGHT_DELTA_THRESHOLD && Scale::weightSamplesLimit < SCALE_WEIGHT_SAMPLES_MAX)
     {
         // when there's a delta but it's under the threshold
         // (most likely the item on the scale is stabilizing) and
@@ -191,10 +191,17 @@ void Scale::calcAvgWeight(float rawWeight)
         // increase the samples in an effort to stabilize the weight and
         // add the new weight sample, to the new rawWeight
         // to prevent any potential previous value to affect the next average...
+        //
+        // note: most likely, unless we impose the SCALE_WEIGHT_SAMPLES_MAX,
+        //       there's always going to be some delta between the sensor values and
+        //       the samples list will keep growing infinitely and never converge to true zero.
         Scale::weights[++Scale::weightSamplesLimit] = rawWeight;
 
 #ifdef SERIAL_DEBUG
-        Serial.print("avgWeights: ");
+        Serial.print("avgWeights ");
+        Serial.print("(");
+        Serial.print(Scale::weightSamplesLimit);
+        Serial.print("): ");
         for (int x = 0; x < Scale::weightSamplesLimit; x++)
         {
             Serial.print(Scale::weights[x]);
@@ -217,7 +224,10 @@ void Scale::calcAvgWeight(float rawWeight)
             Scale::weights[x] = rawWeight;
 
 #ifdef SERIAL_DEBUG
-        Serial.print("avgWeights: ");
+        Serial.print("avgWeights ");
+        Serial.print("(");
+        Serial.print(Scale::weightSamplesLimit);
+        Serial.print("): ");
         for (int x = 0; x < Scale::weightSamplesLimit; x++)
         {
             Serial.print(Scale::weights[x]);
@@ -230,8 +240,8 @@ void Scale::calcAvgWeight(float rawWeight)
     // reset this flag on each loop iteration, unless we make it true later on
     Scale::hasWeightChanged = false;
 
-    // when there's any difference between the prev/new avg weight
-    if (Scale::avgWeight != avgWeight)
+    // when there's a notable difference between the prev/new avg weight
+    if (delta > SCALE_AVG_WEIGHT_DELTA_IGNORE_THRESHOLD)
     {
         // update the prev. avg weight
         // so that our moving avg. window keeps rolling/converging towards the new weight

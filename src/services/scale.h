@@ -67,6 +67,15 @@
 #define SCALE_AVG_WEIGHT_DELTA_THRESHOLD 0.1
 
 /**
+ * @brief the delta threshold between two average weight values
+ * that when smaller, we ignore and consider at that point, noise.
+ *
+ * this is in an effort to reduce the list of samples from growing too fast.
+ *
+ */
+#define SCALE_AVG_WEIGHT_DELTA_IGNORE_THRESHOLD 0.01
+
+/**
  * @brief calculate the zero threshold that when the avg weight
  * has a delta smaller or equal to, will be considered zero,
  * for formatting purposes only.
