@@ -218,7 +218,7 @@ void Mode_Brew::render()
     }
     else if (Mode_Brew::stage == brew_stage_done)
     {
-        Lcd::print(Mode_Brew::getFormattedBrewSeconds() + " - done", 0, 1, clearLcd_row);
+        Lcd::print(Mode_Brew::getFormattedBrewSeconds() + " - done!", 0, 1, clearLcd_row);
     }
 };
 

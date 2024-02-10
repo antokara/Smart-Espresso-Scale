@@ -189,8 +189,8 @@ void Scale::calcAvgWeight(float rawWeight)
         // the samples are still under the max. limit
         //
         // increase the samples in an effort to stabilize the weight and
-        // set the average weight to the new maximum sample slot
-        // to prevent any previous value to affect the next average...
+        // add the new weight sample, to the new rawWeight
+        // to prevent any potential previous value to affect the next average...
         Scale::weights[++Scale::weightSamplesLimit] = rawWeight;
 
 #ifdef SERIAL_DEBUG
