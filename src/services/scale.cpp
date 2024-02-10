@@ -241,7 +241,7 @@ void Scale::calcAvgWeight(float rawWeight)
             Serial.print("    ");
         }
         Serial.println("");
-#endif SERIAL_DEBUG
+#endif
     }
 
     // when there's a notable difference between the prev/new avg weight
