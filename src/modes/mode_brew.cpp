@@ -36,7 +36,6 @@ void Mode_Brew::setStage(brew_stages stage)
         }
         else if (stage == brew_stage_stopping)
         {
-            Buzzer::on(1000);
             if (Presets::getPreset()->autoPump == true)
             {
                 // TODO: stop the brew (toggle the relay switch)
@@ -129,8 +128,16 @@ void Mode_Brew::loop()
             {
                 // count down the warnings...
                 Mode_Brew::estBrewSecondsLeftWarning--;
-                // warn the user that we approach the end
-                Buzzer::on(250);
+                if (Mode_Brew::estBrewSecondsLeftWarning > 0)
+                {
+                    // warn the user that we approach the end
+                    Buzzer::on(350);
+                }
+                else
+                {
+                    // notify the user to stop the brew pump!
+                    Buzzer::on(1000);
+                }
             }
         }
         render = true;
