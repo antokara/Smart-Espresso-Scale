@@ -23,6 +23,9 @@
 // the minimum weight during brew (greater than or equal),
 // to be considered that the brew has actually started and
 // to avoid trying to stop, when the seconds left are still basically, zero...
+//
+// it can't be very low or zero, because it causes the brew to stop almost immediatelly,
+// since the seconds left, will most likely be zero at the very first second.
 #define MIN_BREW_WEIGHT 9
 
 class Mode_Brew : public Mode_Base
