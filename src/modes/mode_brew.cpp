@@ -101,7 +101,7 @@ void Mode_Brew::loop()
                 Mode_Brew::setStage(brew_stage_in_progress);
             }
         }
-        else if (Mode_Brew::stage == brew_stage_in_progress && Scale::getWeight() > 0)
+        else if (Mode_Brew::stage == brew_stage_in_progress && Scale::getWeight() >= MIN_BREW_WEIGHT)
         {
             // calculate the estimated target brew weight and seconds left
             Mode_Brew::estBrewWeight = Scale::getWeight() / Mode_Brew::brewSeconds * Presets::getPreset()->brewDuration;

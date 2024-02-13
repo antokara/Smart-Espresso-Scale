@@ -20,6 +20,11 @@
 // when stopTimer == stopTimer_last_drop
 #define TIME_SINCE_LAST_DROP_TO_STOP 2000
 
+// the minimum weight during brew (greater than or equal),
+// to be considered that the brew has actually started and
+// to avoid trying to stop, when the seconds left are still basically, zero...
+#define MIN_BREW_WEIGHT 9
+
 class Mode_Brew : public Mode_Base
 {
 public:
