@@ -34,6 +34,7 @@ public:
     static void setup();
     static void loop();
     static void trackActivity();
+    static void checkActivity();
     static void powerOff();
 
     // props

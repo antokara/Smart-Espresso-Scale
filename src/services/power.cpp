@@ -30,11 +30,20 @@ bool Power::isPoweringOff = false;
 
 /**
  * @brief updates the activity time to postpone the idle (auto power off)
- *
+ * TODO: call this from places
  */
 void Power::trackActivity()
 {
     Power::idleSinceTime = millis();
+}
+
+/**
+ * @brief checks if the device is idle and needs to auto power off
+ * must be called from within the loop
+ */
+void Power::checkActivity()
+{
+    // TODO:
 }
 
 /**
@@ -88,5 +97,6 @@ void Power::loop()
     {
         // button unpressed
         Power::powerOffPressTime = 0;
+        Power::checkActivity();
     }
 }
