@@ -2,7 +2,7 @@
 #include "services/device.h"
 #include "services/buttons.h"
 #include "services/lcd.h"
-#include "modes/modes.h"
+#include "modes/enums/modes.h"
 #include "modes/mode_scale.h"
 #include "modes/mode_tare.h"
 #include "modes/mode_selectPreset.h"

@@ -1,6 +1,6 @@
 #ifndef MODES_CONTROLLER
 #define MODES_CONTROLLER
-#include "modes/modes.h"
+#include "modes/enums/modes.h"
 #include "modes/mode_base.h"
 #include "modes/mode_scale.h"
 #include "modes/mode_tare.h"

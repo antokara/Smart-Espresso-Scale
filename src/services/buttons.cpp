@@ -5,7 +5,7 @@
 #include "services/device.h"
 #include "services/modes_controller.h"
 #include "services/power.h"
-#include "modes/modes.h"
+#include "modes/enums/modes.h"
 
 /**
  * @author Antonios Karagiannis (antokarag@gmail.com)
