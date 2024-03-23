@@ -5,7 +5,7 @@
 #include "modes/enums/modes.h"
 #include "modes/scale.h"
 #include "modes/tare.h"
-#include "modes/selectPreset.h"
+#include "modes/select_preset.h"
 #include "modes/brew.h"
 #include "services/modes_controller.h"
 
@@ -68,7 +68,7 @@ void Modes_Controller::loop()
             Modes_Controller::currentMode = new Mode_Tare();
             break;
         case modes_selectPreset:
-            Modes_Controller::currentMode = new Mode_SelectPreset();
+            Modes_Controller::currentMode = new Mode_Select_Preset();
             break;
         case modes_brew:
             Modes_Controller::currentMode = new Mode_Brew();

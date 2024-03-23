@@ -5,7 +5,7 @@
 #include "services/presets/presets.h"
 #include "services/scale.h"
 #include "services/buzzer.h"
-#include "modes/selectPreset.h"
+#include "modes/select_preset.h"
 #include "modes/brew.h"
 #include "utils.h"
 

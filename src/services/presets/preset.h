@@ -1,8 +1,8 @@
 #ifndef PRESET
 #define PRESET
 #include <Arduino.h>
-#include "services/presets/startTimers.h"
-#include "services/presets/stopTimers.h"
+#include "services/presets/start_timers.h"
+#include "services/presets/stop_timers.h"
 
 class Preset
 {
@@ -12,8 +12,8 @@ public:
     float brewRatio;
     int brewDuration;
     // TODO: add stop offset (decide if it's time based or weight based)
-    startTimers startTimer;
-    stopTimers stopTimer;
+    start_timers startTimer;
+    stop_timers stopTimer;
     bool autoPump;
 };
 

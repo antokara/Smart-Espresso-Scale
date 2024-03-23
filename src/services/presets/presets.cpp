@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include "services/presets/presets.h"
-#include "modes/selectPreset.h"
+#include "modes/select_preset.h"
 
 Preset *Presets::presets[PRESETS_COUNT];
 
@@ -23,11 +23,11 @@ void Presets::setup()
 
 /**
  * @brief returns the currently selected preset
- * (through the Mode_SelectPreset)
+ * (through the Mode_Select_Preset)
  *
  * @return Preset*
  */
 Preset *Presets::getPreset()
 {
-    return Presets::presets[Mode_SelectPreset::selectedPresetIndex];
+    return Presets::presets[Mode_Select_Preset::selectedPresetIndex];
 }

@@ -4,7 +4,7 @@
 #include "modes/base.h"
 #include "modes/scale.h"
 #include "modes/tare.h"
-#include "modes/selectPreset.h"
+#include "modes/select_preset.h"
 
 /**
  * @brief this class is responsible for:

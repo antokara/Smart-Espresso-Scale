@@ -1,7 +1,7 @@
 #ifndef START_TIMERS
 #define START_TIMERS
 
-enum startTimers
+enum start_timers
 {
     startTimer_pump,
     startTimer_first_drop

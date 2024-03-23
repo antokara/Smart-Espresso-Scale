@@ -2,7 +2,7 @@
 #define MODE_SELECT_PRESET
 #include "modes/base.h"
 
-class Mode_SelectPreset : public Mode_Base
+class Mode_Select_Preset : public Mode_Base
 {
 public:
     void setup();
