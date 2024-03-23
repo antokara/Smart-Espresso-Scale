@@ -3,6 +3,12 @@
 #include <Arduino.h>
 #include "services/lcd.h"
 
+/**
+ * @brief the menu navigation text
+ * to display on the 2nd row of the LCD screen
+ */
+#define MENU_NAVIGATION "up/dn/enter/back"
+
 class Mode_Base
 {
 public:

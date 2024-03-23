@@ -7,6 +7,7 @@
 #include "modes/tare.h"
 #include "modes/select_preset.h"
 #include "modes/brew.h"
+#include "modes/custom_brew_menu.h"
 #include "services/modes_controller.h"
 
 /**
@@ -60,7 +61,7 @@ void Modes_Controller::loop()
         Buttons::ignoreAll();
         switch (Modes_Controller::mode)
         {
-        default:
+        default: // NOP
         case modes_scale:
             Modes_Controller::currentMode = new Mode_Scale();
             break;
@@ -72,6 +73,9 @@ void Modes_Controller::loop()
             break;
         case modes_brew:
             Modes_Controller::currentMode = new Mode_Brew();
+            break;
+        case modes_customBrewMenu:
+            Modes_Controller::currentMode = new Mode_Custom_Brew_Menu();
             break;
         }
         Modes_Controller::currentMode->setup();
