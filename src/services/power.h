@@ -19,7 +19,7 @@
  * @brief time to power off when idle
  *
  */
-#define POWER_IDLE_OFF_SECONDS 60
+#define POWER_IDLE_OFF_MILLIS 180000
 
 /**
  * @brief milliseconds for the power off button to need to be pressed

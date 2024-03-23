@@ -4,6 +4,7 @@
 #include "services/lcd.h"
 #include "services/device.h"
 #include "services/modes_controller.h"
+#include "services/power.h"
 #include "modes/modes.h"
 
 /**
@@ -56,6 +57,7 @@ void Buttons::loop()
   {
     if (Buttons::tare == button_up)
     {
+      Power::trackActivity();
       Buttons::tare = button_pressed;
     }
     else if (Buttons::tare == button_pressed)
@@ -72,6 +74,7 @@ void Buttons::loop()
   {
     if (Buttons::up == button_up)
     {
+      Power::trackActivity();
       Buttons::up = button_pressed;
     }
     else if (Buttons::up == button_pressed)
@@ -88,6 +91,7 @@ void Buttons::loop()
   {
     if (Buttons::down == button_up)
     {
+      Power::trackActivity();
       Buttons::down = button_pressed;
     }
     else if (Buttons::down == button_pressed)
@@ -104,6 +108,7 @@ void Buttons::loop()
   {
     if (Buttons::ok == button_up)
     {
+      Power::trackActivity();
       Buttons::ok = button_pressed;
     }
     else if (Buttons::ok == button_pressed)
@@ -120,6 +125,7 @@ void Buttons::loop()
   {
     if (Buttons::cancel == button_up)
     {
+      Power::trackActivity();
       Buttons::cancel = button_pressed;
     }
     else if (Buttons::cancel == button_pressed)
@@ -136,6 +142,7 @@ void Buttons::loop()
   {
     if (Buttons::coffee == button_up)
     {
+      Power::trackActivity();
       Buttons::coffee = button_pressed;
     }
     else if (Buttons::coffee == button_pressed)

@@ -1,5 +1,7 @@
 #include "services/power.h"
 #include "services/device.h"
+#include "services/buzzer.h"
+#include "services/lcd.h"
 
 /**
  * @author Antonios Karagiannis (antokarag@gmail.com)
@@ -30,7 +32,7 @@ bool Power::isPoweringOff = false;
 
 /**
  * @brief updates the activity time to postpone the idle (auto power off)
- * TODO: call this from places
+ * @see services/buttons.cpp
  */
 void Power::trackActivity()
 {
@@ -43,7 +45,13 @@ void Power::trackActivity()
  */
 void Power::checkActivity()
 {
-    // TODO:
+    if (millis() - Power::idleSinceTime >= POWER_IDLE_OFF_MILLIS)
+    {
+        Lcd::print("powering off...", 0, 0, clearLcd_all);
+        Buzzer::on(1000);
+        delay(1000);
+        Power::powerOff();
+    }
 }
 
 /**
