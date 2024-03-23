@@ -38,9 +38,9 @@ byte Scale::firstAvailability = SCALE_FIRST_AVAILABILITY_UNKNOWN;
  * @brief Value used to convert the load cell reading to lbs or kg
  * @see SCALE_CALIBRATE and calibrate()
  * 1kg -820.18
- * 500g 4150.93
+ * 500g 4229.66 with 50g weight set
  */
-float Scale::calibrationFactor = 4150.93;
+float Scale::calibrationFactor = 4229.66;
 
 /**
  * @brief "Zero" value that is found when scale is tared
