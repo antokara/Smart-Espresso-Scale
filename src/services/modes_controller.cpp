@@ -8,6 +8,7 @@
 #include "modes/select_preset.h"
 #include "modes/brew.h"
 #include "modes/custom_brew_menu.h"
+#include "modes/presets_menu.h"
 #include "services/modes_controller.h"
 
 /**
@@ -76,6 +77,9 @@ void Modes_Controller::loop()
             break;
         case modes_customBrewMenu:
             Modes_Controller::currentMode = new Mode_Custom_Brew_Menu();
+            break;
+        case modes_presetsMenu:
+            Modes_Controller::currentMode = new Mode_Presets_Menu();
             break;
         }
         Modes_Controller::currentMode->setup();

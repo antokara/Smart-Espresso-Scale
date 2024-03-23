@@ -16,10 +16,12 @@ void Mode_Custom_Brew_Menu::tare()
 
 void Mode_Custom_Brew_Menu::up()
 {
+    Modes_Controller::setMode(modes_presetsMenu);
 }
 
 void Mode_Custom_Brew_Menu::down()
 {
+    Modes_Controller::setMode(modes_presetsMenu);
 }
 
 void Mode_Custom_Brew_Menu::ok()
