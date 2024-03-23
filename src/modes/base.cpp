@@ -1,4 +1,4 @@
-#include "modes/mode_base.h"
+#include "modes/base.h"
 
 /**
  * @brief attempts to render now, the text with the options provided and if it can't,

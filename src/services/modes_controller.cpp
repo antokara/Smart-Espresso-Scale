@@ -3,10 +3,10 @@
 #include "services/buttons.h"
 #include "services/lcd.h"
 #include "modes/enums/modes.h"
-#include "modes/mode_scale.h"
-#include "modes/mode_tare.h"
-#include "modes/mode_selectPreset.h"
-#include "modes/mode_brew.h"
+#include "modes/scale.h"
+#include "modes/tare.h"
+#include "modes/selectPreset.h"
+#include "modes/brew.h"
 #include "services/modes_controller.h"
 
 /**

@@ -1,4 +1,4 @@
-#include "modes/mode_scale.h"
+#include "modes/scale.h"
 #include "services/lcd.h"
 #include "services/scale.h"
 #include "services/buttons.h"

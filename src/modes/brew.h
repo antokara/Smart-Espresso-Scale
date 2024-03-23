@@ -1,6 +1,6 @@
 #ifndef MODE_BREW
 #define MODE_BREW
-#include "modes/mode_base.h"
+#include "modes/base.h"
 #include "modes/enums/brew_stages.h"
 
 // the weight the first drop needs to be
