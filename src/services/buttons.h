@@ -40,11 +40,28 @@ class Buttons
 public:
     // properties
     static button_states tare;
+    static unsigned long tare_pressed_duration;
+    static unsigned long tare_pressed_time;
+
     static button_states up;
+    static unsigned long up_pressed_duration;
+    static unsigned long up_pressed_time;
+
     static button_states down;
+    static unsigned long down_pressed_duration;
+    static unsigned long down_pressed_time;
+
     static button_states ok;
+    static unsigned long ok_pressed_duration;
+    static unsigned long ok_pressed_time;
+
     static button_states cancel;
+    static unsigned long cancel_pressed_duration;
+    static unsigned long cancel_pressed_time;
+
     static button_states coffee;
+    static unsigned long coffee_pressed_duration;
+    static unsigned long coffee_pressed_time;
 
     // methods
     static void setup();
