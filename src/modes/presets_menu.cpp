@@ -26,6 +26,7 @@ void Mode_Presets_Menu::down()
 
 void Mode_Presets_Menu::ok()
 {
+    Modes_Controller::setMode(modes_configurePreset);
 }
 
 void Mode_Presets_Menu::cancel()

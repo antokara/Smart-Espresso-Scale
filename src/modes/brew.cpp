@@ -124,6 +124,7 @@ void Mode_Brew::loop()
             // when the estimated brew seconds are more than zero and
             // are equal or less than the estimated brew seconds left warning,
             // reduce the estimated brew seconds left warning and beep accordingly
+            // TODO: check why this is faster than ideal...
             if (Presets::getPreset()->autoPump == false && Mode_Brew::estBrewSecondsLeft >= 0 && Mode_Brew::estBrewSecondsLeft < Mode_Brew::estBrewSecondsLeftWarning)
             {
                 // count down the warnings...

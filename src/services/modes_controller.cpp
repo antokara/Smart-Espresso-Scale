@@ -9,6 +9,7 @@
 #include "modes/brew.h"
 #include "modes/custom_brew_menu.h"
 #include "modes/presets_menu.h"
+#include "modes/configure_preset.h"
 #include "services/modes_controller.h"
 
 /**
@@ -73,6 +74,9 @@ void Modes_Controller::loop()
             Modes_Controller::currentMode = new Mode_Select_Preset();
             break;
         case modes_brew:
+            // TODO: figure out how to many route dynamic
+            //       maybe add a function like setMode but with immediate effect
+            //       with the instantiation taking place at the caller
             Modes_Controller::currentMode = new Mode_Brew();
             break;
         case modes_customBrewMenu:
@@ -80,6 +84,9 @@ void Modes_Controller::loop()
             break;
         case modes_presetsMenu:
             Modes_Controller::currentMode = new Mode_Presets_Menu();
+            break;
+        case modes_configurePreset:
+            Modes_Controller::currentMode = new Mode_Configure_Preset();
             break;
         }
         Modes_Controller::currentMode->setup();
