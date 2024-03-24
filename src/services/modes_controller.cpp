@@ -12,6 +12,7 @@
 #include "modes/configure_preset.h"
 #include "modes/change_preset_name_menu.h"
 #include "modes/change_preset_name.h"
+#include "modes/coffee_weight_menu.h"
 #include "services/modes_controller.h"
 
 /**
@@ -58,6 +59,9 @@ void Modes_Controller::setMode(modes newMode)
             break;
         case modes_changePresetName:
             Modes_Controller::setMode(new Mode_Change_Preset_Name());
+            break;
+        case modes_coffeeWeightMenu:
+            Modes_Controller::setMode(new Mode_Coffee_Weight_Menu());
             break;
         }
     }

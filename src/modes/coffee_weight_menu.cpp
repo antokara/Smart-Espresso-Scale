@@ -4,7 +4,7 @@
 
 modes Mode_Coffee_Weight_Menu::getMode()
 {
-    return modes_changePresetNameMenu;
+    return modes_coffeeWeightMenu;
 }
 
 void Mode_Coffee_Weight_Menu::setup()
