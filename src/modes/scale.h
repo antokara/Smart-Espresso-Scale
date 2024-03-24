@@ -9,6 +9,7 @@ public:
     modes getMode();
     void setup();
     void loop();
+    static bool firstSetup;
 
     // user actions
     void tare();

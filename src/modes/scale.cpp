@@ -1,8 +1,11 @@
 #include "modes/scale.h"
+#include "modes/tare.h"
 #include "services/lcd.h"
 #include "services/scale.h"
 #include "services/buttons.h"
 #include "services/modes_controller.h"
+
+bool Mode_Scale::firstSetup = true;
 
 modes Mode_Scale::getMode()
 {
@@ -11,6 +14,12 @@ modes Mode_Scale::getMode()
 
 void Mode_Scale::setup()
 {
+    // only tare on the first setup of the scale mode...
+    if (Mode_Scale::firstSetup)
+    {
+        (new Mode_Tare())->setup();
+        Mode_Scale::firstSetup = false;
+    }
     Lcd::print(Scale::getFormattedWeight(), 0, 0, clearLcd_all);
 };
 

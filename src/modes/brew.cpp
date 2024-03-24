@@ -7,6 +7,7 @@
 #include "services/buzzer.h"
 #include "modes/select_preset.h"
 #include "modes/brew.h"
+#include "modes/tare.h"
 #include "utils.h"
 
 modes Mode_Brew::getMode()
@@ -72,7 +73,7 @@ void Mode_Brew::setup()
     Mode_Brew::targetBrewWeight = Presets::getPreset()->coffeeWeight * Presets::getPreset()->brewRatio;
 
     // auto-tare right before we start, to negate the cup (that should already be on the scale)
-    Scale::tare();
+    (new Mode_Tare())->setup();
     Mode_Brew::render();
     if (Presets::getPreset()->autoPump == true)
     {

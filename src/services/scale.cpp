@@ -464,7 +464,8 @@ void Scale::loop()
         if (Scale::firstAvailability == SCALE_FIRST_AVAILABILITY_UNKNOWN)
         {
             Scale::firstAvailability = SCALE_FIRST_AVAILABILITY_YES;
-            Scale::tare();
+            // moved to mode
+            // Scale::tare();
         }
 
         // calculate the average weight and set the hasWeightChanged
