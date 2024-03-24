@@ -69,7 +69,7 @@ void Mode_Change_Preset_Name::ok()
     {
         // save and exit
         Lcd::noBlink();
-        Presets::presets[Mode_Configure_Preset::selectedPresetIndex]->name = Mode_Change_Preset_Name::name;
+        Presets::getPreset()->name = Mode_Change_Preset_Name::name;
         Presets::save();
         Modes_Controller::setMode(modes_changePresetNameMenu);
     }

@@ -33,6 +33,16 @@ Preset *Presets::getPreset()
 }
 
 /**
+ * @brief returns the custom coffee preset
+ *
+ * @return Preset*
+ */
+Preset *Presets::getCustomPreset()
+{
+    return Presets::presets[PRESETS_COUNT - 1];
+}
+
+/**
  * @brief saves all the presets in persistent storage
  *
  */

@@ -109,6 +109,7 @@
 
 /**
  * @brief scale unit suffixes
+ * TODO: move to a units file, since its shared with coffee weight mode
  *
  */
 #define SCALE_UNIT_SUFFIX_GRAMS "g."

@@ -20,7 +20,7 @@ void Mode_Select_Preset::loop(){};
 void Mode_Select_Preset::render()
 {
     Lcd::print("Select Preset", 0, 0, clearLcd_all);
-    Lcd::print(Presets::presets[Mode_Select_Preset::selectedPresetIndex]->name, 0, 1);
+    Lcd::print(Presets::getPreset()->name, 0, 1);
 };
 
 void Mode_Select_Preset::tare() {}

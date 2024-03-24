@@ -32,8 +32,7 @@ void Mode_Coffee_Weight_Menu::down()
 
 void Mode_Coffee_Weight_Menu::ok()
 {
-    // TODO:
-    // Modes_Controller::setMode(modes_changePresetName);
+    Modes_Controller::setMode(modes_coffeeWeight);
 }
 
 void Mode_Coffee_Weight_Menu::cancel()

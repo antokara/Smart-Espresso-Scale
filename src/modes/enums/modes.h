@@ -96,19 +96,19 @@ enum modes
      *
      * TODO: add pointer; to parent/siblings/children; use tuples
      */
-    modes_coffeeWeightSelection,
+    modes_coffeeWeight,
 
     modes_brewRatioMenu,
-    modes_brewRatioSelection,
+    modes_brewRatio,
 
     modes_brewDurationMenu,
-    modes_brewDurationSelection,
+    modes_brewDuration,
 
     modes_startTimerMenu,
-    modes_startTimerSelection,
+    modes_startTimer,
 
     modes_stopTimerMenu,
-    modes_stopTimerSelection,
+    modes_stopTimer,
 
     // TODO: add pump auto/manual toggle in preset
 
