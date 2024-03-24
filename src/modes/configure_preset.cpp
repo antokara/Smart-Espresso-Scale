@@ -51,6 +51,7 @@ void Mode_Configure_Preset::down()
 
 void Mode_Configure_Preset::ok()
 {
+    Modes_Controller::setMode(modes_changePresetNameMenu);
 }
 
 void Mode_Configure_Preset::cancel()
