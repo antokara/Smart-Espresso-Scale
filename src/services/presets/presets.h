@@ -10,6 +10,7 @@ public:
     static Preset *presets[PRESETS_COUNT];
     static Preset *getPreset();
     static void setup();
+    static void save();
 };
 
 #endif // PRESETS

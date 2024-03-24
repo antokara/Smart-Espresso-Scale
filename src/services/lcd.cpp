@@ -66,6 +66,27 @@ void Lcd::clear()
 }
 
 /**
+ * @brief starts a blinking cursor at the location given
+ *
+ * @param col
+ * @param row
+ */
+void Lcd::blink(uint8_t col, uint8_t row)
+{
+    lcd.setCursor(col, row);
+    lcd.blink();
+}
+
+/**
+ * @brief stops the blinking cursor
+ *
+ */
+void Lcd::noBlink()
+{
+    lcd.noBlink();
+}
+
+/**
  * @brief should be called once, from the main setup() function
  *
  */

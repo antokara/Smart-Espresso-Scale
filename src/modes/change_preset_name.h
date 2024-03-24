@@ -19,8 +19,11 @@ public:
     void coffee();
 
 private:
+    static const char stopCharacter = '|';
+    static const byte maxCharacters = 16;
     static String name;
-    static char character;
+    static byte characterIndex;
+    static String characters;
 };
 
 #endif // #define MODE_CHANGE_PRESET_NAME

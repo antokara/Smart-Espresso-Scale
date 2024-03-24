@@ -34,6 +34,8 @@ public:
     static void loop();
     static void print(String text, uint8_t col, uint8_t row, clearLcd clear = clearLcd_none);
     static void clear();
+    static void blink(uint8_t col, uint8_t row);
+    static void noBlink();
 };
 
 #endif // LCD

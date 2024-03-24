@@ -10,6 +10,11 @@
         "memory": "cpp",
         "algorithm": "cpp",
         "cmath": "cpp",
-        "new": "cpp"
+        "new": "cpp",
+        "*.tcc": "cpp",
+        "deque": "cpp",
+        "list": "cpp",
+        "unordered_map": "cpp",
+        "vector": "cpp"
     }
 }

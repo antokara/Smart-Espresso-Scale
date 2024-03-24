@@ -31,3 +31,12 @@ Preset *Presets::getPreset()
 {
     return Presets::presets[Mode_Select_Preset::selectedPresetIndex];
 }
+
+/**
+ * @brief saves all the presets in persistent storage
+ *
+ */
+void Presets::save()
+{
+    // TODO:
+}
