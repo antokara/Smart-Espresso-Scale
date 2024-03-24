@@ -11,6 +11,7 @@
 #include "modes/presets_menu.h"
 #include "modes/configure_preset.h"
 #include "modes/change_preset_name_menu.h"
+#include "modes/change_preset_name.h"
 #include "services/modes_controller.h"
 
 /**
@@ -54,6 +55,9 @@ void Modes_Controller::setMode(modes newMode)
             break;
         case modes_changePresetNameMenu:
             Modes_Controller::setMode(new Mode_Change_Preset_Name_Menu());
+            break;
+        case modes_changePresetName:
+            Modes_Controller::setMode(new Mode_Change_Preset_Name());
             break;
         }
     }
