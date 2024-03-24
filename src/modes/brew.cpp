@@ -9,6 +9,11 @@
 #include "modes/brew.h"
 #include "utils.h"
 
+modes Mode_Brew::getMode()
+{
+    return modes_brew;
+}
+
 /**
  * @brief sets the brewing stage (it's kind of a like a sub-mode)
  *

@@ -5,6 +5,7 @@
 class Mode_Configure_Preset : public Mode_Base
 {
 public:
+    modes getMode();
     void setup();
     void loop();
     void render();

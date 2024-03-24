@@ -3,6 +3,11 @@
 #include "services/modes_controller.h"
 #include "services/presets/presets.h"
 
+modes Mode_Change_Preset_Name_Menu::getMode()
+{
+    return modes_changePresetNameMenu;
+}
+
 void Mode_Change_Preset_Name_Menu::setup()
 {
     Lcd::print("change name", 0, 0, clearLcd_all);

@@ -2,6 +2,7 @@
 #define MODE_BASE
 #include <Arduino.h>
 #include "services/lcd.h"
+#include "modes/enums/modes.h"
 
 /**
  * @brief the menu navigation text
@@ -15,6 +16,7 @@ public:
     // standard methods (must be implemented by the derived class)
     virtual void setup() = 0;
     virtual void loop() = 0;
+    virtual modes getMode() = 0;
 
     // LCD render debouncer
     unsigned long lastRenderTime;

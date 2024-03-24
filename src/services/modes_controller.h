@@ -18,7 +18,6 @@ class Modes_Controller
 private:
     // properties
     static modes mode;
-    static modes prevMode;
     static Mode_Base *currentMode;
 
 public:
@@ -26,6 +25,7 @@ public:
     static void setup();
     static void loop();
     static void setMode(modes newMode);
+    static void setMode(Mode_Base *newMode);
 };
 
 #endif // MODES_CONTROLLER

@@ -1,6 +1,11 @@
 #include "modes/custom_brew_menu.h"
 #include "services/modes_controller.h"
 
+modes Mode_Custom_Brew_Menu::getMode()
+{
+    return modes_customBrewMenu;
+}
+
 void Mode_Custom_Brew_Menu::setup()
 {
     Lcd::print("custom brew", 0, 0, clearLcd_all);

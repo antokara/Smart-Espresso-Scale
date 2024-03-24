@@ -4,6 +4,11 @@
 #include "services/buttons.h"
 #include "services/modes_controller.h"
 
+modes Mode_Scale::getMode()
+{
+    return modes_scale;
+}
+
 void Mode_Scale::setup()
 {
     Lcd::print(Scale::getFormattedWeight(), 0, 0, clearLcd_all);
@@ -24,7 +29,6 @@ void Mode_Scale::loop()
 void Mode_Scale::tare()
 {
     Modes_Controller::setMode(modes_tare);
-    Lcd::print("tare    ", 0, 1);
 }
 
 void Mode_Scale::up()

@@ -5,6 +5,7 @@
 class Mode_Change_Preset_Name_Menu : public Mode_Base
 {
 public:
+    modes getMode();
     void setup();
     void loop();
 

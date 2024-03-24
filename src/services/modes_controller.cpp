@@ -14,18 +14,6 @@
 #include "services/modes_controller.h"
 
 /**
- * @brief the active mode
- *
- */
-modes Modes_Controller::mode = modes_scale;
-
-/**
- * @brief the previously active mode
- *
- */
-modes Modes_Controller::prevMode;
-
-/**
  * @brief the current mode instance
  *
  */
@@ -34,73 +22,72 @@ Mode_Base *Modes_Controller::currentMode;
 /**
  * @brief sets the new mode.
  *
- * important: the new mode does not take effect immediatelly.
- *            rather, the timing of that event, gets handled properly
- *            inside the loop method of this class.
- *            this method helps us control the change from a single approved method.
- *
- * @param newMode
- * @see loop()
+ * @param newMode the new enum mode to set (using default parms)
  */
 void Modes_Controller::setMode(modes newMode)
 {
-    if (Modes_Controller::mode != newMode)
+    if (Modes_Controller::currentMode == NULL || Modes_Controller::currentMode->getMode() != newMode)
     {
-        Modes_Controller::mode = newMode;
+        switch (newMode)
+        {
+        default: // NOP
+        case modes_scale:
+            Modes_Controller::setMode(new Mode_Scale());
+            break;
+        case modes_tare:
+            Modes_Controller::setMode(new Mode_Tare());
+            break;
+        case modes_selectPreset:
+            Modes_Controller::setMode(new Mode_Select_Preset());
+            break;
+        case modes_brew:
+            Modes_Controller::setMode(new Mode_Brew());
+            break;
+        case modes_customBrewMenu:
+            Modes_Controller::setMode(new Mode_Custom_Brew_Menu());
+            break;
+        case modes_presetsMenu:
+            Modes_Controller::setMode(new Mode_Presets_Menu());
+            break;
+        case modes_configurePreset:
+            Modes_Controller::setMode(new Mode_Configure_Preset());
+            break;
+        case modes_changePresetNameMenu:
+            Modes_Controller::setMode(new Mode_Change_Preset_Name_Menu());
+            break;
+        }
     }
 }
 
-void Modes_Controller::setup(){
+/**
+ * @brief sets the new mode.
+ *
+ * @param newMode the new mode instance to set (as provided)
+ */
+void Modes_Controller::setMode(Mode_Base *newMode)
+{
+    if (Modes_Controller::currentMode == NULL || Modes_Controller::currentMode->getMode() != newMode->getMode())
+    {
+        if (Modes_Controller::currentMode != NULL)
+        {
+            delete Modes_Controller::currentMode;
+        }
+        Buttons::ignoreAll();
+        Modes_Controller::currentMode = newMode;
+        Modes_Controller::currentMode->setup();
+    }
+}
 
+void Modes_Controller::setup()
+{
+    // start with the scale mode...
+    Modes_Controller::setMode(modes_scale);
 };
 
 void Modes_Controller::loop()
 {
-    // handle mode changes, as the first thing we do (so that don't have NULL, on the first loop)
-    if (Modes_Controller::mode != Modes_Controller::prevMode)
-    {
-        Modes_Controller::prevMode = Modes_Controller::mode;
-        delete Modes_Controller::currentMode;
-        Buttons::ignoreAll();
-        switch (Modes_Controller::mode)
-        {
-        default: // NOP
-        case modes_scale:
-            Modes_Controller::currentMode = new Mode_Scale();
-            break;
-        case modes_tare:
-            Modes_Controller::currentMode = new Mode_Tare();
-            break;
-        case modes_selectPreset:
-            Modes_Controller::currentMode = new Mode_Select_Preset();
-            break;
-        case modes_brew:
-            // TODO: figure out how to many route dynamic
-            //       maybe add a function like setMode but with immediate effect
-            //       with the instantiation taking place at the caller
-            Modes_Controller::currentMode = new Mode_Brew();
-            break;
-        case modes_customBrewMenu:
-            Modes_Controller::currentMode = new Mode_Custom_Brew_Menu();
-            break;
-        case modes_presetsMenu:
-            Modes_Controller::currentMode = new Mode_Presets_Menu();
-            break;
-        case modes_configurePreset:
-            Modes_Controller::currentMode = new Mode_Configure_Preset();
-            break;
-        case modes_changePresetNameMenu:
-            Modes_Controller::currentMode = new Mode_Change_Preset_Name_Menu();
-            break;
-        }
-        Modes_Controller::currentMode->setup();
-    }
-
     // run the mode's loop
     Modes_Controller::currentMode->loop();
-
-    // TODO: add timeout when no button has been pressed for 1 minute
-    //       and start beeping. maybe add scene? OR implement auto shut-off
 
     // check for user actions (buttons)
     if (Buttons::tare == button_pressed)

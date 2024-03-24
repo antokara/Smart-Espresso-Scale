@@ -69,6 +69,19 @@ copy `secrets.h.template` to `secrets.h` and insert values
 
 ## troubleshooting
 
+### unable to upload due to bad firmware
+
+1. remove the battery
+1. unplug all USB cables
+1. hold the BOOTSEL button and while holding, plug in the PC USB with Power
+1. let go of the BOOTSEL button
+1. confirm mounted media `ls /run/media/user/RPI-RP2/`
+1. change upload port to `/run/media/user/RPI-RP2`
+1. upload
+1. change upload port back to `auto`
+1. turn off USB power
+1. insert battery
+
 ### debugging
 
 - in `main.cpp` uncomment the `#define SERIAL_DEBUG` and build/upload, to enable serial.print debug messages

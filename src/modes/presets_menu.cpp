@@ -1,6 +1,11 @@
 #include "modes/presets_menu.h"
 #include "services/modes_controller.h"
 
+modes Mode_Presets_Menu::getMode()
+{
+    return modes_presetsMenu;
+}
+
 void Mode_Presets_Menu::setup()
 {
     Lcd::print("presets", 0, 0, clearLcd_all);

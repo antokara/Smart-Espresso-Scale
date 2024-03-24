@@ -5,6 +5,11 @@
 
 byte Mode_Select_Preset::selectedPresetIndex = 0;
 
+modes Mode_Select_Preset::getMode()
+{
+    return modes_selectPreset;
+}
+
 void Mode_Select_Preset::setup()
 {
     Mode_Select_Preset::render();

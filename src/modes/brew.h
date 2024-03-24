@@ -31,6 +31,7 @@
 class Mode_Brew : public Mode_Base
 {
 public:
+    modes getMode();
     void setup();
     void loop();
     void render();

@@ -11,8 +11,6 @@
 #include <SparkFun_Qwiic_Scale_NAU7802_Arduino_Library.h>
 #include "services/scale.h"
 #include "services/device.h"
-#include "services/lcd.h"
-#include "services/buzzer.h"
 #include "utils.h"
 
 // the actual scale device instance
@@ -355,20 +353,13 @@ void Scale::calculateZeroOffset()
 void Scale::tare()
 {
     // TODO: properly tare with a watch. this basically needs to "start" taring
-    Buzzer::on();
-    Lcd::print("Tearing...", 0, 0, clearLcd_all);
 
     // tare
     Scale::calculateZeroOffset();
 
-    // show zero to the screen
-    Lcd::print(Scale::formatWeight(0), 0, 0, clearLcd_all);
-
     // reset all avg weight values
     for (int x = 0; x < SCALE_WEIGHT_SAMPLES_MAX; x++)
         Scale::weights[x] = 0;
-
-    Buzzer::off();
 }
 
 /**

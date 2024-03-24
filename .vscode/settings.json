@@ -9,6 +9,7 @@
         "string": "cpp",
         "memory": "cpp",
         "algorithm": "cpp",
-        "cmath": "cpp"
+        "cmath": "cpp",
+        "new": "cpp"
     }
 }
