@@ -1,4 +1,5 @@
 #include "modes/coffee_weight_menu.h"
+#include "modes/coffee_weight.h"
 #include "services/modes_controller.h"
 #include "services/presets/presets.h"
 
@@ -32,6 +33,7 @@ void Mode_Coffee_Weight_Menu::down()
 
 void Mode_Coffee_Weight_Menu::ok()
 {
+    Mode_Coffee_Weight::coffee_weight = Presets::getPreset()->coffeeWeight;
     Modes_Controller::setMode(modes_coffeeWeight);
 }
 

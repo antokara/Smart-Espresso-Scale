@@ -29,17 +29,8 @@ void Presets::setup()
  */
 Preset *Presets::getPreset()
 {
+    // TODO: make it pick the custom;;
     return Presets::presets[Mode_Select_Preset::selectedPresetIndex];
-}
-
-/**
- * @brief returns the custom coffee preset
- *
- * @return Preset*
- */
-Preset *Presets::getCustomPreset()
-{
-    return Presets::presets[PRESETS_COUNT - 1];
 }
 
 /**

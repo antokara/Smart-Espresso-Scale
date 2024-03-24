@@ -9,7 +9,6 @@ class Presets
 public:
     static Preset *presets[PRESETS_COUNT];
     static Preset *getPreset();
-    static Preset *getCustomPreset();
     static void setup();
     static void save();
 };

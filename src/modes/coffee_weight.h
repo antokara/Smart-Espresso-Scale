@@ -1,6 +1,10 @@
 #ifndef MODE_COFFEE_WEIGHT
 #define MODE_COFFEE_WEIGHT
 #include "modes/base.h"
+#include "services/presets/presets.h"
+
+#define MAX_COFFEE_WEIGHT 5.0
+#define MIN_COFFEE_WEIGHT 25.0
 
 class Mode_Coffee_Weight : public Mode_Base
 {
@@ -26,6 +30,9 @@ public:
     modes getMode();
     void setup();
     void loop();
+    void render();
+    static float coffee_weight;
+    static float coffee_weight_step;
 
     // user actions
     void tare();
