@@ -3,7 +3,7 @@
 #include "services/presets/presets.h"
 #include "services/modes_controller.h"
 
-byte Mode_Configure_Preset::selectedPresetIndex = 0;
+byte Mode_Configure_Preset::presetIndex = 0;
 
 modes Mode_Configure_Preset::getMode()
 {
@@ -30,27 +30,29 @@ void Mode_Configure_Preset::tare()
 
 void Mode_Configure_Preset::up()
 {
-    if (Mode_Configure_Preset::selectedPresetIndex < PRESETS_COUNT - 1)
+    if (Mode_Configure_Preset::presetIndex < PRESETS_COUNT - 1)
     {
-        Mode_Configure_Preset::selectedPresetIndex++;
+        Mode_Configure_Preset::presetIndex++;
     }
     else
     {
-        Mode_Configure_Preset::selectedPresetIndex = 0;
+        Mode_Configure_Preset::presetIndex = 0;
     }
+    Presets::presetIndex = Mode_Configure_Preset::presetIndex;
     Mode_Configure_Preset::render();
 }
 
 void Mode_Configure_Preset::down()
 {
-    if (Mode_Configure_Preset::selectedPresetIndex > 0)
+    if (Mode_Configure_Preset::presetIndex > 0)
     {
-        Mode_Configure_Preset::selectedPresetIndex--;
+        Mode_Configure_Preset::presetIndex--;
     }
     else
     {
-        Mode_Configure_Preset::selectedPresetIndex = PRESETS_COUNT - 1;
+        Mode_Configure_Preset::presetIndex = PRESETS_COUNT - 1;
     }
+    Presets::presetIndex = Mode_Configure_Preset::presetIndex;
     Mode_Configure_Preset::render();
 }
 

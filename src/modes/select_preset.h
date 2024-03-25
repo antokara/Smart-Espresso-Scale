@@ -15,7 +15,7 @@ public:
      * from other modes (even when this mode is not active)
      *
      */
-    static byte selectedPresetIndex;
+    static byte presetIndex;
 
     // user actions
     void tare();

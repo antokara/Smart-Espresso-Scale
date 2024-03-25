@@ -3,7 +3,7 @@
 #include "services/presets/presets.h"
 #include "modes/select_preset.h"
 
-byte Mode_Select_Preset::selectedPresetIndex = 0;
+byte Mode_Select_Preset::presetIndex = 0;
 
 modes Mode_Select_Preset::getMode()
 {
@@ -27,27 +27,29 @@ void Mode_Select_Preset::tare() {}
 
 void Mode_Select_Preset::up()
 {
-    if (Mode_Select_Preset::selectedPresetIndex < PRESETS_COUNT - 1)
+    if (Mode_Select_Preset::presetIndex < PRESETS_COUNT - 1)
     {
-        Mode_Select_Preset::selectedPresetIndex++;
+        Mode_Select_Preset::presetIndex++;
     }
     else
     {
-        Mode_Select_Preset::selectedPresetIndex = 0;
+        Mode_Select_Preset::presetIndex = 0;
     }
+    Presets::presetIndex = Mode_Select_Preset::presetIndex;
     Mode_Select_Preset::render();
 }
 
 void Mode_Select_Preset::down()
 {
-    if (Mode_Select_Preset::selectedPresetIndex > 0)
+    if (Mode_Select_Preset::presetIndex > 0)
     {
-        Mode_Select_Preset::selectedPresetIndex--;
+        Mode_Select_Preset::presetIndex--;
     }
     else
     {
-        Mode_Select_Preset::selectedPresetIndex = PRESETS_COUNT - 1;
+        Mode_Select_Preset::presetIndex = PRESETS_COUNT - 1;
     }
+    Presets::presetIndex = Mode_Select_Preset::presetIndex;
     Mode_Select_Preset::render();
 }
 

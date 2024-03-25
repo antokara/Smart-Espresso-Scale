@@ -3,6 +3,7 @@
 #include "modes/select_preset.h"
 
 Preset *Presets::presets[PRESETS_COUNT];
+byte Presets::presetIndex;
 
 void Presets::setup()
 {
@@ -22,15 +23,17 @@ void Presets::setup()
 }
 
 /**
- * @brief returns the currently selected preset
- * (through the Mode_Select_Preset)
+ * @brief returns the currently selected preset.
+ * this needs to be set prior to:
+ *  - configuring a preset
+ *  - brewing a preset
+ *  - brewing a custom coffee brew
  *
  * @return Preset*
  */
 Preset *Presets::getPreset()
 {
-    // TODO: make it pick the custom;;
-    return Presets::presets[Mode_Select_Preset::selectedPresetIndex];
+    return Presets::presets[Presets::presetIndex];
 }
 
 /**

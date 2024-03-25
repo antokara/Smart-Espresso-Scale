@@ -3,8 +3,8 @@
 #include "modes/base.h"
 #include "services/presets/presets.h"
 
-#define MAX_COFFEE_WEIGHT 5.0
-#define MIN_COFFEE_WEIGHT 25.0
+#define MAX_COFFEE_WEIGHT 25.0
+#define MIN_COFFEE_WEIGHT 5.0
 
 class Mode_Coffee_Weight : public Mode_Base
 {
