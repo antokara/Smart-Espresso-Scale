@@ -110,9 +110,17 @@ void Modes_Controller::loop()
     {
         Modes_Controller::currentMode->up(button_pressed);
     }
+    else if (Buttons::up == button_down)
+    {
+        Modes_Controller::currentMode->up(button_down);
+    }
     else if (Buttons::down == button_pressed)
     {
         Modes_Controller::currentMode->down(button_pressed);
+    }
+    else if (Buttons::down == button_down)
+    {
+        Modes_Controller::currentMode->down(button_down);
     }
     else if (Buttons::ok == button_pressed)
     {

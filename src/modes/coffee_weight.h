@@ -6,6 +6,9 @@
 #define MAX_COFFEE_WEIGHT 25.0
 #define MIN_COFFEE_WEIGHT 5.0
 
+#define DEFAULT_STEP 0.1
+#define STEP_CHANGE_DURATION 500
+
 class Mode_Coffee_Weight : public Mode_Base
 {
 private:
@@ -21,6 +24,11 @@ private:
      */
     modes _okMode;
 
+    float _coffee_weight;
+    float _coffee_weight_step = DEFAULT_STEP;
+    unsigned long _firstButtonPressTime;
+    unsigned long _lastChange = 0;
+
 public:
     Mode_Coffee_Weight(modes parentMode = modes_coffeeWeightMenu, modes okMode = modes_coffeeWeightMenu)
     {
@@ -31,8 +39,6 @@ public:
     void setup();
     void loop();
     void render();
-    static float coffee_weight;
-    static float coffee_weight_step;
 
     // user actions
     void tare(button_states button_state);

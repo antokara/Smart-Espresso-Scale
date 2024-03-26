@@ -3,10 +3,6 @@
 #include "services/presets/presets.h"
 #include "services/scale.h"
 
-// TODO: change dynamically depending on press duration
-float Mode_Coffee_Weight::coffee_weight_step = 0.1;
-float Mode_Coffee_Weight::coffee_weight;
-
 modes Mode_Coffee_Weight::getMode()
 {
     return modes_coffeeWeight;
@@ -15,7 +11,7 @@ modes Mode_Coffee_Weight::getMode()
 void Mode_Coffee_Weight::setup()
 {
     Lcd::print("coffee weight", 0, 0, clearLcd_all);
-    Mode_Coffee_Weight::coffee_weight = Presets::getPreset()->coffeeWeight;
+    this->_coffee_weight = Presets::getPreset()->coffeeWeight;
     Mode_Coffee_Weight::render();
 };
 
@@ -23,7 +19,7 @@ void Mode_Coffee_Weight::loop(){};
 
 void Mode_Coffee_Weight::render()
 {
-    Lcd::print(String(Mode_Coffee_Weight::coffee_weight) + SCALE_UNIT_SUFFIX_GRAMS, 0, 1);
+    Lcd::print(String(this->_coffee_weight) + SCALE_UNIT_SUFFIX_GRAMS, 0, 1, clearLcd_row);
 };
 
 void Mode_Coffee_Weight::tare(button_states button_state)
@@ -33,11 +29,22 @@ void Mode_Coffee_Weight::tare(button_states button_state)
 
 void Mode_Coffee_Weight::up(button_states button_state)
 {
-    if (button_state == button_pressed)
+    if (button_state == button_down && millis() - this->_firstButtonPressTime > STEP_CHANGE_DURATION)
     {
-        if (Mode_Coffee_Weight::coffee_weight + Mode_Coffee_Weight::coffee_weight_step < MAX_COFFEE_WEIGHT)
+        this->_coffee_weight_step = 1;
+    }
+
+    if (button_state == button_pressed || (button_state == button_down && millis() - this->_lastChange > STEP_CHANGE_DURATION))
+    {
+        if (button_state == button_pressed)
         {
-            Mode_Coffee_Weight::coffee_weight += Mode_Coffee_Weight::coffee_weight_step;
+            this->_coffee_weight_step = DEFAULT_STEP;
+            this->_firstButtonPressTime = millis();
+        }
+        this->_lastChange = millis();
+        if (this->_coffee_weight + this->_coffee_weight_step < MAX_COFFEE_WEIGHT)
+        {
+            this->_coffee_weight += this->_coffee_weight_step;
             Mode_Coffee_Weight::render();
         }
     }
@@ -45,11 +52,22 @@ void Mode_Coffee_Weight::up(button_states button_state)
 
 void Mode_Coffee_Weight::down(button_states button_state)
 {
-    if (button_state == button_pressed)
+    if (button_state == button_down && millis() - this->_firstButtonPressTime > STEP_CHANGE_DURATION)
     {
-        if (Mode_Coffee_Weight::coffee_weight - Mode_Coffee_Weight::coffee_weight_step > MIN_COFFEE_WEIGHT)
+        this->_coffee_weight_step = 1;
+    }
+
+    if (button_state == button_pressed || (button_state == button_down && millis() - this->_lastChange > STEP_CHANGE_DURATION))
+    {
+        if (button_state == button_pressed)
         {
-            Mode_Coffee_Weight::coffee_weight -= Mode_Coffee_Weight::coffee_weight_step;
+            this->_coffee_weight_step = DEFAULT_STEP;
+            this->_firstButtonPressTime = millis();
+        }
+        this->_lastChange = millis();
+        if (this->_coffee_weight - this->_coffee_weight_step > MIN_COFFEE_WEIGHT)
+        {
+            this->_coffee_weight -= this->_coffee_weight_step;
             Mode_Coffee_Weight::render();
         }
     }
@@ -59,7 +77,7 @@ void Mode_Coffee_Weight::ok(button_states button_state)
 {
     if (button_state == button_pressed)
     {
-        Presets::getPreset()->coffeeWeight = Mode_Coffee_Weight::coffee_weight;
+        Presets::getPreset()->coffeeWeight = this->_coffee_weight;
         Presets::save();
         Modes_Controller::setMode(this->_okMode);
     }
