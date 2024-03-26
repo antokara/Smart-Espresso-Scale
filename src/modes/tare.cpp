@@ -3,6 +3,7 @@
 #include "modes/tare.h"
 #include "services/lcd.h"
 #include "services/buzzer.h"
+#include "services/button_states.h"
 
 modes Mode_Tare::getMode()
 {
@@ -25,26 +26,26 @@ void Mode_Tare::setup()
 
 void Mode_Tare::loop(){};
 
-void Mode_Tare::tare()
+void Mode_Tare::tare(button_states button_state)
 {
 }
 
-void Mode_Tare::up()
+void Mode_Tare::up(button_states button_state)
 {
 }
 
-void Mode_Tare::down()
+void Mode_Tare::down(button_states button_state)
 {
 }
 
-void Mode_Tare::ok()
+void Mode_Tare::ok(button_states button_state)
 {
 }
 
-void Mode_Tare::cancel()
+void Mode_Tare::cancel(button_states button_state)
 {
 }
 
-void Mode_Tare::coffee()
+void Mode_Tare::coffee(button_states button_state)
 {
 }

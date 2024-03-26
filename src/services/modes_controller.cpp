@@ -104,26 +104,26 @@ void Modes_Controller::loop()
     // check for user actions (buttons)
     if (Buttons::tare == button_pressed)
     {
-        Modes_Controller::currentMode->tare();
+        Modes_Controller::currentMode->tare(button_pressed);
     }
     else if (Buttons::up == button_pressed)
     {
-        Modes_Controller::currentMode->up();
+        Modes_Controller::currentMode->up(button_pressed);
     }
     else if (Buttons::down == button_pressed)
     {
-        Modes_Controller::currentMode->down();
+        Modes_Controller::currentMode->down(button_pressed);
     }
     else if (Buttons::ok == button_pressed)
     {
-        Modes_Controller::currentMode->ok();
+        Modes_Controller::currentMode->ok(button_pressed);
     }
     else if (Buttons::cancel == button_pressed)
     {
-        Modes_Controller::currentMode->cancel();
+        Modes_Controller::currentMode->cancel(button_pressed);
     }
     else if (Buttons::coffee == button_pressed)
     {
-        Modes_Controller::currentMode->coffee();
+        Modes_Controller::currentMode->coffee(button_pressed);
     }
 };

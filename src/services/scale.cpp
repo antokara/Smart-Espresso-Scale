@@ -11,6 +11,7 @@
 #include <SparkFun_Qwiic_Scale_NAU7802_Arduino_Library.h>
 #include "services/scale.h"
 #include "services/device.h"
+#include "services/button_states.h"
 #include "utils.h"
 
 // the actual scale device instance
@@ -465,7 +466,7 @@ void Scale::loop()
         {
             Scale::firstAvailability = SCALE_FIRST_AVAILABILITY_YES;
             // moved to mode
-            // Scale::tare();
+            // Scale::tare(button_states button_state);
         }
 
         // calculate the average weight and set the hasWeightChanged

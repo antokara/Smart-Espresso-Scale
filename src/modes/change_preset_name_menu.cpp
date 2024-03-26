@@ -15,32 +15,41 @@ void Mode_Change_Preset_Name_Menu::setup()
 
 void Mode_Change_Preset_Name_Menu::loop(){};
 
-void Mode_Change_Preset_Name_Menu::tare()
+void Mode_Change_Preset_Name_Menu::tare(button_states button_state)
 {
     // NOP
 }
 
-void Mode_Change_Preset_Name_Menu::up()
+void Mode_Change_Preset_Name_Menu::up(button_states button_state)
 {
     // TODO:
 }
 
-void Mode_Change_Preset_Name_Menu::down()
+void Mode_Change_Preset_Name_Menu::down(button_states button_state)
 {
-    Modes_Controller::setMode(modes_coffeeWeightMenu);
+    if (button_state == button_pressed)
+    {
+        Modes_Controller::setMode(modes_coffeeWeightMenu);
+    }
 }
 
-void Mode_Change_Preset_Name_Menu::ok()
+void Mode_Change_Preset_Name_Menu::ok(button_states button_state)
 {
-    Modes_Controller::setMode(modes_changePresetName);
+    if (button_state == button_pressed)
+    {
+        Modes_Controller::setMode(modes_changePresetName);
+    }
 }
 
-void Mode_Change_Preset_Name_Menu::cancel()
+void Mode_Change_Preset_Name_Menu::cancel(button_states button_state)
 {
-    Modes_Controller::setMode(modes_configurePreset);
+    if (button_state == button_pressed)
+    {
+        Modes_Controller::setMode(modes_configurePreset);
+    }
 }
 
-void Mode_Change_Preset_Name_Menu::coffee()
+void Mode_Change_Preset_Name_Menu::coffee(button_states button_state)
 {
     // NOP
 }

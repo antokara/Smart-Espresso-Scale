@@ -23,50 +23,62 @@ void Mode_Configure_Preset::render()
     Lcd::print(Presets::getPreset()->name, 0, 1);
 };
 
-void Mode_Configure_Preset::tare()
+void Mode_Configure_Preset::tare(button_states button_state)
 {
     // NOP
 }
 
-void Mode_Configure_Preset::up()
+void Mode_Configure_Preset::up(button_states button_state)
 {
-    if (Mode_Configure_Preset::presetIndex < PRESETS_COUNT - 1)
+    if (button_state == button_pressed)
     {
-        Mode_Configure_Preset::presetIndex++;
+        if (Mode_Configure_Preset::presetIndex < PRESETS_COUNT - 1)
+        {
+            Mode_Configure_Preset::presetIndex++;
+        }
+        else
+        {
+            Mode_Configure_Preset::presetIndex = 0;
+        }
+        Presets::presetIndex = Mode_Configure_Preset::presetIndex;
+        Mode_Configure_Preset::render();
     }
-    else
-    {
-        Mode_Configure_Preset::presetIndex = 0;
-    }
-    Presets::presetIndex = Mode_Configure_Preset::presetIndex;
-    Mode_Configure_Preset::render();
 }
 
-void Mode_Configure_Preset::down()
+void Mode_Configure_Preset::down(button_states button_state)
 {
-    if (Mode_Configure_Preset::presetIndex > 0)
+    if (button_state == button_pressed)
     {
-        Mode_Configure_Preset::presetIndex--;
+        if (Mode_Configure_Preset::presetIndex > 0)
+        {
+            Mode_Configure_Preset::presetIndex--;
+        }
+        else
+        {
+            Mode_Configure_Preset::presetIndex = PRESETS_COUNT - 1;
+        }
+        Presets::presetIndex = Mode_Configure_Preset::presetIndex;
+        Mode_Configure_Preset::render();
     }
-    else
+}
+
+void Mode_Configure_Preset::ok(button_states button_state)
+{
+    if (button_state == button_pressed)
     {
-        Mode_Configure_Preset::presetIndex = PRESETS_COUNT - 1;
+        Modes_Controller::setMode(modes_changePresetNameMenu);
     }
-    Presets::presetIndex = Mode_Configure_Preset::presetIndex;
-    Mode_Configure_Preset::render();
 }
 
-void Mode_Configure_Preset::ok()
+void Mode_Configure_Preset::cancel(button_states button_state)
 {
-    Modes_Controller::setMode(modes_changePresetNameMenu);
+    if (button_state == button_pressed)
+    {
+        Modes_Controller::setMode(modes_presetsMenu);
+    }
 }
 
-void Mode_Configure_Preset::cancel()
-{
-    Modes_Controller::setMode(modes_presetsMenu);
-}
-
-void Mode_Configure_Preset::coffee()
+void Mode_Configure_Preset::coffee(button_states button_state)
 {
     // NOP
 }

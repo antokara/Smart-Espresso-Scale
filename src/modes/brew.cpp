@@ -250,53 +250,62 @@ String Mode_Brew::getFormattedBrewSeconds()
     return String(Mode_Brew::brewSeconds) + " secs.";
 };
 
-void Mode_Brew::tare() {}
+void Mode_Brew::tare(button_states button_state) {}
 
-void Mode_Brew::up()
+void Mode_Brew::up(button_states button_state)
 {
 }
 
-void Mode_Brew::down()
+void Mode_Brew::down(button_states button_state)
 {
 }
 
-void Mode_Brew::ok()
+void Mode_Brew::ok(button_states button_state)
 {
-    if (Mode_Brew::stage == brew_stage_waiting && Presets::getPreset()->startTimer == startTimer_pump && Presets::getPreset()->autoPump == false)
+    if (button_state == button_pressed)
     {
-        Mode_Brew::setStage(brew_stage_in_progress);
-    }
-    else if (Mode_Brew::stage == brew_stage_stopping)
-    {
-        Mode_Brew::setStage(brew_stage_done);
-    }
-    else if (Mode_Brew::stage == brew_stage_done)
-    {
-        Modes_Controller::setMode(modes_scale);
+        if (Mode_Brew::stage == brew_stage_waiting && Presets::getPreset()->startTimer == startTimer_pump && Presets::getPreset()->autoPump == false)
+        {
+            Mode_Brew::setStage(brew_stage_in_progress);
+        }
+        else if (Mode_Brew::stage == brew_stage_stopping)
+        {
+            Mode_Brew::setStage(brew_stage_done);
+        }
+        else if (Mode_Brew::stage == brew_stage_done)
+        {
+            Modes_Controller::setMode(modes_scale);
+        }
     }
 }
 
-void Mode_Brew::cancel()
+void Mode_Brew::cancel(button_states button_state)
 {
-    if (Mode_Brew::stage == brew_stage_in_progress)
+    if (button_state == button_pressed)
     {
-        // stop the brew
-        Mode_Brew::setStage(brew_stage_stopping);
-    }
-    else
-    {
-        Modes_Controller::setMode(modes_scale);
+        if (Mode_Brew::stage == brew_stage_in_progress)
+        {
+            // stop the brew
+            Mode_Brew::setStage(brew_stage_stopping);
+        }
+        else
+        {
+            Modes_Controller::setMode(modes_scale);
+        }
     }
 }
 
-void Mode_Brew::coffee()
+void Mode_Brew::coffee(button_states button_state)
 {
-    if (Mode_Brew::stage == brew_stage_stopping)
+    if (button_state == button_pressed)
     {
-        Mode_Brew::setStage(brew_stage_done);
-    }
-    else if (Mode_Brew::stage == brew_stage_done)
-    {
-        Modes_Controller::setMode(modes_scale);
+        if (Mode_Brew::stage == brew_stage_stopping)
+        {
+            Mode_Brew::setStage(brew_stage_done);
+        }
+        else if (Mode_Brew::stage == brew_stage_done)
+        {
+            Modes_Controller::setMode(modes_scale);
+        }
     }
 }

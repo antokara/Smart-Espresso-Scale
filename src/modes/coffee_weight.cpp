@@ -26,43 +26,54 @@ void Mode_Coffee_Weight::render()
     Lcd::print(String(Mode_Coffee_Weight::coffee_weight) + SCALE_UNIT_SUFFIX_GRAMS, 0, 1);
 };
 
-void Mode_Coffee_Weight::tare()
+void Mode_Coffee_Weight::tare(button_states button_state)
 {
     // NOP
 }
 
-void Mode_Coffee_Weight::up()
+void Mode_Coffee_Weight::up(button_states button_state)
 {
-    if (Mode_Coffee_Weight::coffee_weight + Mode_Coffee_Weight::coffee_weight_step < MAX_COFFEE_WEIGHT)
+    if (button_state == button_pressed)
     {
-        Mode_Coffee_Weight::coffee_weight += Mode_Coffee_Weight::coffee_weight_step;
-        Mode_Coffee_Weight::render();
+        if (Mode_Coffee_Weight::coffee_weight + Mode_Coffee_Weight::coffee_weight_step < MAX_COFFEE_WEIGHT)
+        {
+            Mode_Coffee_Weight::coffee_weight += Mode_Coffee_Weight::coffee_weight_step;
+            Mode_Coffee_Weight::render();
+        }
     }
 }
 
-void Mode_Coffee_Weight::down()
+void Mode_Coffee_Weight::down(button_states button_state)
 {
-    if (Mode_Coffee_Weight::coffee_weight - Mode_Coffee_Weight::coffee_weight_step > MIN_COFFEE_WEIGHT)
+    if (button_state == button_pressed)
     {
-        Mode_Coffee_Weight::coffee_weight -= Mode_Coffee_Weight::coffee_weight_step;
-        Mode_Coffee_Weight::render();
+        if (Mode_Coffee_Weight::coffee_weight - Mode_Coffee_Weight::coffee_weight_step > MIN_COFFEE_WEIGHT)
+        {
+            Mode_Coffee_Weight::coffee_weight -= Mode_Coffee_Weight::coffee_weight_step;
+            Mode_Coffee_Weight::render();
+        }
     }
 }
 
-void Mode_Coffee_Weight::ok()
+void Mode_Coffee_Weight::ok(button_states button_state)
 {
-    // TODO:
-    Presets::getPreset()->coffeeWeight = Mode_Coffee_Weight::coffee_weight;
-    Presets::save();
-    Modes_Controller::setMode(this->_okMode);
+    if (button_state == button_pressed)
+    {
+        Presets::getPreset()->coffeeWeight = Mode_Coffee_Weight::coffee_weight;
+        Presets::save();
+        Modes_Controller::setMode(this->_okMode);
+    }
 }
 
-void Mode_Coffee_Weight::cancel()
+void Mode_Coffee_Weight::cancel(button_states button_state)
 {
-    Modes_Controller::setMode(this->_parentMode);
+    if (button_state == button_pressed)
+    {
+        Modes_Controller::setMode(this->_parentMode);
+    }
 }
 
-void Mode_Coffee_Weight::coffee()
+void Mode_Coffee_Weight::coffee(button_states button_state)
 {
     // NOP
 }

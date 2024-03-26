@@ -3,6 +3,7 @@
 #include <Arduino.h>
 #include "services/lcd.h"
 #include "modes/enums/modes.h"
+#include "services/button_states.h"
 
 /**
  * @brief the menu navigation text
@@ -36,12 +37,12 @@ public:
      * even for NOOP, to ensure we did not forget to handle a user action
      *
      */
-    virtual void tare() = 0;
-    virtual void up() = 0;
-    virtual void down() = 0;
-    virtual void ok() = 0;
-    virtual void cancel() = 0;
-    virtual void coffee() = 0;
+    virtual void tare(button_states button_state) = 0;
+    virtual void up(button_states button_state) = 0;
+    virtual void down(button_states button_state) = 0;
+    virtual void ok(button_states button_state) = 0;
+    virtual void cancel(button_states button_state) = 0;
+    virtual void coffee(button_states button_state) = 0;
 };
 
 #endif // MODE_BASE

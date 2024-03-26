@@ -35,12 +35,12 @@ public:
     static float coffee_weight_step;
 
     // user actions
-    void tare();
-    void up();
-    void down();
-    void ok();
-    void cancel();
-    void coffee();
+    void tare(button_states button_state);
+    void up(button_states button_state);
+    void down(button_states button_state);
+    void ok(button_states button_state);
+    void cancel(button_states button_state);
+    void coffee(button_states button_state);
 };
 
 #endif // #define MODE_COFFEE_WEIGHT

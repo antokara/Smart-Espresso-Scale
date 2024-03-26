@@ -35,29 +35,38 @@ void Mode_Scale::loop()
     }
 }
 
-void Mode_Scale::tare()
+void Mode_Scale::tare(button_states button_state)
 {
-    Modes_Controller::setMode(modes_tare);
+    if (button_state == button_pressed)
+    {
+        Modes_Controller::setMode(modes_tare);
+    }
 }
 
-void Mode_Scale::up()
-{
-}
-
-void Mode_Scale::down()
-{
-}
-
-void Mode_Scale::ok()
-{
-    Modes_Controller::setMode(modes_customBrewMenu);
-}
-
-void Mode_Scale::cancel()
+void Mode_Scale::up(button_states button_state)
 {
 }
 
-void Mode_Scale::coffee()
+void Mode_Scale::down(button_states button_state)
 {
-    Modes_Controller::setMode(modes_selectPreset);
+}
+
+void Mode_Scale::ok(button_states button_state)
+{
+    if (button_state == button_pressed)
+    {
+        Modes_Controller::setMode(modes_customBrewMenu);
+    }
+}
+
+void Mode_Scale::cancel(button_states button_state)
+{
+}
+
+void Mode_Scale::coffee(button_states button_state)
+{
+    if (button_state == button_pressed)
+    {
+        Modes_Controller::setMode(modes_selectPreset);
+    }
 }

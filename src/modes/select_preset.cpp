@@ -23,47 +23,62 @@ void Mode_Select_Preset::render()
     Lcd::print(Presets::getPreset()->name, 0, 1);
 };
 
-void Mode_Select_Preset::tare() {}
+void Mode_Select_Preset::tare(button_states button_state) {}
 
-void Mode_Select_Preset::up()
+void Mode_Select_Preset::up(button_states button_state)
 {
-    if (Mode_Select_Preset::presetIndex < PRESETS_COUNT - 1)
+    if (button_state == button_pressed)
     {
-        Mode_Select_Preset::presetIndex++;
+        if (Mode_Select_Preset::presetIndex < PRESETS_COUNT - 1)
+        {
+            Mode_Select_Preset::presetIndex++;
+        }
+        else
+        {
+            Mode_Select_Preset::presetIndex = 0;
+        }
+        Presets::presetIndex = Mode_Select_Preset::presetIndex;
+        Mode_Select_Preset::render();
     }
-    else
-    {
-        Mode_Select_Preset::presetIndex = 0;
-    }
-    Presets::presetIndex = Mode_Select_Preset::presetIndex;
-    Mode_Select_Preset::render();
 }
 
-void Mode_Select_Preset::down()
+void Mode_Select_Preset::down(button_states button_state)
 {
-    if (Mode_Select_Preset::presetIndex > 0)
+    if (button_state == button_pressed)
     {
-        Mode_Select_Preset::presetIndex--;
+        if (Mode_Select_Preset::presetIndex > 0)
+        {
+            Mode_Select_Preset::presetIndex--;
+        }
+        else
+        {
+            Mode_Select_Preset::presetIndex = PRESETS_COUNT - 1;
+        }
+        Presets::presetIndex = Mode_Select_Preset::presetIndex;
+        Mode_Select_Preset::render();
     }
-    else
+}
+
+void Mode_Select_Preset::ok(button_states button_state)
+{
+    if (button_state == button_pressed)
     {
-        Mode_Select_Preset::presetIndex = PRESETS_COUNT - 1;
+        Modes_Controller::setMode(modes_brew);
     }
-    Presets::presetIndex = Mode_Select_Preset::presetIndex;
-    Mode_Select_Preset::render();
 }
 
-void Mode_Select_Preset::ok()
+void Mode_Select_Preset::cancel(button_states button_state)
 {
-    Modes_Controller::setMode(modes_brew);
+    if (button_state == button_pressed)
+    {
+        Modes_Controller::setMode(modes_scale);
+    }
 }
 
-void Mode_Select_Preset::cancel()
+void Mode_Select_Preset::coffee(button_states button_state)
 {
-    Modes_Controller::setMode(modes_scale);
-}
-
-void Mode_Select_Preset::coffee()
-{
-    Mode_Select_Preset::ok();
+    if (button_state == button_pressed)
+    {
+        Mode_Select_Preset::ok(button_pressed);
+    }
 }

@@ -14,32 +14,44 @@ void Mode_Presets_Menu::setup()
 
 void Mode_Presets_Menu::loop(){};
 
-void Mode_Presets_Menu::tare()
+void Mode_Presets_Menu::tare(button_states button_state)
 {
     // NOP
 }
 
-void Mode_Presets_Menu::up()
+void Mode_Presets_Menu::up(button_states button_state)
 {
-    Modes_Controller::setMode(modes_customBrewMenu);
+    if (button_state == button_pressed)
+    {
+        Modes_Controller::setMode(modes_customBrewMenu);
+    }
 }
 
-void Mode_Presets_Menu::down()
+void Mode_Presets_Menu::down(button_states button_state)
 {
-    Modes_Controller::setMode(modes_customBrewMenu);
+    if (button_state == button_pressed)
+    {
+        Modes_Controller::setMode(modes_customBrewMenu);
+    }
 }
 
-void Mode_Presets_Menu::ok()
+void Mode_Presets_Menu::ok(button_states button_state)
 {
-    Modes_Controller::setMode(modes_configurePreset);
+    if (button_state == button_pressed)
+    {
+        Modes_Controller::setMode(modes_configurePreset);
+    }
 }
 
-void Mode_Presets_Menu::cancel()
+void Mode_Presets_Menu::cancel(button_states button_state)
 {
-    Modes_Controller::setMode(modes_scale);
+    if (button_state == button_pressed)
+    {
+        Modes_Controller::setMode(modes_scale);
+    }
 }
 
-void Mode_Presets_Menu::coffee()
+void Mode_Presets_Menu::coffee(button_states button_state)
 {
     // NOP
 }

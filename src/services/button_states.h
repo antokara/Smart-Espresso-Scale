@@ -13,7 +13,7 @@ enum button_states
      */
     button_pressed,
     /**
-     * @brief still down/pressed (consecutive loop, no action usually)
+     * @brief still down/pressed (consecutive loop, for long press actions)
      *
      */
     button_down,

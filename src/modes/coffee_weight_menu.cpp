@@ -17,33 +17,42 @@ void Mode_Coffee_Weight_Menu::setup()
 
 void Mode_Coffee_Weight_Menu::loop(){};
 
-void Mode_Coffee_Weight_Menu::tare()
+void Mode_Coffee_Weight_Menu::tare(button_states button_state)
 {
     // NOP
 }
 
-void Mode_Coffee_Weight_Menu::up()
+void Mode_Coffee_Weight_Menu::up(button_states button_state)
 {
-    Modes_Controller::setMode(modes_changePresetNameMenu);
+    if (button_state == button_pressed)
+    {
+        Modes_Controller::setMode(modes_changePresetNameMenu);
+    }
 }
 
-void Mode_Coffee_Weight_Menu::down()
+void Mode_Coffee_Weight_Menu::down(button_states button_state)
 {
     // TODO:
 }
 
-void Mode_Coffee_Weight_Menu::ok()
+void Mode_Coffee_Weight_Menu::ok(button_states button_state)
 {
-    Presets::presetIndex = Mode_Configure_Preset::presetIndex;
-    Modes_Controller::setMode(modes_coffeeWeight);
+    if (button_state == button_pressed)
+    {
+        Presets::presetIndex = Mode_Configure_Preset::presetIndex;
+        Modes_Controller::setMode(modes_coffeeWeight);
+    }
 }
 
-void Mode_Coffee_Weight_Menu::cancel()
+void Mode_Coffee_Weight_Menu::cancel(button_states button_state)
 {
-    Modes_Controller::setMode(modes_configurePreset);
+    if (button_state == button_pressed)
+    {
+        Modes_Controller::setMode(modes_configurePreset);
+    }
 }
 
-void Mode_Coffee_Weight_Menu::coffee()
+void Mode_Coffee_Weight_Menu::coffee(button_states button_state)
 {
     // NOP
 }
