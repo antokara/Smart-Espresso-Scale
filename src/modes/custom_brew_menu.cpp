@@ -42,8 +42,7 @@ void Mode_Custom_Brew_Menu::ok(button_states button_state)
     if (button_state == button_pressed)
     {
         Presets::presetIndex = Presets::customBrewIndex;
-        // TODO:
-        Modes_Controller::setMode(new Mode_Coffee_Weight(this->getMode(), this->getMode()));
+        Modes_Controller::setMode(new Mode_Coffee_Weight(menu_modes_customBrew));
     }
 }
 

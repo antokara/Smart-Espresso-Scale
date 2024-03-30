@@ -2,27 +2,21 @@
 #define MODE_BREW_RATIO
 #include "modes/baseValueStepper.h"
 #include "services/presets/presets.h"
+#include "modes/enums/menu_modes.h"
 
 class Mode_Brew_Ratio : public Mode_Base_Value_Stepper
 {
 private:
     /**
-     * @brief where to go when pressing cancel/etc.
+     * @brief to know where to go when pressing ok/cancel/etc.
      *
      */
-    modes _parentMode;
-
-    /**
-     * @brief where to go when pressing OK
-     *
-     */
-    modes _okMode;
+    menu_modes _menu_mode;
 
 public:
-    Mode_Brew_Ratio(modes parentMode = modes_brewRatioMenu, modes okMode = modes_brewRatioMenu)
+    Mode_Brew_Ratio(menu_modes menu_mode = menu_modes_configurePreset)
     {
-        this->_parentMode = parentMode;
-        this->_okMode = okMode;
+        this->_menu_mode = menu_mode;
         this->value = 0;
         this->max_value = 5;
         this->min_value = 1;

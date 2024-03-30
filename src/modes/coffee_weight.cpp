@@ -1,4 +1,5 @@
 #include "modes/coffee_weight.h"
+#include "modes/brew_ratio.h"
 #include "services/modes_controller.h"
 #include "services/presets/presets.h"
 #include "services/scale.h"
@@ -43,8 +44,14 @@ void Mode_Coffee_Weight::ok(button_states button_state)
     {
         Presets::getPreset()->coffeeWeight = this->value;
         Presets::save();
-        // TODO: how will the next mode know its ok/parent modes?
-        Modes_Controller::setMode(this->_okMode);
+        if (this->_menu_mode == menu_modes_configurePreset)
+        {
+            Modes_Controller::setMode(modes_coffeeWeightMenu);
+        }
+        else if (this->_menu_mode == menu_modes_customBrew)
+        {
+            Modes_Controller::setMode(new Mode_Brew_Ratio(this->_menu_mode));
+        }
     }
 }
 
@@ -52,7 +59,14 @@ void Mode_Coffee_Weight::cancel(button_states button_state)
 {
     if (button_state == button_pressed)
     {
-        Modes_Controller::setMode(this->_parentMode);
+        if (this->_menu_mode == menu_modes_configurePreset)
+        {
+            Modes_Controller::setMode(modes_coffeeWeightMenu);
+        }
+        else if (this->_menu_mode == menu_modes_customBrew)
+        {
+            Modes_Controller::setMode(modes_customBrewMenu);
+        }
     }
 }
 

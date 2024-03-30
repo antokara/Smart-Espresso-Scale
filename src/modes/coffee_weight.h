@@ -2,27 +2,21 @@
 #define MODE_COFFEE_WEIGHT
 #include "modes/baseValueStepper.h"
 #include "services/presets/presets.h"
+#include "modes/enums/menu_modes.h"
 
 class Mode_Coffee_Weight : public Mode_Base_Value_Stepper
 {
 private:
     /**
-     * @brief where to go when pressing cancel/etc.
+     * @brief to know where to go when pressing ok/cancel/etc.
      *
      */
-    modes _parentMode;
-
-    /**
-     * @brief where to go when pressing OK
-     *
-     */
-    modes _okMode;
+    menu_modes _menu_mode;
 
 public:
-    Mode_Coffee_Weight(modes parentMode = modes_coffeeWeightMenu, modes okMode = modes_coffeeWeightMenu)
+    Mode_Coffee_Weight(menu_modes menu_mode = menu_modes_configurePreset)
     {
-        this->_parentMode = parentMode;
-        this->_okMode = okMode;
+        this->_menu_mode = menu_mode;
         this->value = 0;
         this->max_value = 25;
         this->min_value = 5;

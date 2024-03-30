@@ -61,7 +61,15 @@ void Mode_Brew_Ratio::ok(button_states button_state)
     {
         Presets::getPreset()->brewRatio = this->value;
         Presets::save();
-        Modes_Controller::setMode(this->_okMode);
+        if (this->_menu_mode == menu_modes_configurePreset)
+        {
+            Modes_Controller::setMode(modes_brewRatioMenu);
+        }
+        else if (this->_menu_mode == menu_modes_customBrew)
+        {
+            // TODO:
+            // Modes_Controller::setMode();
+        }
     }
 }
 
@@ -69,7 +77,14 @@ void Mode_Brew_Ratio::cancel(button_states button_state)
 {
     if (button_state == button_pressed)
     {
-        Modes_Controller::setMode(this->_parentMode);
+        if (this->_menu_mode == menu_modes_configurePreset)
+        {
+            Modes_Controller::setMode(modes_brewRatioMenu);
+        }
+        else if (this->_menu_mode == menu_modes_customBrew)
+        {
+            Modes_Controller::setMode(modes_customBrewMenu);
+        }
     }
 }
 
