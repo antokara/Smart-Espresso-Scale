@@ -3,11 +3,21 @@
 #include "modes/base.h"
 #include "services/presets/presets.h"
 
-#define MAX_COFFEE_WEIGHT 25.0
-#define MIN_COFFEE_WEIGHT 5.0
+#define MAX_VALUE 25.0
+#define MIN_VALUE 5.0
 
-#define DEFAULT_STEP 0.1
-#define STEP_CHANGE_DURATION 500
+/**
+ * @brief milliseconds that must pass while the button is still pressed
+ *        before the value changes...
+ *
+ */
+#define VALUE_STEP_DURATION 300
+
+/**
+ * @brief maximum number of value steps in the list
+ *
+ */
+#define MAX_VALUE_STEPS 3
 
 class Mode_Coffee_Weight : public Mode_Base
 {
@@ -24,10 +34,42 @@ private:
      */
     modes _okMode;
 
-    float _coffee_weight;
-    float _coffee_weight_step = DEFAULT_STEP;
-    unsigned long _firstButtonPressTime;
-    unsigned long _lastChange = 0;
+    /**
+     * @brief current coffee weight
+     *
+     */
+    float _value;
+
+    /**
+     * @brief when was the first value change (button press)
+     */
+
+    unsigned long _firstValueChangeTime;
+    /**
+     * @brief when was the last value change
+     *
+     */
+    unsigned long _lastValueChangeTime = 0;
+
+    /**
+     * @brief list of supported value steps
+     *
+     */
+    const float _value_steps[MAX_VALUE_STEPS] = {0.1, 1, 5};
+
+    /**
+     * @brief list of durations each value_step should
+     *        be active, while the button is pressed,
+     *        before increasing the value_step_index
+     *
+     */
+    const int _value_step_durations[MAX_VALUE_STEPS - 1] = {1000, 2500};
+
+    /**
+     * @brief the current value_steps[index]
+     *
+     */
+    byte _value_step_index = 0;
 
 public:
     Mode_Coffee_Weight(modes parentMode = modes_coffeeWeightMenu, modes okMode = modes_coffeeWeightMenu)
