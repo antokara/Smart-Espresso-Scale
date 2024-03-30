@@ -14,6 +14,8 @@
 #include "modes/change_preset_name.h"
 #include "modes/coffee_weight_menu.h"
 #include "modes/coffee_weight.h"
+#include "modes/brew_ratio_menu.h"
+#include "modes/brew_ratio.h"
 #include "services/modes_controller.h"
 
 /**
@@ -66,6 +68,12 @@ void Modes_Controller::setMode(modes newMode)
             break;
         case modes_coffeeWeight:
             Modes_Controller::setMode(new Mode_Coffee_Weight());
+            break;
+        case modes_brewRatioMenu:
+            Modes_Controller::setMode(new Mode_Brew_Ratio_Menu());
+            break;
+        case modes_brewRatio:
+            Modes_Controller::setMode(new Mode_Brew_Ratio());
             break;
         }
     }

@@ -32,7 +32,10 @@ void Mode_Coffee_Weight_Menu::up(button_states button_state)
 
 void Mode_Coffee_Weight_Menu::down(button_states button_state)
 {
-    // TODO:
+    if (button_state == button_pressed)
+    {
+        Modes_Controller::setMode(modes_brewRatioMenu);
+    }
 }
 
 void Mode_Coffee_Weight_Menu::ok(button_states button_state)
