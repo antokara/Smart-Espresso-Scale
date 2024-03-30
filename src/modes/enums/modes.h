@@ -92,9 +92,6 @@ enum modes
      *        up/down: change coffee weight
      *        ok: save weight to profile OR to custom brew
      *        cancel: back to coffeeWeightMenu OR customBrewMenu
-     * TODO: needs dynamic ok/cancel action
-     *
-     * TODO: add pointer; to parent/siblings/children; use tuples
      */
     modes_coffeeWeight,
 
