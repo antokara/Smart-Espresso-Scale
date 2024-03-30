@@ -19,8 +19,25 @@ void Mode_Brew_Ratio::loop(){};
 
 void Mode_Brew_Ratio::render()
 {
-    // TODO: add ristretto/etc.
-    Lcd::print("1:" + String(this->value), 0, 1, clearLcd_row);
+    String brew_type = "";
+    if (this->value < 2)
+    {
+        brew_type = "ristretto";
+    }
+    else if (this->value < 3)
+    {
+        brew_type = "trad/nal";
+    }
+    else if (this->value < 4)
+    {
+        brew_type = "lungo";
+    }
+    else
+    {
+        brew_type = "long";
+    }
+
+    Lcd::print(brew_type + " 1:" + String(this->value), 0, 1, clearLcd_row);
 };
 
 void Mode_Brew_Ratio::tare(button_states button_state)
