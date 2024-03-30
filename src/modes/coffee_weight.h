@@ -5,45 +5,6 @@
 
 class Mode_Coffee_Weight : public Mode_Base_Value_Stepper
 {
-protected:
-    /**
-     * @brief current value
-     *
-     */
-    float value;
-
-    /**
-     * @brief max allowed value
-     *
-     */
-    static constexpr float max_value = 25.0;
-
-    /**
-     * @brief min allowed value
-     *
-     */
-    static constexpr float min_value = 5.0;
-
-    /**
-     * @brief maximum number of value steps allowed
-     *
-     */
-    static const byte max_value_steps = 3;
-
-    /**
-     * @brief list of supported value steps
-     *
-     */
-    const float value_steps[Mode_Base_Value_Stepper::max_value_steps] = {0.1, 1, 5};
-
-    /**
-     * @brief list of durations each value_step should
-     *        be active, while the button is pressed,
-     *        before increasing the value_step_index
-     *
-     */
-    const int value_step_durations[Mode_Base_Value_Stepper::max_value_steps - 1] = {1000, 2500};
-
 private:
     /**
      * @brief where to go when pressing cancel/etc.
@@ -62,6 +23,15 @@ public:
     {
         this->_parentMode = parentMode;
         this->_okMode = okMode;
+        this->value = 0;
+        this->max_value = 25;
+        this->min_value = 5;
+        this->max_value_steps = 3;
+        this->value_steps[0] = 0.1;
+        this->value_steps[1] = 1;
+        this->value_steps[2] = 5;
+        this->value_step_durations[0] = 1000;
+        this->value_step_durations[1] = 2500;
     }
     modes getMode();
     void setup();

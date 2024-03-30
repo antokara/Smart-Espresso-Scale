@@ -2,13 +2,15 @@
 #define MODE_BASE_VALUE_STEPPER
 #include "modes/base.h"
 
+#define MAX_VALUE_STEPPER_STEPS 3
+
 class Mode_Base_Value_Stepper : public Mode_Base
 {
 private:
     /**
      * @brief when was the first value change (button press)
      */
-    unsigned long _firstValueChangeTime;
+    unsigned long _firstValueChangeTime = 0;
 
     /**
      * @brief when was the last value change
@@ -27,38 +29,38 @@ protected:
      * @brief current value
      *
      */
-    float value;
+    float value = 0;
 
     /**
      * @brief max allowed value
      *
      */
-    static constexpr float max_value = 50.0;
+    float max_value = 50.0;
 
     /**
      * @brief min allowed value
      *
      */
-    static constexpr float min_value = 1.0;
+    float min_value = 1.0;
 
     /**
      * @brief milliseconds that must pass while the button is still pressed
      *        before the value changes...
      *
      */
-    static const int time_between_value_steps = 300;
+    int time_between_value_steps = 300;
 
     /**
      * @brief maximum number of value steps allowed
      *
      */
-    static const byte max_value_steps = 3;
+    byte max_value_steps = MAX_VALUE_STEPPER_STEPS;
 
     /**
      * @brief list of supported value steps
      *
      */
-    const float value_steps[Mode_Base_Value_Stepper::max_value_steps] = {0.1, 1, 5};
+    float value_steps[MAX_VALUE_STEPPER_STEPS] = {};
 
     /**
      * @brief list of durations each value_step should
@@ -66,9 +68,23 @@ protected:
      *        before increasing the value_step_index
      *
      */
-    const int value_step_durations[Mode_Base_Value_Stepper::max_value_steps - 1] = {1000, 2500};
+    int value_step_durations[MAX_VALUE_STEPPER_STEPS - 1] = {1000, 2500};
 
 public:
+    Mode_Base_Value_Stepper()
+    {
+        this->value = 0;
+        this->max_value = 50;
+        this->min_value = 1;
+        this->time_between_value_steps = 300;
+        this->max_value_steps = 3;
+        this->value_steps[0] = 0.1;
+        this->value_steps[1] = 1;
+        this->value_steps[2] = 5;
+        this->value_step_durations[0] = 1000;
+        this->value_step_durations[1] = 2500;
+    }
+
     void up(button_states button_state);
     void down(button_states button_state);
 
