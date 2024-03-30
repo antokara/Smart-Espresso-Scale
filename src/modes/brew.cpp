@@ -196,7 +196,8 @@ void Mode_Brew::render()
     {
         if (Presets::getPreset()->startTimer == startTimer_pump && Presets::getPreset()->autoPump == false)
         {
-            Lcd::print("Press OK...", 0, 1, clearLcd_row);
+            Lcd::print("Start pump and", 0, 0, clearLcd_row);
+            Lcd::print("press OK...", 0, 1, clearLcd_row);
         }
         else if (Presets::getPreset()->startTimer == startTimer_first_drop)
         {

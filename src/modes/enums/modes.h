@@ -107,6 +107,9 @@ enum modes
     modes_stopTimerMenu,
     modes_stopTimer,
 
+    modes_autoPumpMenu,
+    modes_autoPump,
+
     // TODO: add pump auto/manual toggle in preset
 
     // TODO: consider adding
