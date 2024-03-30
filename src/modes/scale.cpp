@@ -18,7 +18,9 @@ void Mode_Scale::setup()
     // only tare on the first setup of the scale mode...
     if (Mode_Scale::firstSetup)
     {
-        (new Mode_Tare())->setup();
+        Mode_Tare *mode_tare = new Mode_Tare();
+        mode_tare->setup();
+        delete mode_tare;
         Mode_Scale::firstSetup = false;
     }
     Lcd::print(Scale::getFormattedWeight(), 0, 0, clearLcd_all);
@@ -41,7 +43,9 @@ void Mode_Scale::tare(button_states button_state)
 {
     if (button_state == button_pressed)
     {
-        (new Mode_Tare())->setup();
+        Mode_Tare *mode_tare = new Mode_Tare();
+        mode_tare->setup();
+        delete mode_tare;
     }
 }
 

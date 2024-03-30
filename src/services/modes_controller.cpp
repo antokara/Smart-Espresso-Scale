@@ -36,6 +36,7 @@ void Modes_Controller::setMode(modes newMode)
         switch (newMode)
         {
         default: // NOP
+        // TODO: destroy every new instance
         case modes_scale:
             Modes_Controller::setMode(new Mode_Scale());
             break;

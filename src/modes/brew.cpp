@@ -73,7 +73,9 @@ void Mode_Brew::setup()
     Mode_Brew::targetBrewWeight = Presets::getPreset()->coffeeWeight * Presets::getPreset()->brewRatio;
 
     // auto-tare right before we start, to negate the cup (that should already be on the scale)
-    (new Mode_Tare())->setup();
+    Mode_Tare *mode_tare = new Mode_Tare();
+    mode_tare->setup();
+    delete mode_tare;
     Mode_Brew::render();
     if (Presets::getPreset()->autoPump == true)
     {
