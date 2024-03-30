@@ -19,6 +19,10 @@
 #include "modes/brew_duration_menu.h"
 #include "modes/brew_duration.h"
 #include "modes/custom_brew_confirm.h"
+#include "modes/start_timer_menu.h"
+#include "modes/start_timer.h"
+#include "modes/stop_timer_menu.h"
+#include "modes/stop_timer.h"
 #include "services/modes_controller.h"
 
 /**
@@ -86,6 +90,18 @@ void Modes_Controller::setMode(modes newMode)
             break;
         case modes_customBrewConfirm:
             Modes_Controller::setMode(new Mode_Custom_Brew_Confirm());
+            break;
+        case modes_startTimerMenu:
+            Modes_Controller::setMode(new Mode_Start_Timer_Menu());
+            break;
+        case modes_startTimer:
+            Modes_Controller::setMode(new Mode_Start_Timer());
+            break;
+        case modes_stopTimerMenu:
+            Modes_Controller::setMode(new Mode_Stop_Timer_Menu());
+            break;
+        case modes_stopTimer:
+            Modes_Controller::setMode(new Mode_Stop_Timer());
             break;
         }
     }

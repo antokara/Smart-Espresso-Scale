@@ -110,11 +110,9 @@ enum modes
     modes_autoPumpMenu,
     modes_autoPump,
 
-    // TODO: add pump auto/manual toggle in preset
-
     // TODO: consider adding
     //  - sound on/off
-    //  - gravity offset
+    //  - gravity (time/weight) offset - experiment with existing preset values
 };
 
 #endif // MODES

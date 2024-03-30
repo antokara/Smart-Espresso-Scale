@@ -32,7 +32,10 @@ void Mode_Brew_Duration_Menu::up(button_states button_state)
 
 void Mode_Brew_Duration_Menu::down(button_states button_state)
 {
-    // TODO:
+    if (button_state == button_pressed)
+    {
+        Modes_Controller::setMode(modes_startTimerMenu);
+    }
 }
 
 void Mode_Brew_Duration_Menu::ok(button_states button_state)
