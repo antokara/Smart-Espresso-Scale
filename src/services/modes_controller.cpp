@@ -18,6 +18,7 @@
 #include "modes/brew_ratio.h"
 #include "modes/brew_duration_menu.h"
 #include "modes/brew_duration.h"
+#include "modes/custom_brew_confirm.h"
 #include "services/modes_controller.h"
 
 /**
@@ -82,6 +83,9 @@ void Modes_Controller::setMode(modes newMode)
             break;
         case modes_brewDuration:
             Modes_Controller::setMode(new Mode_Brew_Duration());
+            break;
+        case modes_customBrewConfirm:
+            Modes_Controller::setMode(new Mode_Custom_Brew_Confirm());
             break;
         }
     }

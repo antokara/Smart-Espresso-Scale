@@ -48,8 +48,7 @@ void Mode_Brew_Duration::ok(button_states button_state)
         }
         else if (this->_menu_mode == menu_modes_customBrew)
         {
-            // TODO:
-            // Modes_Controller::setMode();
+            Modes_Controller::setMode(modes_customBrewConfirm);
         }
     }
 }

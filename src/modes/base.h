@@ -9,7 +9,7 @@
  * @brief the menu navigation text
  * to display on the 2nd row of the LCD screen
  */
-#define MENU_NAVIGATION "up/dn/enter/back"
+#define MENU_NAVIGATION "up/dn/ok/back"
 
 class Mode_Base
 {
