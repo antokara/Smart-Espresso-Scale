@@ -9,13 +9,6 @@ public:
     void setup();
     void loop();
 
-    /**
-     * @brief static so that we can access that information
-     * from other modes (even when this mode is not active)
-     *
-     */
-    static byte presetIndex;
-
     // user actions
     void tare(button_states button_state);
     void up(button_states button_state);

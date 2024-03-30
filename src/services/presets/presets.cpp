@@ -4,6 +4,7 @@
 
 Preset *Presets::presets[PRESETS_COUNT];
 byte Presets::presetIndex;
+byte Presets::customBrewIndex = PRESETS_COUNT - 1;
 
 void Presets::setup()
 {
@@ -20,6 +21,8 @@ void Presets::setup()
         Presets::presets[i]->stopTimer = stopTimer_last_drop;
         Presets::presets[i]->autoPump = false;
     }
+    // the last preset, will be dedicated custom brew preset
+    Presets::presets[Presets::customBrewIndex]->name = "Custom Brew";
 }
 
 /**
