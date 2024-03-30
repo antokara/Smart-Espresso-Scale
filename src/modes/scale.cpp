@@ -4,6 +4,7 @@
 #include "services/scale.h"
 #include "services/buttons.h"
 #include "services/modes_controller.h"
+#include "services/power.h"
 
 bool Mode_Scale::firstSetup = true;
 
@@ -28,6 +29,7 @@ void Mode_Scale::loop()
     if (Scale::hasWeightChanged)
     {
         Mode_Scale::tryRenderNow(Scale::getFormattedWeight(), 0, 0);
+        Power::trackActivity();
     }
     else
     {
@@ -39,7 +41,7 @@ void Mode_Scale::tare(button_states button_state)
 {
     if (button_state == button_pressed)
     {
-        Modes_Controller::setMode(modes_tare);
+        (new Mode_Tare())->setup();
     }
 }
 
