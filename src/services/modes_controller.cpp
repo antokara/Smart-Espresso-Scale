@@ -16,6 +16,8 @@
 #include "modes/coffee_weight.h"
 #include "modes/brew_ratio_menu.h"
 #include "modes/brew_ratio.h"
+#include "modes/brew_duration_menu.h"
+#include "modes/brew_duration.h"
 #include "services/modes_controller.h"
 
 /**
@@ -74,6 +76,12 @@ void Modes_Controller::setMode(modes newMode)
             break;
         case modes_brewRatio:
             Modes_Controller::setMode(new Mode_Brew_Ratio());
+            break;
+        case modes_brewDurationMenu:
+            Modes_Controller::setMode(new Mode_Brew_Duration_Menu());
+            break;
+        case modes_brewDuration:
+            Modes_Controller::setMode(new Mode_Brew_Duration());
             break;
         }
     }

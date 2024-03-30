@@ -1,7 +1,7 @@
 #include "modes/brew_ratio.h"
+#include "modes/brew_duration.h"
 #include "services/modes_controller.h"
 #include "services/presets/presets.h"
-#include "services/scale.h"
 
 modes Mode_Brew_Ratio::getMode()
 {
@@ -67,8 +67,7 @@ void Mode_Brew_Ratio::ok(button_states button_state)
         }
         else if (this->_menu_mode == menu_modes_customBrew)
         {
-            // TODO:
-            // Modes_Controller::setMode();
+            Modes_Controller::setMode(new Mode_Brew_Duration(this->_menu_mode));
         }
     }
 }
