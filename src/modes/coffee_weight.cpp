@@ -43,6 +43,7 @@ void Mode_Coffee_Weight::ok(button_states button_state)
     {
         Presets::getPreset()->coffeeWeight = this->value;
         Presets::save();
+        // TODO: how will the next mode know its ok/parent modes?
         Modes_Controller::setMode(this->_okMode);
     }
 }

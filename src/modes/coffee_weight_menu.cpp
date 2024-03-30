@@ -42,7 +42,6 @@ void Mode_Coffee_Weight_Menu::ok(button_states button_state)
 {
     if (button_state == button_pressed)
     {
-        Presets::presetIndex = Mode_Configure_Preset::presetIndex;
         Modes_Controller::setMode(modes_coffeeWeight);
     }
 }

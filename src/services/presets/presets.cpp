@@ -31,9 +31,9 @@ void Presets::setup()
  *
  * @return Preset*
  */
-Preset *Presets::getPreset()
+Preset *Presets::getPreset(byte presetIndex)
 {
-    return Presets::presets[Presets::presetIndex];
+    return Presets::presets[presetIndex];
 }
 
 /**

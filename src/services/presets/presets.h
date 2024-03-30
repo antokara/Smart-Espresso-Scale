@@ -9,7 +9,7 @@ class Presets
 public:
     static Preset *presets[PRESETS_COUNT];
     static byte presetIndex;
-    static Preset *getPreset();
+    static Preset *getPreset(byte presetIndex = Presets::presetIndex);
     static void setup();
     static void save();
 };

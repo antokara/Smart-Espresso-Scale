@@ -1,5 +1,9 @@
 #include "modes/custom_brew_menu.h"
+#include "modes/coffee_weight.h"
 #include "services/modes_controller.h"
+#include "services/presets/presets.h"
+
+byte Mode_Custom_Brew_Menu::presetIndex = PRESETS_COUNT - 1;
 
 modes Mode_Custom_Brew_Menu::getMode()
 {
@@ -37,6 +41,11 @@ void Mode_Custom_Brew_Menu::down(button_states button_state)
 
 void Mode_Custom_Brew_Menu::ok(button_states button_state)
 {
+    if (button_state == button_pressed)
+    {
+        Presets::presetIndex = Mode_Custom_Brew_Menu::presetIndex;
+        Modes_Controller::setMode(new Mode_Coffee_Weight(this->getMode(), this->getMode()));
+    }
 }
 
 void Mode_Custom_Brew_Menu::cancel(button_states button_state)

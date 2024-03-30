@@ -20,7 +20,7 @@ void Mode_Configure_Preset::loop(){};
 void Mode_Configure_Preset::render()
 {
     Lcd::print("configure preset", 0, 0, clearLcd_all);
-    Lcd::print(Presets::getPreset()->name, 0, 1);
+    Lcd::print(Presets::getPreset(Mode_Configure_Preset::presetIndex)->name, 0, 1);
 };
 
 void Mode_Configure_Preset::tare(button_states button_state)
@@ -40,7 +40,6 @@ void Mode_Configure_Preset::up(button_states button_state)
         {
             Mode_Configure_Preset::presetIndex = 0;
         }
-        Presets::presetIndex = Mode_Configure_Preset::presetIndex;
         Mode_Configure_Preset::render();
     }
 }
@@ -57,7 +56,6 @@ void Mode_Configure_Preset::down(button_states button_state)
         {
             Mode_Configure_Preset::presetIndex = PRESETS_COUNT - 1;
         }
-        Presets::presetIndex = Mode_Configure_Preset::presetIndex;
         Mode_Configure_Preset::render();
     }
 }
@@ -66,6 +64,7 @@ void Mode_Configure_Preset::ok(button_states button_state)
 {
     if (button_state == button_pressed)
     {
+        Presets::presetIndex = Mode_Configure_Preset::presetIndex;
         Modes_Controller::setMode(modes_changePresetNameMenu);
     }
 }
