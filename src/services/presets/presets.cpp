@@ -7,12 +7,10 @@
 Preset *Presets::presets[PRESETS_COUNT];
 byte Presets::presetIndex;
 byte Presets::customBrewIndex = PRESETS_COUNT - 1;
-int Presets::eeprom_address;
 
 void Presets::setup()
 {
     EEPROM.begin(EEPROM_SIZE_BYTES);
-    Presets::eeprom_address = 0;
     Presets::load();
 }
 
@@ -36,16 +34,51 @@ Preset *Presets::getPreset(byte presetIndex)
  */
 void Presets::save()
 {
-    // TODO:
-
-    EEPROM.write(EEPROM_HAS_STORED_DATA_FLAG_ADDRESS, EEPROM_HAS_STORED_DATA_FLAG_VALUE);
-    EEPROM.write(EEPROM_HAS_STORED_DATA_VER_ADDRESS, EEPROM_HAS_STORED_DATA_VER_VALUE);
-    if (!EEPROM.commit())
+    int eeprom_address = EEPROM_DATA_ADDRESS;
+    for (byte pi = 0; pi < PRESETS_COUNT; pi++)
     {
-#ifdef SERIAL_DEBUG
-        Serial.println("ERROR! EEPROM commit failed");
-#endif
+        Serial.print("preset: ");
+        Serial.println(Presets::presets[pi]->name);
+        for (byte vi = 0; vi < Presets::presets[pi]->name.length(); vi++)
+        {
+            Serial.print(eeprom_address++);
+            Serial.print(" ");
+            // character
+            Serial.print(Presets::presets[pi]->name.charAt(vi));
+            Serial.print(" ");
+            // ascii code of character
+            Serial.println(int(Presets::presets[pi]->name.charAt(vi)));
+        }
+        Serial.print(eeprom_address++);
+        Serial.print(" ");
+        Serial.println(NULL, HEX);
+
+        byte bytes[4];
+        Presets::intToBytes(Presets::presets[pi]->brewDuration, bytes);
+        Serial.print("brewDuration: ");
+        Serial.println(Presets::presets[pi]->brewDuration);
+        for (int i = 0; i < 4; i++)
+        {
+            Serial.print(eeprom_address++);
+            Serial.print(" ");
+            Serial.println(bytes[i]);
+        }
+
+        // Presets::presets[i]->brewRatio = 2;
+        // Presets::presets[i]->coffeeWeight = 17.8;
+        // Presets::presets[i]->startTimer = startTimer_pump;
+        // Presets::presets[i]->stopTimer = stopTimer_last_drop;
+        // Presets::presets[i]->autoPump = false;
     }
+
+    //     EEPROM.write(EEPROM_HAS_STORED_DATA_FLAG_ADDRESS, EEPROM_HAS_STORED_DATA_FLAG_VALUE);
+    //     EEPROM.write(EEPROM_HAS_STORED_DATA_VER_ADDRESS, EEPROM_HAS_STORED_DATA_VER_VALUE);
+    //     if (!EEPROM.commit())
+    //     {
+    // #ifdef SERIAL_DEBUG
+    //         Serial.println("ERROR! EEPROM commit failed");
+    // #endif
+    //     }
 }
 
 /**
@@ -85,4 +118,12 @@ void Presets::load()
         Presets::setDefault();
         Presets::save();
     }
+}
+
+void Presets::intToBytes(int intValue, byte *byteArray)
+{
+    byteArray[0] = (intValue >> 24) & 0xFF;
+    byteArray[1] = (intValue >> 16) & 0xFF;
+    byteArray[2] = (intValue >> 8) & 0xFF;
+    byteArray[3] = intValue & 0xFF;
 }
