@@ -66,6 +66,7 @@ void Mode_Stop_Timer::ok(button_states button_state)
     if (button_state == button_pressed)
     {
         Presets::getPreset()->stopTimer = this->stopTimer;
+        Presets::save();
         Modes_Controller::setMode(modes_stopTimerMenu);
     }
 }

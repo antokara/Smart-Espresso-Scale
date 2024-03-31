@@ -66,6 +66,7 @@ void Mode_Start_Timer::ok(button_states button_state)
     if (button_state == button_pressed)
     {
         Presets::getPreset()->startTimer = this->startTimer;
+        Presets::save();
         Modes_Controller::setMode(modes_startTimerMenu);
     }
 }

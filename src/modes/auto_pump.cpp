@@ -49,6 +49,7 @@ void Mode_Auto_Pump::ok(button_states button_state)
     if (button_state == button_pressed)
     {
         Presets::getPreset()->autoPump = this->autoPump;
+        Presets::save();
         Modes_Controller::setMode(modes_autoPumpMenu);
     }
 }
