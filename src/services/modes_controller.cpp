@@ -24,6 +24,7 @@
 #include "modes/stop_timer_menu.h"
 #include "modes/stop_timer.h"
 #include "modes/auto_pump_menu.h"
+#include "modes/auto_pump.h"
 #include "services/modes_controller.h"
 
 /**
@@ -106,6 +107,9 @@ void Modes_Controller::setMode(modes newMode)
             break;
         case modes_autoPumpMenu:
             Modes_Controller::setMode(new Mode_Auto_Pump_Menu());
+            break;
+        case modes_autoPump:
+            Modes_Controller::setMode(new Mode_Auto_Pump());
             break;
         }
     }
