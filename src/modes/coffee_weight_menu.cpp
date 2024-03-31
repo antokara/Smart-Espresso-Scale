@@ -11,7 +11,7 @@ modes Mode_Coffee_Weight_Menu::getMode()
 
 void Mode_Coffee_Weight_Menu::setup()
 {
-    Lcd::print("coffee weight", 0, 0, clearLcd_all);
+    Lcd::print("Coffee Weight", 0, 0, clearLcd_all);
     Lcd::print(MENU_NAVIGATION, 0, 1);
 };
 

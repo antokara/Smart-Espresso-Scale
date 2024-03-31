@@ -10,7 +10,7 @@ modes Mode_Brew_Ratio::getMode()
 
 void Mode_Brew_Ratio::setup()
 {
-    Lcd::print("brew ratio", 0, 0, clearLcd_all);
+    Lcd::print("Brew Ratio", 0, 0, clearLcd_all);
     this->value = Presets::getPreset()->brewRatio;
     Mode_Brew_Ratio::render();
 };

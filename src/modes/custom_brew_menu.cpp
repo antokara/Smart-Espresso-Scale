@@ -10,7 +10,7 @@ modes Mode_Custom_Brew_Menu::getMode()
 
 void Mode_Custom_Brew_Menu::setup()
 {
-    Lcd::print("custom brew", 0, 0, clearLcd_all);
+    Lcd::print("Custom Brew", 0, 0, clearLcd_all);
     Lcd::print(MENU_NAVIGATION, 0, 1);
 };
 

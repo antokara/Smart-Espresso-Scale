@@ -9,7 +9,7 @@ modes Mode_Change_Preset_Name_Menu::getMode()
 
 void Mode_Change_Preset_Name_Menu::setup()
 {
-    Lcd::print("change name", 0, 0, clearLcd_all);
+    Lcd::print("Change Name", 0, 0, clearLcd_all);
     Lcd::print(MENU_NAVIGATION, 0, 1);
 };
 

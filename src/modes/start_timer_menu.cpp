@@ -9,7 +9,7 @@ modes Mode_Start_Timer_Menu::getMode()
 
 void Mode_Start_Timer_Menu::setup()
 {
-    Lcd::print("start timer", 0, 0, clearLcd_all);
+    Lcd::print("Start Timer", 0, 0, clearLcd_all);
     Lcd::print(MENU_NAVIGATION, 0, 1);
 };
 

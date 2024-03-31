@@ -11,7 +11,7 @@ modes Mode_Brew_Ratio_Menu::getMode()
 
 void Mode_Brew_Ratio_Menu::setup()
 {
-    Lcd::print("brew ratio", 0, 0, clearLcd_all);
+    Lcd::print("Brew Ratio", 0, 0, clearLcd_all);
     Lcd::print(MENU_NAVIGATION, 0, 1);
 };
 

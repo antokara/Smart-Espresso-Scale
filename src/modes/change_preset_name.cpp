@@ -17,7 +17,7 @@ void Mode_Change_Preset_Name::setup()
 {
     Mode_Change_Preset_Name::name = "";
     Mode_Change_Preset_Name::characterIndex = 0;
-    Lcd::print("enter new name", 0, 0, clearLcd_all);
+    Lcd::print("Enter New Name", 0, 0, clearLcd_all);
     Mode_Change_Preset_Name::render();
 };
 

@@ -11,7 +11,7 @@ modes Mode_Coffee_Weight::getMode()
 
 void Mode_Coffee_Weight::setup()
 {
-    Lcd::print("coffee weight", 0, 0, clearLcd_all);
+    Lcd::print("Coffee Weight", 0, 0, clearLcd_all);
     this->value = Presets::getPreset()->coffeeWeight;
     Mode_Coffee_Weight::render();
 };

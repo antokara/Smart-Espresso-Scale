@@ -8,7 +8,7 @@ modes Mode_Presets_Menu::getMode()
 
 void Mode_Presets_Menu::setup()
 {
-    Lcd::print("presets", 0, 0, clearLcd_all);
+    Lcd::print("Presets", 0, 0, clearLcd_all);
     Lcd::print(MENU_NAVIGATION, 0, 1);
 };
 

@@ -19,7 +19,7 @@ void Mode_Configure_Preset::loop(){};
 
 void Mode_Configure_Preset::render()
 {
-    Lcd::print("configure preset", 0, 0, clearLcd_all);
+    Lcd::print("Configure Preset", 0, 0, clearLcd_all);
     Lcd::print(Presets::getPreset(Mode_Configure_Preset::presetIndex)->name, 0, 1);
 };
 

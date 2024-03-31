@@ -9,7 +9,7 @@ modes Mode_Brew_Duration::getMode()
 
 void Mode_Brew_Duration::setup()
 {
-    Lcd::print("brew duration", 0, 0, clearLcd_all);
+    Lcd::print("Brew Duration", 0, 0, clearLcd_all);
     this->value = Presets::getPreset()->brewDuration;
     Mode_Brew_Duration::render();
 };

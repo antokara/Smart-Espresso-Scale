@@ -11,7 +11,7 @@ modes Mode_Brew_Duration_Menu::getMode()
 
 void Mode_Brew_Duration_Menu::setup()
 {
-    Lcd::print("brew duration", 0, 0, clearLcd_all);
+    Lcd::print("Brew Duration", 0, 0, clearLcd_all);
     Lcd::print(MENU_NAVIGATION, 0, 1);
 };
 
