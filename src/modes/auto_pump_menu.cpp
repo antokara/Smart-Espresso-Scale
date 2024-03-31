@@ -4,7 +4,7 @@
 
 modes Mode_Auto_Pump_Menu::getMode()
 {
-    return modes_stopTimerMenu;
+    return modes_autoPumpMenu;
 }
 
 void Mode_Auto_Pump_Menu::setup()
