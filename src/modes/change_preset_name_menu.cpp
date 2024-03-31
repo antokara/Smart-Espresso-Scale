@@ -22,7 +22,10 @@ void Mode_Change_Preset_Name_Menu::tare(button_states button_state)
 
 void Mode_Change_Preset_Name_Menu::up(button_states button_state)
 {
-    // TODO:
+    if (button_state == button_pressed)
+    {
+        Modes_Controller::setMode(modes_autoPumpMenu);
+    }
 }
 
 void Mode_Change_Preset_Name_Menu::down(button_states button_state)
