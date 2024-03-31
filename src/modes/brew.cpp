@@ -38,6 +38,7 @@ void Mode_Brew::setStage(brew_stages stage)
             if (Presets::getPreset()->autoPump == true)
             {
                 // TODO: start the brew (toggle the relay switch)
+                // TODO: add pump service for this...
             }
         }
         else if (stage == brew_stage_stopping)

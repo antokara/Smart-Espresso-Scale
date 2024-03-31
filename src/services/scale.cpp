@@ -97,7 +97,6 @@ byte Scale::hasWeightChanged = false;
  */
 void Scale::setup()
 {
-    // TODO: show on screen status start/end/calibrate
 #ifdef SERIAL_DEBUG
     Serial.println("Scale::setup - start");
 #endif

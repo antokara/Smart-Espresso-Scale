@@ -11,10 +11,10 @@ public:
     float coffeeWeight;
     float brewRatio;
     int brewDuration;
-    // TODO: add stop offset (decide if it's time based or weight based)
     start_timers startTimer;
     stop_timers stopTimer;
     bool autoPump;
+    // TODO: add stop offset (decide if it's time based or weight based)
 };
 
 #endif // PRESET
