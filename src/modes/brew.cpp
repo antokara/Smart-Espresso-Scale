@@ -301,15 +301,5 @@ void Mode_Brew::cancel(button_states button_state)
 
 void Mode_Brew::coffee(button_states button_state)
 {
-    if (button_state == button_pressed)
-    {
-        if (Mode_Brew::stage == brew_stage_stopping)
-        {
-            Mode_Brew::setStage(brew_stage_done);
-        }
-        else if (Mode_Brew::stage == brew_stage_done)
-        {
-            Modes_Controller::setMode(modes_scale);
-        }
-    }
+    Mode_Brew::ok(button_state);
 }
