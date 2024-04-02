@@ -1,7 +1,7 @@
 #include "services/data_store.h"
 
 bool Data_Store::pendingSave = false;
-unsigned int Data_Store::mem_address = EEPROM_HAS_STORED_DATA_FLAG_ADDRESS;
+unsigned int Data_Store::mem_address = DATA_STORE_DATA_ITEMS_ADDRESS;
 
 /**
  * @brief must be called before all other services,
@@ -10,7 +10,7 @@ unsigned int Data_Store::mem_address = EEPROM_HAS_STORED_DATA_FLAG_ADDRESS;
  */
 void Data_Store::setup()
 {
-    EEPROM.begin(EEPROM_SIZE_BYTES);
+    EEPROM.begin(DATA_STORE_SIZE_BYTES);
 }
 
 /**
@@ -23,69 +23,125 @@ void Data_Store::setup()
 bool Data_Store::hasStoredData()
 {
     // check and see if we have previously stored any data
-    byte hasStoredData = EEPROM.read(EEPROM_HAS_STORED_DATA_FLAG_ADDRESS);
-    byte hasStoredDataVersion = EEPROM.read(EEPROM_HAS_STORED_DATA_FLAG_ADDRESS + 1);
-    return hasStoredData == EEPROM_HAS_STORED_DATA_FLAG_VALUE && hasStoredDataVersion == EEPROM_HAS_STORED_DATA_VER_VALUE;
+    byte hasStoredData = EEPROM.read(DATA_STORE_HAS_STORED_DATA_FLAG_ADDRESS);
+    byte hasStoredDataVersion = EEPROM.read(DATA_STORE_VERSION_ADDRESS);
+    return hasStoredData == DATA_STORE_HAS_STORED_DATA_FLAG_VALUE && hasStoredDataVersion == DATA_STORE_VERSION_VALUE;
 }
 
 /**
- * @brief converts a number to a byte array
+ * @brief converts a value to a byte array
  *
- * @param value can be int/float/double/etc.
+ * @param value can be int/float/double/char/boolean/etc.
  * @param byteArray
  */
 template <typename T>
-void Data_Store::numberToBytes(T value, byte *byteArray)
+void Data_Store::convertToBytes(T value, byte *byteArray)
 {
     memcpy(byteArray, &value, sizeof(value));
 }
 
 /**
- * @brief commits to memory all the set data
+ * @brief converts a string to a byte array
+ *
+ * @param str
+ * @param byteArray
+ */
+void Data_Store::stringToBytes(String str, byte *byteArray)
+{
+    str.getBytes(byteArray, str.length() + 1); // +1 to include null terminator
+}
+
+/**
+ * @brief commits to memory all the written data
  *
  * @return true
  * @return false
  */
 bool Data_Store::save()
 {
-    // makes the save
+    Data_Store::pendingSave = false;
+    EEPROM.write(Data_Store::mem_address, data_store_next_flag_end);
+    if (!EEPROM.commit())
+    {
+#ifdef SERIAL_DEBUG
+        Serial.println("ERROR! EEPROM commit failed");
+#endif
+    }
     return false;
 }
 
-void Data_Store::setIntData(int value)
+/**
+ * @brief writes the byte array to memory, byte-by-byte
+ *
+ * @param byteArray
+ */
+void Data_Store::writeByteArray(byte *byteArray)
 {
-    Serial.print("setIntData ");
-    Serial.println(value);
-    byte bytes[sizeof(value)];
-    Data_Store::numberToBytes(value, bytes);
-    for (int i = 0; i < sizeof(value); i++)
+    int sizeOfByteArray = sizeof(byteArray) / sizeof(byteArray[0]);
+    for (int i = 0; i < sizeof(sizeOfByteArray); i++)
     {
-        Serial.print(i);
-        Serial.print(": ");
-        Serial.println(bytes[i], HEX);
+        EEPROM.write(Data_Store::mem_address++, byteArray[i]);
     }
-
-    int cv = Data_Store::bytesToInt(bytes);
-    Serial.print("cv int: ");
-    Serial.println(cv);
 }
 
-void Data_Store::setFloatData(float value)
+void Data_Store::writeData(data_store_types type, byte *byteArray)
 {
-    Serial.print("setFloatData ");
-    Serial.println(value);
-    byte bytes[sizeof(value)];
-    Data_Store::numberToBytes(value, bytes);
-    for (int i = 0; i < sizeof(value); i++)
+    if (Data_Store::pendingSave)
     {
-        Serial.print(i);
-        Serial.print(": ");
-        Serial.println(bytes[i], HEX);
+        EEPROM.write(Data_Store::mem_address++, data_store_next_flag_more);
+    }
+    else
+    {
+        Data_Store::mem_address = DATA_STORE_DATA_ITEMS_ADDRESS;
+        Data_Store::pendingSave = true;
     }
 
-    float cv = Data_Store::bytesToFloat(bytes);
-    Serial.print("cv float: ");
-    Serial.println(cv);
+    // type of variable we are about to store
+    EEPROM.write(Data_Store::mem_address++, type);
+
+    // number of bytes
+    int sizeOfByteArray = sizeof(byteArray) / sizeof(byteArray[0]);
+    byte sizeOfByteArrayBytes[sizeof(sizeOfByteArray)];
+    Data_Store::convertToBytes(sizeOfByteArray, sizeOfByteArrayBytes);
+    Data_Store::writeByteArray(sizeOfByteArrayBytes);
+
+    // the actual data
+    Data_Store::writeByteArray(sizeOfByteArrayBytes);
+}
+
+void Data_Store::writeByteData(byte value)
+{
+    byte bytes[sizeof(value)];
+    Data_Store::convertToBytes(value, bytes);
+    Data_Store::writeData(data_store_type_byte, bytes);
+}
+
+void Data_Store::writeBoolData(bool value)
+{
+    byte bytes[sizeof(value)];
+    Data_Store::convertToBytes(value, bytes);
+    Data_Store::writeData(data_store_type_bool, bytes);
+}
+
+void Data_Store::writeCharData(char value)
+{
+    byte bytes[sizeof(value)];
+    Data_Store::convertToBytes(value, bytes);
+    Data_Store::writeData(data_store_type_char, bytes);
+}
+
+void Data_Store::writeIntData(int value)
+{
+    byte bytes[sizeof(value)];
+    Data_Store::convertToBytes(value, bytes);
+    Data_Store::writeData(data_store_type_int, bytes);
+}
+
+void Data_Store::writeFloatData(float value)
+{
+    byte bytes[sizeof(value)];
+    Data_Store::convertToBytes(value, bytes);
+    Data_Store::writeData(data_store_type_int, bytes);
 }
 
 int Data_Store::bytesToInt(byte *byteArray)

@@ -70,8 +70,8 @@ void Presets::save()
     //     // Presets::presets[i]->autoPump = false;
     // }
 
-    //     EEPROM.write(EEPROM_HAS_STORED_DATA_FLAG_ADDRESS, EEPROM_HAS_STORED_DATA_FLAG_VALUE);
-    //     EEPROM.write(EEPROM_HAS_STORED_DATA_VER_ADDRESS, EEPROM_HAS_STORED_DATA_VER_VALUE);
+    //     EEPROM.write(DATA_STORE_HAS_STORED_DATA_FLAG_ADDRESS, DATA_STORE_HAS_STORED_DATA_FLAG_VALUE);
+    //     EEPROM.write(EEPROM_VERSION_ADDRESS, DATA_STORE_VERSION_VALUE);
     //     if (!EEPROM.commit())
     //     {
     // #ifdef SERIAL_DEBUG
@@ -103,8 +103,9 @@ void Presets::setDefault()
 
 void Presets::load()
 {
-    Data_Store::setIntData(1024);
-    Data_Store::setFloatData(123.456);
+    Data_Store::writeIntData(1024);
+    Data_Store::writeFloatData(123.456);
+    Data_Store::save();
 
     // check and see if we have previously stored any data
     if (Data_Store::hasStoredData())
