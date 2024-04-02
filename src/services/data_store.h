@@ -97,7 +97,6 @@ class Data_Store
 
 public:
     static void setup();
-    static bool hasStoredData();
 
     static void writeByteArray(byte *byteArray);
     static void writeData(data_store_types type, byte *byteArray);
@@ -113,6 +112,8 @@ public:
     static void convertToBytes(T value, byte *byteArray);
     static void stringToBytes(String str, byte *byteArray);
 
+    static bool hasStoredData();
+    static void load();
     static int bytesToInt(byte *byteArray);
     static float bytesToFloat(byte *byteArray);
 };

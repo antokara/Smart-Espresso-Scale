@@ -92,6 +92,8 @@ void Data_Store::writeData(data_store_types type, byte *byteArray)
     }
     else
     {
+        EEPROM.write(DATA_STORE_HAS_STORED_DATA_FLAG_ADDRESS, DATA_STORE_HAS_STORED_DATA_FLAG_VALUE);
+        EEPROM.write(DATA_STORE_VERSION_ADDRESS, DATA_STORE_VERSION_VALUE);
         Data_Store::mem_address = DATA_STORE_DATA_ITEMS_ADDRESS;
         Data_Store::pendingSave = true;
     }
@@ -141,7 +143,14 @@ void Data_Store::writeFloatData(float value)
 {
     byte bytes[sizeof(value)];
     Data_Store::convertToBytes(value, bytes);
-    Data_Store::writeData(data_store_type_int, bytes);
+    Data_Store::writeData(data_store_type_float, bytes);
+}
+
+void Data_Store::writeStringData(String value)
+{
+    byte bytes[value.length()];
+    Data_Store::stringToBytes(value, bytes);
+    Data_Store::writeData(data_store_type_string, bytes);
 }
 
 int Data_Store::bytesToInt(byte *byteArray)
@@ -156,4 +165,18 @@ float Data_Store::bytesToFloat(byte *byteArray)
     float floatValue;
     memcpy(&floatValue, byteArray, sizeof(float));
     return floatValue;
+}
+
+void Data_Store::load()
+{
+    if (Data_Store::hasStoredData())
+    {
+        Data_Store::mem_address = DATA_STORE_DATA_ITEMS_ADDRESS;
+        byte data_store_type = EEPROM.read(Data_Store::mem_address);
+        Serial.println("data_store_type");
+        Serial.println(data_store_type);
+    }
+    else
+    {
+    }
 }
