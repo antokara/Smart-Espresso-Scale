@@ -1,7 +1,7 @@
 #include <Arduino.h>
-#include <EEPROM.h>
 #include "services/presets/presets.h"
 #include "services/device.h"
+#include "services/data_store.h"
 #include "modes/select_preset.h"
 
 Preset *Presets::presets[PRESETS_COUNT];
@@ -10,7 +10,6 @@ byte Presets::customBrewIndex = PRESETS_COUNT - 1;
 
 void Presets::setup()
 {
-    EEPROM.begin(EEPROM_SIZE_BYTES);
     Presets::load();
 }
 
@@ -34,42 +33,42 @@ Preset *Presets::getPreset(byte presetIndex)
  */
 void Presets::save()
 {
-    int eeprom_address = EEPROM_DATA_ADDRESS;
-    for (byte pi = 0; pi < PRESETS_COUNT; pi++)
-    {
-        Serial.print("preset: ");
-        Serial.println(Presets::presets[pi]->name);
-        for (byte vi = 0; vi < Presets::presets[pi]->name.length(); vi++)
-        {
-            Serial.print(eeprom_address++);
-            Serial.print(" ");
-            // character
-            Serial.print(Presets::presets[pi]->name.charAt(vi));
-            Serial.print(" ");
-            // ascii code of character
-            Serial.println(int(Presets::presets[pi]->name.charAt(vi)));
-        }
-        Serial.print(eeprom_address++);
-        Serial.print(" ");
-        Serial.println(NULL, HEX);
+    // int eeprom_address = EEPROM_DATA_ADDRESS;
+    // for (byte pi = 0; pi < PRESETS_COUNT; pi++)
+    // {
+    //     // Serial.print("preset: ");
+    //     // Serial.println(Presets::presets[pi]->name);
+    //     // for (byte vi = 0; vi < Presets::presets[pi]->name.length(); vi++)
+    //     // {
+    //     //     Serial.print(eeprom_address++);
+    //     //     Serial.print(" ");
+    //     //     // character
+    //     //     Serial.print(Presets::presets[pi]->name.charAt(vi));
+    //     //     Serial.print(" ");
+    //     //     // ascii code of character
+    //     //     Serial.println(int(Presets::presets[pi]->name.charAt(vi)));
+    //     // }
+    //     // Serial.print(eeprom_address++);
+    //     // Serial.print(" ");
+    //     // Serial.println(NULL, HEX);
 
-        byte bytes[4];
-        Presets::intToBytes(Presets::presets[pi]->brewDuration, bytes);
-        Serial.print("brewDuration: ");
-        Serial.println(Presets::presets[pi]->brewDuration);
-        for (int i = 0; i < 4; i++)
-        {
-            Serial.print(eeprom_address++);
-            Serial.print(" ");
-            Serial.println(bytes[i]);
-        }
+    //     // byte bytes[4];
+    //     // Data_Store::intToBytes(Presets::presets[pi]->brewDuration, bytes);
+    //     // Serial.print("brewDuration: ");
+    //     // Serial.println(Presets::presets[pi]->brewDuration);
+    //     // for (int i = 0; i < 4; i++)
+    //     // {
+    //     //     Serial.print(eeprom_address++);
+    //     //     Serial.print(" ");
+    //     //     Serial.println(bytes[i]);
+    //     // }
 
-        // Presets::presets[i]->brewRatio = 2;
-        // Presets::presets[i]->coffeeWeight = 17.8;
-        // Presets::presets[i]->startTimer = startTimer_pump;
-        // Presets::presets[i]->stopTimer = stopTimer_last_drop;
-        // Presets::presets[i]->autoPump = false;
-    }
+    //     // Presets::presets[i]->brewRatio = 2;
+    //     // Presets::presets[i]->coffeeWeight = 17.8;
+    //     // Presets::presets[i]->startTimer = startTimer_pump;
+    //     // Presets::presets[i]->stopTimer = stopTimer_last_drop;
+    //     // Presets::presets[i]->autoPump = false;
+    // }
 
     //     EEPROM.write(EEPROM_HAS_STORED_DATA_FLAG_ADDRESS, EEPROM_HAS_STORED_DATA_FLAG_VALUE);
     //     EEPROM.write(EEPROM_HAS_STORED_DATA_VER_ADDRESS, EEPROM_HAS_STORED_DATA_VER_VALUE);
@@ -104,10 +103,11 @@ void Presets::setDefault()
 
 void Presets::load()
 {
+    Data_Store::setIntData(1024);
+    Data_Store::setFloatData(123.456);
+
     // check and see if we have previously stored any data
-    byte hasStoredData = EEPROM.read(EEPROM_HAS_STORED_DATA_FLAG_ADDRESS);
-    byte hasStoredDataVersion = EEPROM.read(EEPROM_HAS_STORED_DATA_VER_ADDRESS);
-    if (hasStoredData == EEPROM_HAS_STORED_DATA_FLAG_VALUE && hasStoredDataVersion == EEPROM_HAS_STORED_DATA_VER_VALUE)
+    if (Data_Store::hasStoredData())
     {
         // previously stored data of the same version
         // TODO: Load
@@ -118,12 +118,4 @@ void Presets::load()
         Presets::setDefault();
         Presets::save();
     }
-}
-
-void Presets::intToBytes(int intValue, byte *byteArray)
-{
-    byteArray[0] = (intValue >> 24) & 0xFF;
-    byteArray[1] = (intValue >> 16) & 0xFF;
-    byteArray[2] = (intValue >> 8) & 0xFF;
-    byteArray[3] = intValue & 0xFF;
 }

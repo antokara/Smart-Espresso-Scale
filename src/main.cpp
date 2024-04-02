@@ -5,11 +5,13 @@
 #include "services/scale.h"
 #include "services/buttons.h"
 #include "services/power.h"
+#include "services/data_store.h"
 #include "services/modes_controller.h"
 #include "services/presets/presets.h"
 
 void setup()
 {
+    Data_Store::setup();
     Power::setup();
     Buzzer::setup();
     Lcd::setup();
