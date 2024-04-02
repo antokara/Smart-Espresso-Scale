@@ -103,10 +103,10 @@ void Presets::setDefault()
 
 void Presets::load()
 {
-    Data_Store::writeIntData(1024);
+    // Data_Store::writeIntData(1024);
     // Data_Store::writeFloatData(123.456);
     // Data_Store::writeStringData("testing!");
-    Data_Store::save();
+    // Data_Store::save();
     Data_Store::load();
 
     // check and see if we have previously stored any data

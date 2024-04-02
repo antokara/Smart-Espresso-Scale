@@ -172,9 +172,34 @@ void Data_Store::load()
     if (Data_Store::hasStoredData())
     {
         Data_Store::mem_address = DATA_STORE_DATA_ITEMS_ADDRESS;
-        byte data_store_type = EEPROM.read(Data_Store::mem_address);
-        Serial.println("data_store_type");
-        Serial.println(data_store_type);
+        byte data_type = EEPROM.read(Data_Store::mem_address++);
+        Serial.println("data_type");
+        Serial.println(data_type);
+        byte data_length = EEPROM.read(Data_Store::mem_address++);
+        Serial.println("data_length");
+        Serial.println(data_length);
+        byte byteArray[data_length];
+        for (int i = 0; i < data_length; i++)
+        {
+            byteArray[i] = EEPROM.read(Data_Store::mem_address++);
+            Serial.println(byteArray[i]);
+        }
+        byte next_flag = EEPROM.read(Data_Store::mem_address++);
+        Serial.println("next_flag");
+        Serial.println(next_flag);
+        switch (data_type)
+        {
+        case data_store_type_int:
+            int data_value = Data_Store::bytesToInt(byteArray);
+            Serial.println("data_value");
+            Serial.println(data_value);
+            break;
+            // case data_store_type_byte:
+            // case data_store_type_bool:
+            // case data_store_type_char:
+
+            // break;
+        }
     }
     else
     {

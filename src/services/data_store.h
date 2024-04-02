@@ -119,12 +119,3 @@ public:
 };
 
 #endif // DATA_STORE
-
-// switch (type)
-//     {
-//     case data_store_type_byte:
-//     case data_store_type_bool:
-//     case data_store_type_char:
-
-//         break;
-//     }
