@@ -84,10 +84,16 @@
 class Data_Store
 {
     /**
-     * @brief if true, there's setData that needs to be saved
+     * @brief if true, there's written that needs to be saved
      *
      */
     static bool pendingSave;
+
+    /**
+     * @brief if true, we're currently reading data
+     *
+     */
+    static bool pendingLoad;
 
     /**
      * @brief current memory address (read/write)
@@ -113,8 +119,8 @@ public:
     static void stringToBytes(String str, byte *byteArray);
 
     static bool hasStoredData();
-    static void load();
     static void readBytes(int data_length, byte *byteArray);
+    static void load();
     static int bytesToInt(byte *byteArray);
     static float bytesToFloat(byte *byteArray);
 };

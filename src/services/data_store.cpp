@@ -1,6 +1,7 @@
 #include "services/data_store.h"
 
 bool Data_Store::pendingSave = false;
+bool Data_Store::pendingLoad = false;
 unsigned int Data_Store::mem_address = DATA_STORE_DATA_ITEMS_ADDRESS;
 
 /**
@@ -177,21 +178,20 @@ void Data_Store::readBytes(int data_length, byte *byteArray)
 
 void Data_Store::load()
 {
-    if (Data_Store::hasStoredData())
+    if (!Data_Store::pendingLoad && Data_Store::hasStoredData())
     {
         Data_Store::mem_address = DATA_STORE_DATA_ITEMS_ADDRESS;
-
+        Data_Store::pendingLoad = true;
+    }
+    if (Data_Store::pendingLoad)
+    {
         // read the data type
         byte data_type = EEPROM.read(Data_Store::mem_address++);
-        Serial.println("data_type");
-        Serial.println(data_type);
 
         // read the data length
         byte data_length_byteArray[sizeof(int)];
         Data_Store::readBytes(sizeof(int), data_length_byteArray);
         int data_length = Data_Store::bytesToInt(data_length_byteArray);
-        Serial.println("data_length");
-        Serial.println(data_length);
 
         // read the data
         byte byteArray[data_length];
@@ -199,8 +199,6 @@ void Data_Store::load()
 
         // check if there are more data items
         byte next_flag = EEPROM.read(Data_Store::mem_address++);
-        Serial.println("next_flag");
-        Serial.println(next_flag);
 
         switch (data_type)
         {
@@ -215,8 +213,10 @@ void Data_Store::load()
 
             // break;
         }
-    }
-    else
-    {
+
+        if (next_flag == data_store_next_flag_end)
+        {
+            Data_Store::pendingLoad = false;
+        }
     }
 }
