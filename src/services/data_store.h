@@ -114,6 +114,7 @@ public:
 
     static bool hasStoredData();
     static void load();
+    static void readBytes(int data_length, byte *byteArray);
     static int bytesToInt(byte *byteArray);
     static float bytesToFloat(byte *byteArray);
 };

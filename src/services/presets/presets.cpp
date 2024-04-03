@@ -118,7 +118,7 @@ void Presets::load()
     else
     {
         // either no previous data stored OR version mismatch
-        Presets::setDefault();
-        Presets::save();
+        // Presets::save();
     }
+    Presets::setDefault();
 }

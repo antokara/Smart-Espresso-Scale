@@ -101,14 +101,14 @@ void Data_Store::writeData(data_store_types type, byte *byteArray)
     // type of variable we are about to store
     EEPROM.write(Data_Store::mem_address++, type);
 
-    // number of bytes
-    int sizeOfByteArray = sizeof(byteArray) / sizeof(byteArray[0]);
-    byte sizeOfByteArrayBytes[sizeof(sizeOfByteArray)];
-    Data_Store::convertToBytes(sizeOfByteArray, sizeOfByteArrayBytes);
-    Data_Store::writeByteArray(sizeOfByteArrayBytes);
+    // calculate the number of bytes we will need and write it
+    int data_length = sizeof(byteArray) / sizeof(byteArray[0]);
+    byte data_length_byteArray[sizeof(data_length)];
+    Data_Store::convertToBytes(data_length, data_length_byteArray);
+    Data_Store::writeByteArray(data_length_byteArray);
 
-    // the actual data
-    Data_Store::writeByteArray(sizeOfByteArrayBytes);
+    // write the actual data
+    Data_Store::writeByteArray(byteArray);
 }
 
 void Data_Store::writeByteData(byte value)
@@ -167,26 +167,41 @@ float Data_Store::bytesToFloat(byte *byteArray)
     return floatValue;
 }
 
+void Data_Store::readBytes(int data_length, byte *byteArray)
+{
+    for (int i = 0; i < data_length; i++)
+    {
+        byteArray[i] = EEPROM.read(Data_Store::mem_address++);
+    }
+}
+
 void Data_Store::load()
 {
     if (Data_Store::hasStoredData())
     {
         Data_Store::mem_address = DATA_STORE_DATA_ITEMS_ADDRESS;
+
+        // read the data type
         byte data_type = EEPROM.read(Data_Store::mem_address++);
         Serial.println("data_type");
         Serial.println(data_type);
-        byte data_length = EEPROM.read(Data_Store::mem_address++);
+
+        // read the data length
+        byte data_length_byteArray[sizeof(int)];
+        Data_Store::readBytes(sizeof(int), data_length_byteArray);
+        int data_length = Data_Store::bytesToInt(data_length_byteArray);
         Serial.println("data_length");
         Serial.println(data_length);
+
+        // read the data
         byte byteArray[data_length];
-        for (int i = 0; i < data_length; i++)
-        {
-            byteArray[i] = EEPROM.read(Data_Store::mem_address++);
-            Serial.println(byteArray[i]);
-        }
+        Data_Store::readBytes(data_length, byteArray);
+
+        // check if there are more data items
         byte next_flag = EEPROM.read(Data_Store::mem_address++);
         Serial.println("next_flag");
         Serial.println(next_flag);
+
         switch (data_type)
         {
         case data_store_type_int:
