@@ -17,6 +17,8 @@
         "unordered_map": "cpp",
         "vector": "cpp",
         "numbers": "cpp",
-        "compare": "cpp"
+        "compare": "cpp",
+        "memory_resource": "cpp",
+        "string_view": "cpp"
     }
 }

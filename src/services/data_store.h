@@ -81,6 +81,12 @@
  */
 #define DATA_STORE_DATA_ITEMS_ADDRESS DATA_STORE_VERSION_ADDRESS + 9
 
+/**
+ * @brief max. number of characters a string can have
+ * (excl. null terminator)
+ */
+#define DATA_STORE_MAX_STRING_LENGTH 20
+
 class Data_Store
 {
     /**
@@ -104,8 +110,8 @@ class Data_Store
 public:
     static void setup();
 
-    static void writeByteArray(byte *byteArray);
     static void writeData(data_store_types type, byte *byteArray);
+    static void writeByteArray(byte *byteArray);
     static void writeByteData(byte value);
     static void writeBoolData(bool value);
     static void writeCharData(char value);
@@ -119,10 +125,16 @@ public:
     static void stringToBytes(String str, byte *byteArray);
 
     static bool hasStoredData();
-    static void readBytes(int data_length, byte *byteArray);
-    static void load();
     static int bytesToInt(byte *byteArray);
     static float bytesToFloat(byte *byteArray);
+    static void readBytes(int data_length, byte *byteArray);
+    static int readData(data_store_types type, byte *byteArray);
+    static byte readByteData();
+    static bool readBoolData();
+    static char readCharData();
+    static int readIntData();
+    static float readFloatData();
+    static String readStringData();
 };
 
 #endif // DATA_STORE

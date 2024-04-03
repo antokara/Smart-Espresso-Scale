@@ -176,7 +176,14 @@ void Data_Store::readBytes(int data_length, byte *byteArray)
     }
 }
 
-void Data_Store::load()
+/**
+ * @brief
+ *
+ * @param expected_type
+ * @param byteArray
+ * @return int data length or 0
+ */
+int Data_Store::readData(data_store_types expected_type, byte *byteArray)
 {
     if (!Data_Store::pendingLoad && Data_Store::hasStoredData())
     {
@@ -185,8 +192,18 @@ void Data_Store::load()
     }
     if (Data_Store::pendingLoad)
     {
-        // read the data type
+        // read the data type and validate
         byte data_type = EEPROM.read(Data_Store::mem_address++);
+        if (data_type != expected_type)
+        {
+#ifdef SERIAL_DEBUG
+            Serial.print("ERROR! load data item type: ");
+            Serial.print(data_type);
+            Serial.print(", does not match the expected type: ");
+            Serial.println(expected_type);
+#endif
+            return false;
+        }
 
         // read the data length
         byte data_length_byteArray[sizeof(int)];
@@ -194,29 +211,84 @@ void Data_Store::load()
         int data_length = Data_Store::bytesToInt(data_length_byteArray);
 
         // read the data
-        byte byteArray[data_length];
         Data_Store::readBytes(data_length, byteArray);
 
         // check if there are more data items
         byte next_flag = EEPROM.read(Data_Store::mem_address++);
-
-        switch (data_type)
-        {
-        case data_store_type_int:
-            int data_value = Data_Store::bytesToInt(byteArray);
-            Serial.println("data_value");
-            Serial.println(data_value);
-            break;
-            // case data_store_type_byte:
-            // case data_store_type_bool:
-            // case data_store_type_char:
-
-            // break;
-        }
-
+        // when there are not, reset the flag...
         if (next_flag == data_store_next_flag_end)
         {
             Data_Store::pendingLoad = false;
         }
+
+        return data_length;
     }
+
+    return 0;
+}
+
+byte Data_Store::readByteData()
+{
+    byte byteArray[1];
+    if (Data_Store::readData(data_store_type_byte, byteArray))
+    {
+        return byteArray[0];
+    }
+    return 0;
+}
+
+bool Data_Store::readBoolData()
+{
+    byte byteArray[1];
+    if (Data_Store::readData(data_store_type_bool, byteArray))
+    {
+        return byteArray[0];
+    }
+    return false;
+}
+
+char Data_Store::readCharData()
+{
+    byte byteArray[1];
+    if (Data_Store::readData(data_store_type_char, byteArray))
+    {
+        return (char)byteArray[0];
+    }
+    return ' ';
+}
+
+int Data_Store::readIntData()
+{
+    byte byteArray[sizeof(int)];
+    if (Data_Store::readData(data_store_type_int, byteArray))
+    {
+        return Data_Store::bytesToInt(byteArray);
+    }
+    return 0;
+}
+
+float Data_Store::readFloatData()
+{
+    byte byteArray[sizeof(float)];
+    if (Data_Store::readData(data_store_type_float, byteArray))
+    {
+        return Data_Store::bytesToFloat(byteArray);
+    }
+    return 0;
+}
+
+String Data_Store::readStringData()
+{
+    byte byteArray[DATA_STORE_MAX_STRING_LENGTH + 1];
+    int data_length = Data_Store::readData(data_store_type_string, byteArray);
+    if (data_length > 0)
+    {
+        String result = "";
+        for (int i = 0; i < data_length; i++)
+        {
+            result += (char)byteArray[i];
+        }
+        return result;
+    }
+    return "";
 }

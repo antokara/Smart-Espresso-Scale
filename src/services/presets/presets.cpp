@@ -2,6 +2,7 @@
 #include "services/presets/presets.h"
 #include "services/device.h"
 #include "services/data_store.h"
+#include <services/data_store_types.h>
 #include "modes/select_preset.h"
 
 Preset *Presets::presets[PRESETS_COUNT];
@@ -103,11 +104,39 @@ void Presets::setDefault()
 
 void Presets::load()
 {
-    // Data_Store::writeIntData(1024);
-    // Data_Store::writeFloatData(123.456);
-    // Data_Store::writeStringData("testing!");
-    // Data_Store::save();
-    Data_Store::load();
+    Data_Store::writeByteData(15);
+    Data_Store::writeBoolData(true);
+    Data_Store::writeCharData('X');
+    Data_Store::writeIntData(1024);
+    Data_Store::writeFloatData(123.456);
+    Data_Store::writeStringData("testing!");
+    Data_Store::save();
+
+    byte byte_val = Data_Store::readByteData();
+    Serial.println("byte_val: ");
+    Serial.println(byte_val);
+
+    bool bool_val = Data_Store::readBoolData();
+    Serial.println("bool_val: ");
+    Serial.println(bool_val);
+
+    // TODO: fix char read or write
+    bool char_val = Data_Store::readCharData();
+    Serial.println("char_val: ");
+    Serial.println(char_val);
+
+    int int_val = Data_Store::readIntData();
+    Serial.println("int_val: ");
+    Serial.println(int_val);
+
+    // TODO: fix float read or write. we don't get the decimal points
+    int float_val = Data_Store::readFloatData();
+    Serial.println("float_val: ");
+    Serial.println(float_val);
+
+    String str_val = Data_Store::readStringData();
+    Serial.println("str_val: ");
+    Serial.println(str_val);
 
     // check and see if we have previously stored any data
     if (Data_Store::hasStoredData())
