@@ -5,6 +5,7 @@
 #include "services/presets/presets.h"
 #include "services/scale.h"
 #include "services/buzzer.h"
+#include "services/ir.h"
 #include "modes/select_preset.h"
 #include "modes/brew.h"
 #include "modes/tare.h"
@@ -37,17 +38,12 @@ void Mode_Brew::setStage(brew_stages stage)
             Mode_Brew::brewStartTime = millis();
             if (Presets::getPreset()->autoPump == true)
             {
-                // TODO: start the brew (toggle the relay switch)
-                // TODO: add pump service for this...
+                // start the brew (toggle the relay switch)
+                Ir::send();
             }
         }
         else if (stage == brew_stage_stopping)
         {
-            if (Presets::getPreset()->autoPump == true)
-            {
-                // TODO: stop the brew (toggle the relay switch)
-                Mode_Brew::setStage(brew_stage_done);
-            }
             // keep the time the last drop fell (auto-refreshes if weight changes)
             Mode_Brew::timeAtLastDrop = millis();
         }
@@ -118,11 +114,14 @@ void Mode_Brew::loop()
             {
                 if (Presets::getPreset()->autoPump == true)
                 {
-                    // TODO: stop the brew pump
-                    if (Presets::getPreset()->stopTimer == stopTimer_pump)
-                    {
-                        Mode_Brew::setStage(brew_stage_stopping);
-                    }
+                    // stop the brew pump
+                    Ir::send();
+                }
+
+                // check if we need to stop the timer
+                if (Presets::getPreset()->stopTimer == stopTimer_pump)
+                {
+                    Mode_Brew::setStage(brew_stage_stopping);
                 }
                 else if (Presets::getPreset()->stopTimer == stopTimer_last_drop)
                 {

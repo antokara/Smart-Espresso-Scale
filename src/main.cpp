@@ -5,14 +5,20 @@
 #include "services/scale.h"
 #include "services/buttons.h"
 #include "services/power.h"
+#include "services/ir.h"
 #include "services/data_store.h"
 #include "services/modes_controller.h"
 #include "services/presets/presets.h"
 
 void setup()
 {
+#ifdef SERIAL_DEBUG
+    Serial.begin(9600);
+#endif
+
     Data_Store::setup();
     Power::setup();
+    Ir::setup();
     Buzzer::setup();
     Lcd::setup();
     Scale::setup();
@@ -25,6 +31,7 @@ void loop()
 {
     // services constantly run, regardless of the mode
     Power::loop();
+    Ir::loop();
     Buzzer::loop();
     Lcd::loop();
     Scale::loop();

@@ -96,7 +96,7 @@ void Presets::setDefault()
         Presets::presets[i]->coffeeWeight = 17.8;
         Presets::presets[i]->startTimer = startTimer_pump;
         Presets::presets[i]->stopTimer = stopTimer_last_drop;
-        Presets::presets[i]->autoPump = false;
+        Presets::presets[i]->autoPump = true;
     }
     // the last preset, will be dedicated custom brew preset
     Presets::presets[Presets::customBrewIndex]->name = "Custom Brew";

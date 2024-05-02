@@ -45,8 +45,6 @@ unsigned long Buttons::coffee_pressed_time;
 void Buttons::setup()
 {
 #ifdef SERIAL_DEBUG
-  Serial.begin(9600);
-  delay(500); // Give the serial terminal a chance to connect, if present
   Serial.print("Buttons::Setup()");
 #endif
 
