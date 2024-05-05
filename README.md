@@ -2,6 +2,20 @@
 
 A Smart Espresso Scale, powered by the [Raspberry Pi Pico W board](https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html).
 
+## components used
+
+1. [Raspberry Pi Pico W board](https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html)
+   1. [pinout](https://datasheets.raspberrypi.com/picow/PicoW-A4-Pinout.pdf)
+   1. [I2C Wire doc - pico](https://arduino-pico.readthedocs.io/en/latest/wire.html)
+   1. [I2C Wire doc - arduino](https://www.arduino.cc/reference/en/language/functions/communication/wire/)
+1. [I2C 1602 LCD Display Module 16X2](https://www.amazon.com/dp/B07S7PJYM6)
+   1. [documentation](https://wiki.52pi.com/index.php?title=Z-0234)
+   1. [arduino lib](https://github.com/johnrickman/LiquidCrystal_I2C)
+   1. [arduino example](https://projecthub.arduino.cc/arduino_uno_guy/i2c-liquid-crystal-displays-5eb615)
+1. [SparkFun Qwiic Scale - NAU7802](https://www.sparkfun.com/products/15242)
+   1. [arduino lib](https://github.com/sparkfun/SparkFun_Qwiic_Scale_NAU7802_Arduino_Library)
+TODO: add the rest
+
 ## VS Code
 
 1. install VS Code
@@ -11,6 +25,7 @@ A Smart Espresso Scale, powered by the [Raspberry Pi Pico W board](https://www.r
       1. `sudo apt-get install python3-venv`
       1. restart VSCode
       1. warning: it may take up to 10 minutes to finish the installation and all the pio commands to become available
+1. [install the teleplot extension](https://marketplace.visualstudio.com/items?itemName=alexnesnes.teleplot)
 1. install [99-platformio-udev.rules](https://docs.platformio.org/en/latest/core/installation/udev-rules.html)
    1. `curl -fsSL https://raw.githubusercontent.com/platformio/platformio-core/develop/platformio/assets/system/99-platformio-udev.rules | sudo tee /etc/udev/rules.d/99-platformio-udev.rules`
    1. on Fedora
@@ -53,6 +68,19 @@ the device should get `smart-espresso-scale.local` as a hostname on the local ne
 copy `secrets.h.template` to `secrets.h` and insert values
 
 ## troubleshooting
+
+### unable to upload due to bad firmware
+
+1. remove the battery
+1. unplug all USB cables
+1. hold the BOOTSEL button and while holding, plug in the PC USB with Power
+1. let go of the BOOTSEL button
+1. confirm mounted media `ls /run/media/user/RPI-RP2/`
+1. change upload port to `/run/media/user/RPI-RP2`
+1. upload
+1. change upload port back to `auto`
+1. turn off USB power
+1. insert battery
 
 ### debugging
 
