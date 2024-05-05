@@ -3,6 +3,7 @@
 #include <Arduino.h>
 #include <EEPROM.h>
 #include <services/device.h>
+#include <services/presets/presets.h>
 #include <services/data_store_types.h>
 #include <services/data_store_next_flag.h>
 
@@ -37,11 +38,10 @@
 
 /**
  * @brief max. number of bytes we can store in EEPROM
- *        about 34 bytes per preset
- *        x10 presets, that is a total of 340 bytes
+ *        size of preset + max string size of preset name + control bytes
+ *        x10 presets, that is a total of about 400 bytes + 20 for data_store control bytes
  */
-// TODO: check if we can use sizeof here
-#define DATA_STORE_SIZE_BYTES 512
+#define DATA_STORE_SIZE_BYTES (sizeof(Preset) + 5 + 25) * PRESETS_COUNT + 30
 
 /**
  * @brief mem. address of the flag that let's us know
@@ -110,8 +110,8 @@ class Data_Store
 public:
     static void setup();
 
-    static void writeData(data_store_types type, byte *byteArray);
-    static void writeByteArray(byte *byteArray);
+    static void writeData(data_store_types type, byte *byteArray, int data_length);
+    static void writeByteArray(byte *byteArray, int sizeOfByteArray);
     static void writeByteData(byte value);
     static void writeBoolData(bool value);
     static void writeCharData(char value);
@@ -138,3 +138,36 @@ public:
 };
 
 #endif // DATA_STORE
+
+// Test Code:
+// Data_Store::writeByteData(15);
+// Data_Store::writeBoolData(true);
+// Data_Store::writeCharData('X');
+// Data_Store::writeIntData(1024);
+// Data_Store::writeFloatData(123.456);
+// Data_Store::writeStringData("testing!");
+// Data_Store::save();
+
+// byte byte_val = Data_Store::readByteData();
+// Serial.println("byte_val: ");
+// Serial.println(byte_val);
+
+// bool bool_val = Data_Store::readBoolData();
+// Serial.println("bool_val: ");
+// Serial.println(bool_val);
+
+// char char_val = Data_Store::readCharData();
+// Serial.println("char_val: ");
+// Serial.println(char_val);
+
+// int int_val = Data_Store::readIntData();
+// Serial.println("int_val: ");
+// Serial.println(int_val);
+
+// float float_val = Data_Store::readFloatData();
+// Serial.println("float_val: ");
+// Serial.println(float_val);
+
+// String str_val = Data_Store::readStringData();
+// Serial.println("str_val: ");
+// Serial.println(str_val);

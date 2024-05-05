@@ -60,6 +60,14 @@ void Data_Store::stringToBytes(String str, byte *byteArray)
  */
 bool Data_Store::save()
 {
+    if (!Data_Store::pendingSave)
+    {
+#ifdef SERIAL_DEBUG
+        Serial.println("ERROR! There's no pending save!");
+#endif
+        return false;
+    }
+
     Data_Store::pendingSave = false;
     EEPROM.write(Data_Store::mem_address, data_store_next_flag_end);
     if (!EEPROM.commit())
@@ -76,16 +84,15 @@ bool Data_Store::save()
  *
  * @param byteArray
  */
-void Data_Store::writeByteArray(byte *byteArray)
+void Data_Store::writeByteArray(byte *byteArray, int sizeOfByteArray)
 {
-    int sizeOfByteArray = sizeof(byteArray) / sizeof(byteArray[0]);
-    for (int i = 0; i < sizeof(sizeOfByteArray); i++)
+    for (int i = 0; i < sizeOfByteArray; i++)
     {
         EEPROM.write(Data_Store::mem_address++, byteArray[i]);
     }
 }
 
-void Data_Store::writeData(data_store_types type, byte *byteArray)
+void Data_Store::writeData(data_store_types type, byte *byteArray, int data_length)
 {
     if (Data_Store::pendingSave)
     {
@@ -102,56 +109,60 @@ void Data_Store::writeData(data_store_types type, byte *byteArray)
     // type of variable we are about to store
     EEPROM.write(Data_Store::mem_address++, type);
 
-    // calculate the number of bytes we will need and write it
-    int data_length = sizeof(byteArray) / sizeof(byteArray[0]);
-    byte data_length_byteArray[sizeof(data_length)];
+    // the number of bytes of the data we will store
+    byte data_length_byteArray[sizeof(int)];
     Data_Store::convertToBytes(data_length, data_length_byteArray);
-    Data_Store::writeByteArray(data_length_byteArray);
+    Data_Store::writeByteArray(data_length_byteArray, sizeof(int));
 
     // write the actual data
-    Data_Store::writeByteArray(byteArray);
+    Data_Store::writeByteArray(byteArray, data_length);
 }
 
 void Data_Store::writeByteData(byte value)
 {
     byte bytes[sizeof(value)];
     Data_Store::convertToBytes(value, bytes);
-    Data_Store::writeData(data_store_type_byte, bytes);
+    Data_Store::writeData(data_store_type_byte, bytes, sizeof(value));
 }
 
 void Data_Store::writeBoolData(bool value)
 {
     byte bytes[sizeof(value)];
     Data_Store::convertToBytes(value, bytes);
-    Data_Store::writeData(data_store_type_bool, bytes);
+    Data_Store::writeData(data_store_type_bool, bytes, sizeof(value));
 }
 
 void Data_Store::writeCharData(char value)
 {
     byte bytes[sizeof(value)];
     Data_Store::convertToBytes(value, bytes);
-    Data_Store::writeData(data_store_type_char, bytes);
+    Data_Store::writeData(data_store_type_char, bytes, sizeof(value));
 }
 
 void Data_Store::writeIntData(int value)
 {
     byte bytes[sizeof(value)];
     Data_Store::convertToBytes(value, bytes);
-    Data_Store::writeData(data_store_type_int, bytes);
+    Data_Store::writeData(data_store_type_int, bytes, sizeof(value));
 }
 
+/**
+ * @brief it only supports 2 decimal digits precision without rounding
+ *
+ * @param value
+ */
 void Data_Store::writeFloatData(float value)
 {
     byte bytes[sizeof(value)];
     Data_Store::convertToBytes(value, bytes);
-    Data_Store::writeData(data_store_type_float, bytes);
+    Data_Store::writeData(data_store_type_float, bytes, sizeof(value));
 }
 
 void Data_Store::writeStringData(String value)
 {
     byte bytes[value.length()];
     Data_Store::stringToBytes(value, bytes);
-    Data_Store::writeData(data_store_type_string, bytes);
+    Data_Store::writeData(data_store_type_string, bytes, value.length());
 }
 
 int Data_Store::bytesToInt(byte *byteArray)
@@ -177,7 +188,14 @@ void Data_Store::readBytes(int data_length, byte *byteArray)
 }
 
 /**
- * @brief
+ * @brief reads data for the expected type and places it into the byte array provided
+ *        not to be used externally. instead, use the methods:
+ *          - Data_Store::readByteData()
+ *          - Data_Store::readBoolData()
+ *          - Data_Store::readCharData()
+ *          - Data_Store::readIntData()
+ *          - Data_Store::readFloatData()
+ *          - Data_Store::readStringData()
  *
  * @param expected_type
  * @param byteArray
@@ -206,6 +224,7 @@ int Data_Store::readData(data_store_types expected_type, byte *byteArray)
         }
 
         // read the data length
+        // (for strings, this will NOT include the null terminator)
         byte data_length_byteArray[sizeof(int)];
         Data_Store::readBytes(sizeof(int), data_length_byteArray);
         int data_length = Data_Store::bytesToInt(data_length_byteArray);

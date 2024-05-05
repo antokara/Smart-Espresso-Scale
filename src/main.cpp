@@ -14,6 +14,7 @@ void setup()
 {
 #ifdef SERIAL_DEBUG
     Serial.begin(9600);
+    delay(2000);
 #endif
 
     Data_Store::setup();
