@@ -41,8 +41,7 @@ void Mode_Brew::setStage(brew_stages stage)
                 // start the brew (toggle the relay switch)
                 Ir::send();
 #ifdef SERIAL_DEBUG
-                Serial.print("Mode_Brew::start pump");
-                Serial.println(stage);
+                Serial.println("Mode_Brew::start pump");
 #endif
             }
         }
@@ -134,8 +133,7 @@ void Mode_Brew::loop()
                     Serial.print("  ");
                     Serial.print(String(Scale::getWeight()));
                     Serial.print("  ");
-                    Serial.print("Mode_Brew::stop pump");
-                    Serial.println(stage);
+                    Serial.println("Mode_Brew::stop pump");
 #endif
                 }
 
