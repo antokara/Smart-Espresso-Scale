@@ -25,10 +25,10 @@ void Mode_Brew::setStage(brew_stages stage)
 {
     if (Mode_Brew::stage != stage)
     {
-#ifdef SERIAL_DEBUG
-        Serial.print("Mode_Brew::setStage");
-        Serial.println(stage);
-#endif
+        // #ifdef SERIAL_DEBUG
+        //         Serial.print("Mode_Brew::setStage");
+        //         Serial.println(stage);
+        // #endif
         Mode_Brew::stage = stage;
         Buttons::ignoreAll();
         Mode_Brew::render();
@@ -129,7 +129,8 @@ void Mode_Brew::loop()
                     // stop the brew pump
                     Ir::send();
 #ifdef SERIAL_DEBUG
-                    Serial.print(String(Mode_Brew::brewSeconds));
+                    float brewSeconds = Utils::roundFloat((millis() - Mode_Brew::brewStartTime) / 1000.0, 1);
+                    Serial.print(String(brewSeconds));
                     Serial.print("  ");
                     Serial.print(String(Scale::getWeight()));
                     Serial.print("  ");

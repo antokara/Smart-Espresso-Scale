@@ -12,7 +12,7 @@
  */
 uint8_t Ir::sendAddress = 0x02;
 uint8_t Ir::sendCommand = 0x34;
-uint8_t Ir::sendRepeats = 3;
+uint8_t Ir::sendRepeats = 1;
 
 /**
  * @brief should be called once, from the main setup() function
