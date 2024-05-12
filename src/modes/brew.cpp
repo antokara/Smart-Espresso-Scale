@@ -26,7 +26,7 @@ void Mode_Brew::setStage(brew_stages stage)
     if (Mode_Brew::stage != stage)
     {
 #ifdef SERIAL_DEBUG
-        Serial.print("Mode_Brew::setStage ");
+        Serial.print("Mode_Brew::setStage");
         Serial.println(stage);
 #endif
         Mode_Brew::stage = stage;
@@ -40,6 +40,10 @@ void Mode_Brew::setStage(brew_stages stage)
             {
                 // start the brew (toggle the relay switch)
                 Ir::send();
+#ifdef SERIAL_DEBUG
+                Serial.print("Mode_Brew::start pump");
+                Serial.println(stage);
+#endif
             }
         }
         else if (stage == brew_stage_stopping)
@@ -92,6 +96,15 @@ void Mode_Brew::loop()
         {
             Mode_Brew::brewSeconds = brewSeconds;
             render = true;
+#ifdef SERIAL_DEBUG
+            Serial.print(String(Mode_Brew::brewSeconds));
+            Serial.print("  ");
+            Serial.println(String(Scale::getWeight()));
+#endif
+#ifdef SERIAL_DEBUG_PLOT_TIME
+            Serial.print(">time:");
+            Serial.println(String(Mode_Brew::brewSeconds));
+#endif
         }
     }
 
@@ -116,6 +129,14 @@ void Mode_Brew::loop()
                 {
                     // stop the brew pump
                     Ir::send();
+#ifdef SERIAL_DEBUG
+                    Serial.print(String(Mode_Brew::brewSeconds));
+                    Serial.print("  ");
+                    Serial.print(String(Scale::getWeight()));
+                    Serial.print("  ");
+                    Serial.print("Mode_Brew::stop pump");
+                    Serial.println(stage);
+#endif
                 }
 
                 // check if we need to stop the timer

@@ -202,18 +202,18 @@ void Scale::calcAvgWeight(float rawWeight)
         //       the samples list will keep growing infinitely and never converge to true zero.
         Scale::weights[++Scale::weightSamplesLimit] = rawWeight;
 
-#ifdef SERIAL_DEBUG
-        Serial.print("weights ");
-        Serial.print("(");
-        Serial.print(Scale::weightSamplesLimit);
-        Serial.print("): ");
-        for (int x = 0; x < Scale::weightSamplesLimit; x++)
-        {
-            Serial.print(Scale::weights[x]);
-            Serial.print("    ");
-        }
-        Serial.println("");
-#endif
+        // #ifdef SERIAL_DEBUG
+        //         Serial.print("weights ");
+        //         Serial.print("(");
+        //         Serial.print(Scale::weightSamplesLimit);
+        //         Serial.print("): ");
+        //         for (int x = 0; x < Scale::weightSamplesLimit; x++)
+        //         {
+        //             Serial.print(Scale::weights[x]);
+        //             Serial.print("    ");
+        //         }
+        //         Serial.println("");
+        // #endif
     }
     else if (delta > SCALE_AVG_WEIGHT_DELTA_THRESHOLD && Scale::weightSamplesLimit > SCALE_WEIGHT_SAMPLES_MIN)
     {
@@ -228,18 +228,18 @@ void Scale::calcAvgWeight(float rawWeight)
         for (int x = 0; x < SCALE_WEIGHT_SAMPLES_MAX; x++)
             Scale::weights[x] = rawWeight;
 
-#ifdef SERIAL_DEBUG
-        Serial.print("weights ");
-        Serial.print("(");
-        Serial.print(Scale::weightSamplesLimit);
-        Serial.print("): ");
-        for (int x = 0; x < Scale::weightSamplesLimit; x++)
-        {
-            Serial.print(Scale::weights[x]);
-            Serial.print("    ");
-        }
-        Serial.println("");
-#endif
+        // #ifdef SERIAL_DEBUG
+        //         Serial.print("weights ");
+        //         Serial.print("(");
+        //         Serial.print(Scale::weightSamplesLimit);
+        //         Serial.print("): ");
+        //         for (int x = 0; x < Scale::weightSamplesLimit; x++)
+        //         {
+        //             Serial.print(Scale::weights[x]);
+        //             Serial.print("    ");
+        //         }
+        //         Serial.println("");
+        // #endif
     }
 
     // when there's a notable difference between the prev/new avg weight
