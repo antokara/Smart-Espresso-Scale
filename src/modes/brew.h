@@ -28,6 +28,15 @@
 // since the seconds left, will most likely be zero at the very first second.
 #define MIN_BREW_WEIGHT 9
 
+// how many seconds delta greater or equal, to cause a render
+#define BREW_SECONDS_DELTA_RENDER 0.5
+
+// max seconds of brewing time that will ever appear
+#define BREW_SECONDS_MAX 99
+
+// number of decimals to render when formatting seconds
+#define BREW_SECONDS_DECIMALS 1
+
 class Mode_Brew : public Mode_Base
 {
 public:
@@ -43,7 +52,7 @@ public:
     // brew
     unsigned long brewStartTime;
     unsigned long timeAtLastDrop;
-    unsigned int brewSeconds;
+    float brewSeconds;
     float estBrewWeight;
     unsigned int estBrewSecondsLeft;
     float targetBrewWeight;

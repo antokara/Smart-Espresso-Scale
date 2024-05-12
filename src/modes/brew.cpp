@@ -91,8 +91,8 @@ void Mode_Brew::loop()
     // handle brew time progression
     if (Mode_Brew::stage == brew_stage_in_progress || Mode_Brew::stage == brew_stage_stopping)
     {
-        unsigned int brewSeconds = round((millis() - Mode_Brew::brewStartTime) / 1000);
-        if (Mode_Brew::brewSeconds != brewSeconds)
+        float brewSeconds = Utils::roundFloat((millis() - Mode_Brew::brewStartTime) / 1000.0, 1);
+        if (abs(Mode_Brew::brewSeconds - brewSeconds) >= BREW_SECONDS_DELTA_RENDER)
         {
             Mode_Brew::brewSeconds = brewSeconds;
             render = true;
@@ -267,12 +267,26 @@ void Mode_Brew::render()
 
 String Mode_Brew::getFormattedBrewSeconds()
 {
-    if (Mode_Brew::brewSeconds == 1)
+    float formattedSeconds = Mode_Brew::brewSeconds;
+
+    // pad prefix with spaces
+    const int totalWidth = Utils::numberLength(BREW_SECONDS_DECIMALS + BREW_SECONDS_MAX);
+    // +1 for the null terminator
+    char buffer[totalWidth + 1];
+    dtostrf(formattedSeconds, totalWidth, BREW_SECONDS_DECIMALS, buffer);
+
+    // Find the position of the decimal point
+    char *decimalPoint = strchr(buffer, '.');
+
+    // If decimal point is found, move characters to the right to add leading zeros
+    if (decimalPoint != NULL)
     {
-        return "1 sec.";
+        int zerosToAdd = totalWidth - (decimalPoint - buffer);
+        memmove(buffer + zerosToAdd, buffer, strlen(buffer) + 1);
+        memset(buffer, ' ', zerosToAdd);
     }
 
-    return String(Mode_Brew::brewSeconds) + " secs.";
+    return String(buffer) + " " + "s.";
 };
 
 void Mode_Brew::tare(button_states button_state) {}
