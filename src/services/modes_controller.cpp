@@ -25,6 +25,8 @@
 #include "modes/stop_timer.h"
 #include "modes/auto_pump_menu.h"
 #include "modes/auto_pump.h"
+#include "modes/stop_multiplier_menu.h"
+#include "modes/stop_multiplier.h"
 #include "services/modes_controller.h"
 
 /**
@@ -110,6 +112,12 @@ void Modes_Controller::setMode(modes newMode)
             break;
         case modes_autoPump:
             Modes_Controller::setMode(new Mode_Auto_Pump());
+            break;
+        case modes_stopMultiplierMenu:
+            Modes_Controller::setMode(new Mode_Stop_Multiplier_Menu());
+            break;
+        case modes_stopMultiplier:
+            Modes_Controller::setMode(new Mode_Stop_Multiplier());
             break;
         }
     }

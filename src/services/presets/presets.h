@@ -7,7 +7,7 @@
  * DATA_STORE_VERSION_VALUE, which will cause the presets
  * to default their values but will prevent data corruption.
  */
-#define PRESETS_COUNT 10
+#define PRESETS_COUNT 9
 
 class Presets
 {

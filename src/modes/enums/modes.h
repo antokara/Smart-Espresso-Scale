@@ -110,9 +110,11 @@ enum modes
     modes_autoPumpMenu,
     modes_autoPump,
 
+    modes_stopMultiplierMenu,
+    modes_stopMultiplier
+
     // TODO: consider adding
     //  - sound on/off
-    //  - gravity (time/weight) offset - experiment with existing preset values
 };
 
 #endif // MODES

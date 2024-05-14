@@ -13,7 +13,7 @@ void Mode_Auto_Pump_Menu::setup()
     Lcd::print(MENU_NAVIGATION, 0, 1);
 };
 
-void Mode_Auto_Pump_Menu::loop(){};
+void Mode_Auto_Pump_Menu::loop() {};
 
 void Mode_Auto_Pump_Menu::tare(button_states button_state)
 {
@@ -32,7 +32,7 @@ void Mode_Auto_Pump_Menu::down(button_states button_state)
 {
     if (button_state == button_pressed)
     {
-        Modes_Controller::setMode(modes_changePresetNameMenu);
+        Modes_Controller::setMode(modes_stopMultiplierMenu);
     }
 }
 

@@ -43,6 +43,7 @@ void Presets::save()
         Data_Store::writeIntData(Presets::presets[i]->startTimer);
         Data_Store::writeIntData(Presets::presets[i]->stopTimer);
         Data_Store::writeBoolData(Presets::presets[i]->autoPump);
+        Data_Store::writeFloatData(Presets::presets[i]->stopMultiplier);
     }
     Data_Store::save();
 }
@@ -63,6 +64,7 @@ void Presets::setDefault()
         Presets::presets[i]->startTimer = startTimer_pump;
         Presets::presets[i]->stopTimer = stopTimer_last_drop;
         Presets::presets[i]->autoPump = true;
+        Presets::presets[i]->stopMultiplier = 0.95;
     }
     // the last preset, will be dedicated custom brew preset
     Presets::presets[Presets::customBrewIndex]->name = "Custom Brew";
@@ -93,6 +95,7 @@ void Presets::load()
             Presets::presets[i]->startTimer = static_cast<start_timers>(Data_Store::readIntData());
             Presets::presets[i]->stopTimer = static_cast<stop_timers>(Data_Store::readIntData());
             Presets::presets[i]->autoPump = Data_Store::readBoolData();
+            Presets::presets[i]->stopMultiplier = Data_Store::readFloatData();
 #ifdef SERIAL_DEBUG
             Serial.print("name: ");
             Serial.println(Presets::presets[i]->name);
@@ -108,6 +111,8 @@ void Presets::load()
             Serial.println(Presets::presets[i]->stopTimer);
             Serial.print("autoPump: ");
             Serial.println(Presets::presets[i]->autoPump);
+            Serial.print("stopMultiplier: ");
+            Serial.println(Presets::presets[i]->stopMultiplier);
 #endif
         }
     }

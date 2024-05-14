@@ -41,7 +41,7 @@
  *        size of preset + max string size of preset name + control bytes
  *        x10 presets, that is a total of about 400 bytes + 20 for data_store control bytes
  */
-#define DATA_STORE_SIZE_BYTES (sizeof(Preset) + 5 + 25) * PRESETS_COUNT + 30
+#define DATA_STORE_SIZE_BYTES (sizeof(Preset) + 30) * PRESETS_COUNT + 30
 
 /**
  * @brief mem. address of the flag that let's us know
@@ -73,7 +73,7 @@
  *
  * this can only be 1 byte (0-255)
  */
-#define DATA_STORE_VERSION_VALUE 1
+#define DATA_STORE_VERSION_VALUE 2
 
 /**
  * @brief mem. address of the first data item
